@@ -1,33 +1,38 @@
 /* =========================================
-   ESTILOS GERAIS DO CABEÇALHO
+   ESTILOS GERAIS DO CABEÇALHO (Seu Código Original)
    ========================================= */
 .header-container {
   width: 100%;
   background-color: #050505;
   display: flex;
-  flex-direction: column; /* Organiza o topo e o menu um embaixo do outro */
-  padding: 15px 5%; /* Cria um respiro interno (5% de margem nas laterais) */
-  box-sizing: border-box; /* Garante que o padding não quebre a tela */
+  flex-direction: column;
+  padding: 15px 5%;
+  box-sizing: border-box;
 }
 
-/* =========================================
-   LINHA SUPERIOR (Pesquisa, Logo, Ícones)
-   ========================================= */
 .top-bar {
   display: flex;
-  justify-content: space-between; /* Empurra a busca pra esq. e ícones pra dir. */
-  align-items: center; /* Centraliza todos verticalmente */
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
-  margin-bottom: 15px; /* Espaço entre a logo e a linha divisória */
+  margin-bottom: 15px;
 }
 
-/* --- Lado Esquerdo: Pesquisa --- */
+/* Esconde o botão do menu lateral no computador e tablet */
+.mobile-menu-btn {
+  display: none; 
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
 .search-container {
   display: flex;
   align-items: center;
-  background: rgba(0, 0, 0, 0.05); /* Fundo transparente sutil */
-  border: 1px solid #fee1cf; /* Borda cor de pele/salmão */
-  border-radius: 30px; /* Bordas arredondadas do Figma */
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid #fee1cf;
+  border-radius: 30px;
   padding: 8px 15px;
   width: 250px;
 }
@@ -35,7 +40,7 @@
 .search-icon {
   width: 18px;
   height: 18px;
-  margin-right: 10px; /* Afasta a lupa do texto */
+  margin-right: 10px;
 }
 
 .search-input {
@@ -44,119 +49,133 @@
   color: #e9c0aa;
   font-family: "Inter-Regular", sans-serif;
   font-size: 13px;
-  outline: none; /* Remove aquela borda azul feia ao clicar no campo */
+  outline: none;
   width: 100%;
 }
+.search-input::placeholder { color: #e9c0aa; opacity: 0.8; }
 
-/* Personaliza o texto provisório (placeholder) do input */
-.search-input::placeholder {
-  color: #e9c0aa;
-  opacity: 0.8;
-}
+.logo-container { display: flex; justify-content: center; }
+.logo { height: 110px; object-fit: contain; }
 
-/* --- Centro: Logo --- */
-.logo-container {
-  display: flex;
-  justify-content: center;
-}
-
-.logo {
-  height: 110px; /* ⬅️ AUMENTADO AQUI (antes era 80px). Altere esse número para ajustar! */
-  object-fit: contain;
-}
-/* --- Lado Direito: Ações (Ícones) --- */
-.actions-container {
-  display: flex;
-  gap: 20px; 
-  align-items: center;
-}
-
+.actions-container { display: flex; gap: 20px; align-items: center; }
 .action-icon {
-  width: 32px; /* ⬅️ AUMENTADO AQUI (antes era 24px). */
+  width: 32px;
   height: auto;
-  cursor: pointer; 
-  transition: transform 0.2s ease; 
+  cursor: pointer;
+  transition: transform 0.2s ease;
 }
+.action-icon:hover { transform: scale(1.1); }
 
-/* Efeito: Quando passar o mouse, o ícone cresce um pouquinho */
-.action-icon:hover {
-  transform: scale(1.1); 
-}
-
-/* =========================================
-   LINHA DIVISÓRIA
-   ========================================= */
 .divider {
   width: 100%;
   height: 1px;
-  background-color: #876a64; /* A cor avermelhada do seu Figma */
+  background-color: #876a64;
   margin: 0 auto 15px auto;
 }
 
-/* =========================================
-   MENU DE NAVEGAÇÃO
-   ========================================= */
 .nav-menu {
   display: flex;
-  justify-content: center; /* Centraliza os links todos */
-  gap: 40px; /* Distância entre Masculino, Feminino, etc. */
+  justify-content: center;
+  gap: 40px;
   width: 100%;
-  flex-wrap: wrap; /* IMPORTANTE: Se não couber, joga os links pra linha de baixo! */
+  flex-wrap: wrap;
 }
 
 .nav-link {
   color: #f9f5f5;
   font-family: "Inter-Regular", sans-serif;
   font-size: 16px;
-  text-decoration: none; /* Tira o sublinhado padrão de links */
+  text-decoration: none;
   cursor: pointer;
   transition: color 0.3s;
 }
+.nav-link:hover { color: #fee1cf; }
 
-/* Efeito: Quando passar o mouse no link, ele fica com a cor salmão */
-.nav-link:hover {
-  color: #fee1cf; 
-}
 
 /* =========================================
-   RESPONSIVIDADE (Telas Menores / Celular)
+   BARRA LATERAL MOBILE (Glassmorphism)
    ========================================= */
-
-/* Quando a tela for menor que 900px (Tablets e Celulares deitados) */
-@media (max-width: 900px) {
-  .top-bar {
-    flex-wrap: wrap; /* Permite quebrar a barra em duas linhas */
-    gap: 15px;
-  }
-  
-  .search-container {
-    order: 3; /* Joga a barra de pesquisa para a linha de baixo */
-    width: 100%; /* Faz a pesquisa ocupar a tela toda */
-    margin-top: 10px;
-  }
-  
-  .logo-container {
-    order: 1; /* Mantém a logo no topo esquerdo */
-  }
-  
-  .actions-container {
-    order: 2; /* Joga os ícones para o topo direito */
-  }
-  
-  .nav-menu {
-    gap: 20px; /* Diminui o espaço entre os menus para caberem melhor */
-  }
+.sidebar-overlay {
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 998;
 }
 
-/* Quando a tela for menor que 600px (Celulares em pé) */
+.mobile-sidebar {
+  position: fixed; top: 0; left: -100%;
+  width: 75%; max-width: 300px; height: 100vh;
+  background: rgba(15, 15, 15, 0.6); /* Preto um pouco transparente */
+  backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+  z-index: 999;
+  transition: left 0.4s ease;
+  padding: 30px 20px;
+  display: flex; flex-direction: column;
+}
+.mobile-sidebar.open { left: 0; }
+
+.sidebar-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 30px;
+}
+.sidebar-badge {
+  background: rgba(254, 225, 207, 0.15); color: #fee1cf;
+  font-family: 'Inter-Bold', sans-serif; padding: 6px 12px;
+  border-radius: 20px; font-size: 13px;
+}
+.close-btn { background: none; border: none; color: white; font-size: 24px; cursor: pointer; }
+
+.sidebar-links { list-style: none; padding: 0; margin: 0; }
+.sidebar-links li { border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+.sidebar-links li a {
+  display: block; padding: 18px 0; color: #f9f5f5;
+  text-decoration: none; font-family: 'Inter-Regular', sans-serif; font-size: 16px;
+}
+
+
+/* =========================================
+   RESPONSIVIDADE 
+   ========================================= */
+
+/* Tablet (Mantém como você deixou) */
+@media (max-width: 900px) {
+  .top-bar { flex-wrap: wrap; gap: 15px; }
+  .search-container { order: 3; width: 100%; margin-top: 10px; }
+  .logo-container { order: 1; }
+  .actions-container { order: 2; }
+  .nav-menu { gap: 20px; }
+}
+
+/* Celular (Apenas aqui a mágica do menu lateral acontece) */
 @media (max-width: 600px) {
-  .header-container {
-    padding: 10px 5%;
+  .header-container { padding: 15px 5%; }
+  
+  /* Some com o menu em linha e a divisória */
+  .nav-menu, .divider { display: none; }
+  
+  /* Mostra o ícone de hambúrguer */
+  .mobile-menu-btn { 
+    display: block; 
+    order: 1; /* Fica na esquerda */
   }
-  .logo {
-    height: 80px; /* ⬅️ Deixei a logo um pouco maior no celular também */
+
+  .logo-container { 
+    order: 2; /* Fica no meio */
   }
-  .nav-link {
-    font-size: 14px; 
+  
+  .logo { 
+    height: 70px; /* Logo um pouco menor para caber na mesma linha do botão */
+  }
+  
+  .actions-container { 
+    order: 3; /* Ícones na direita */
+    gap: 12px; 
+  }
+  
+  .action-icon { 
+    width: 26px; /* Ícones um pouquinho menores */
+  }
+
+  .search-container { 
+    order: 4; /* Pesquisa vai para baixo */
   }
 }

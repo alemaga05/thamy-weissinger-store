@@ -4,10 +4,18 @@
   <!-- Linha superior: Contém a Pesquisa, a Logo e os Ícones de Ação -->
   <div class="top-bar">
 
+    <!-- Botão Hambúrguer (Invisível no PC, aparece só no celular) -->
+    <button class="mobile-menu-btn" (click)="toggleSidebar()">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fee1cf" stroke-width="2" stroke-linecap="round">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+
     <!-- Lado Esquerdo: Barra de Pesquisa transformável -->
     <div class="search-container">
       <img class="search-icon" src="/lupa.svg" alt="Lupa" />
-      <!-- Input real para o usuário poder digitar a busca -->
       <input type="text" class="search-input" placeholder="Pesquise por um produto" />
     </div>
 
@@ -25,11 +33,10 @@
 
   </div>
 
-  <!-- Linha divisória horizontal -->
+  <!-- Linha divisória horizontal (Vai sumir no celular junto com o menu) -->
   <div class="divider"></div>
 
   <!-- Linha inferior: Menu de Navegação Principal -->
-  <!-- Usamos a tag <nav> (navigation) que é melhor para o Google (SEO) -->
   <nav class="nav-menu">
     <a href="#" class="nav-link">Masculino</a>
     <a href="#" class="nav-link">Feminino</a>
@@ -37,5 +44,29 @@
     <a href="#" class="nav-link">Acessórios</a>
     <a href="#" class="nav-link">Conjuntos</a>
   </nav>
+
+  <!-- ========================================== -->
+  <!-- MENU LATERAL MOBILE (Com Efeito Vidro)     -->
+  <!-- ========================================== -->
+  
+  <!-- Fundo escuro atrás da barra lateral -->
+  <div class="sidebar-overlay" *ngIf="isSidebarOpen" (click)="toggleSidebar()"></div>
+
+  <!-- Barra lateral puxando suas categorias reais -->
+  <div class="mobile-sidebar" [class.open]="isSidebarOpen">
+    <div class="sidebar-header">
+      <span class="sidebar-badge">Categorias</span>
+      <button class="close-btn" (click)="toggleSidebar()">✕</button>
+    </div>
+
+    <ul class="sidebar-links">
+      <!-- (click)="toggleSidebar()" faz o menu fechar sozinho ao clicar em um link -->
+      <li><a href="#" (click)="toggleSidebar()">Masculino</a></li>
+      <li><a href="#" (click)="toggleSidebar()">Feminino</a></li>
+      <li><a href="#" (click)="toggleSidebar()">Peças Avulsas</a></li>
+      <li><a href="#" (click)="toggleSidebar()">Acessórios</a></li>
+      <li><a href="#" (click)="toggleSidebar()">Conjuntos</a></li>
+    </ul>
+  </div>
 
 </header>
