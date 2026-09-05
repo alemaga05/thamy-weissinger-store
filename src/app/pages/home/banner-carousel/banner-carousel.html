@@ -1,21 +1,22 @@
-<!-- Área principal. Pausamos a rotação automática se o mouse estiver em cima -->
-<div class="carousel-container" (mouseenter)="stopAutoPlay()" (mouseleave)="startAutoPlay()">
+<!-- Adicionamos o touchstart e touchend para o celular reconhecer o dedo -->
+<div class="carousel-container" 
+     (mouseenter)="stopAutoPlay()" 
+     (mouseleave)="startAutoPlay()"
+     (touchstart)="onTouchStart($event)"
+     (touchend)="onTouchEnd($event)">
   
-  <!-- "Pista" que desliza para os lados baseada no index atual -->
+  <!-- "Pista" que desliza para os lados -->
   <div class="carousel-track" [style.transform]="'translateX(-' + currentIndex * 100 + '%)'">
-    
-    <!-- O Angular cria uma div dessa para CADA foto na nossa lista do TS -->
     <div class="slide" *ngFor="let slide of slides">
       <img [src]="slide.url" [alt]="slide.alt">
     </div>
-
   </div>
 
   <!-- Botões de Navegação (Setas) -->
   <button class="nav-btn prev" (click)="prevSlide()">&#10094;</button>
   <button class="nav-btn next" (click)="nextSlide()">&#10095;</button>
 
-  <!-- Bolinhas indicadoras na parte inferior -->
+  <!-- Bolinhas indicadoras -->
   <div class="dots-container">
     <span class="dot" 
           *ngFor="let slide of slides; let i = index" 
