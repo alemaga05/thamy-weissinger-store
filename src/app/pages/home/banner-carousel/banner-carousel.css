@@ -34,6 +34,7 @@
    BOTÕES E BOLINHAS
    ========================================= */
 .nav-btn {
+
   position: absolute;
   top: 50%;
   transform: translateY(-50%); /* Centraliza perfeitamente no eixo Y */
@@ -46,7 +47,10 @@
   border-radius: 50%;
   transition: background 0.3s ease;
   z-index: 10;
+
 }
+
+
 
 .nav-btn:hover { background: rgba(172, 117, 97, 0.9); /* Cor salmão/dourada ao passar o mouse */ }
 .prev { left: 20px; }
@@ -81,6 +85,10 @@
    RESPONSIVIDADE APRIMORADA
    ========================================= */
 
+/* =========================================
+   RESPONSIVIDADE (Tablets e Celulares)
+   ========================================= */
+
 @media (max-width: 900px) {
   .carousel-container { height: 400px; } 
   .nav-btn { padding: 10px 15px; font-size: 18px; }
@@ -88,30 +96,29 @@
 
 @media (max-width: 600px) {
   .carousel-container { 
-    height: 30vh; /* Altura menor para se adaptar melhor à imagem completa */
-    min-height: 220px; 
-    background-color: #050505; /* Fundo preto para as bordas vazias não ficarem estranhas */
+    height: auto; /* 1. Tiramos a altura forçada */
+    min-height: unset; /* 2. Removemos a altura mínima que estava sobrando */
+    aspect-ratio: 21 / 9; /* 3. A MÁGICA: Força a caixa a ter a exata proporção de um banner deitado */
+    background-color: #050505; 
   } 
   
-  /* A MÁGICA QUE EXIBE A IMAGEM INTEIRA: */
   .slide img {
-    object-fit: contain; /* Encaixa a imagem inteira na tela sem cortar nada */
+    object-fit: cover; /* Como a caixa agora tem o formato perfeito, o cover preenche TUDO sem cortar e sem deixar borda! */
     object-position: center;
   }
 
-  /* Esconde as setas laterais, afinal agora temos o Swipe! */
+  /* Mantemos as setas escondidas para usar o dedo (Swipe) */
   .nav-btn { 
     display: none; 
   }
 
-  /* Bolinhas mais fáceis de clicar com o dedo */
   .dots-container {
-    bottom: 5px; /* Desce um pouco as bolinhas */
+    bottom: 5px; 
     gap: 12px;
   }
   
   .dot {
-    width: 14px;
-    height: 14px;
+    width: 10px; /* Diminuí um pouquinho a bolinha para não cobrir muito a arte do banner */
+    height: 10px;
   }
 }

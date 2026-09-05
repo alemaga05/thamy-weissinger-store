@@ -180,3 +180,72 @@
   justify-content: center;
   align-items: center;
 }
+
+@media (max-width: 900px) {
+  .products-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 15px;
+  }
+}
+
+/* Para Celulares (A Mágica das 3 Colunas) */
+@media (max-width: 600px) {
+  .popular-section {
+    padding: 30px 2%; /* Reduz a margem da tela para ganhar mais espaço útil */
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(3, 1fr); /* Força exatamente 3 colunas iguais */
+    gap: 8px; /* Espaço bem reduzido entre os produtos */
+  }
+
+  /* Tudo "diminuindo" para caber no mini-cartão */
+  .product-card {
+    border-radius: 8px; /* Borda menos arredondada para aproveitar espaço */
+  }
+
+  .image-container {
+    height: 110px; /* Reduz a altura da foto */
+  }
+
+  .favorite-btn {
+    width: 26px;
+    height: 26px;
+    font-size: 14px; /* Coraçãozinho menor */
+    top: 5px;
+    right: 5px;
+  }
+
+  .product-info {
+    padding: 8px; /* Menos respiro interno no cartão */
+  }
+
+  .product-name {
+    font-size: 10px; /* Fonte bem menor */
+    margin: 0 0 6px 0;
+    
+    /* Truque de Ouro: Se o nome do produto for gigante, 
+       corta e coloca "..." no final para não empurrar o layout pra baixo */
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis; 
+  }
+
+  .product-price {
+    font-size: 12px; /* Preço reduzido */
+  }
+
+  .buy-btn {
+    width: 22px;
+    height: 22px;
+    font-size: 10px; /* Setinha menor */
+  }
+
+  /* Ajuste no título da seção para não ficar gigante no mobile */
+  .section-title {
+    font-size: 24px;
+  }
+  
+  .decor-arrow { width: 20px; }
+  .decor-center { width: 30px; }
+}
