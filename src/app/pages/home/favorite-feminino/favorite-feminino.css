@@ -1,0 +1,182 @@
+.popular-section {
+  background-color: #ffffff;
+  padding: 60px 5%;
+  width: 100%;
+}
+
+/* =========================================
+   TÍTULO DECORADO (Ajustado para o novo layout)
+   ========================================= */
+.title-wrapper {
+  display: flex;
+  flex-direction: column; /* Coloca o texto em cima e a linha embaixo */
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.section-title {
+  color: #a87662; /* Ajustei o tom do marrom para bater certinho com a imagem 2 */
+  
+  /* Usamos Impact para dar aquele visual grosso e alto. Arial Black como plano B */
+  font-family: Impact, "Arial Black", "Inter-Bold", sans-serif; 
+  
+  font-size: 36px; /* Aumentei o tamanho para dar mais destaque */
+  font-weight: 900; /* Força a espessura máxima da letra */
+  letter-spacing: 1px; /* Dá um micro espaço entre as letras grossas para não grudarem */
+  
+  margin: 0 0 10px 0;
+  text-transform: uppercase;
+}
+.decoration-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 2030px; /* Aumentei um pouco a largura total da linha */
+  
+  /* O gap zero garante que as setas fiquem 100% coladas nas linhas */
+  gap: 0; 
+}
+.line {
+  flex: 1; 
+  height: 2px;
+  background-color: #a87662; 
+}
+
+/* Tamanho dos ícones que você vai exportar */
+.decor-arrow { 
+  width: 30px; /* ⬅️ Ícones bem maiores agora */
+  height: auto; 
+  position: relative;
+  z-index: 2;
+}
+.decor-arrow:last-child {
+  transform: scaleX(-1);
+}
+/* --- Ícone do Centro (Losango) --- */
+.decor-center { 
+  width: 48px; /* ⬅️ Ícone central bem maior */
+  height: auto; 
+  
+  /* Deixei um micro espaço de 8px só nas laterais do centro para a 
+     linha não "atravessar" o desenho, mas se quiser 100% colado, mude para 0 */
+  margin: 0 8px; 
+}
+
+/* Primeira seta (Esquerda) */
+.decor-arrow:first-child {
+  /* O valor negativo puxa a linha para dentro do ícone. 
+     Se ainda ficar espaço, mude para -8px ou -10px! */
+  margin-right: -5px; 
+}
+
+/* Última seta (Direita) */
+.decor-arrow:last-child {
+  transform: scaleX(-1); /* Mantém a seta invertida como você pediu */
+  margin-left: -5px; /* Puxa a linha para dentro do ícone do lado direito */
+}
+
+
+/* =========================================
+   GRADE DE PRODUTOS
+   ========================================= */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 25px; 
+}
+
+/* =========================================
+   CARTÃO DO PRODUTO (Agora como Link)
+   ========================================= */
+.product-card {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 15px;
+  overflow: hidden; 
+  display: flex;
+  flex-direction: column;
+  text-decoration: none; /* Remove o sublinhado azul padrão de links HTML */
+  color: inherit; /* Mantém as cores originais da fonte */
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+/* Foto e Coração */
+.image-container {
+  position: relative; 
+  width: 100%;
+  height: 205px;
+  background-color: #f5f5f5; 
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.favorite-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 40px; /* Aumentado */
+  height: 40px; /* Aumentado */
+  font-size: 22px; /* Coração maior */
+  color: #9e7565; /* Cor combinando com o tema */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.favorite-btn:hover {
+  transform: scale(1.1); /* Dá um pequeno pulinho ao passar o mouse */
+}
+
+/* Textos e Botão de Comprar */
+.product-info {
+  padding: 15px;
+}
+
+.product-name {
+  font-size: 15px;
+  color: #333;
+  margin: 0 0 10px 0;
+  font-family: "Inter-Regular", sans-serif; /* Fonte aplicada */
+}
+
+.price-action {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.product-price {
+  font-size: 20px;
+  font-weight: 700;
+  color: #000;
+  font-family: "Inter-Bold", sans-serif; /* Fonte aplicada */
+}
+
+.buy-btn {
+  background: #4a4a4a;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

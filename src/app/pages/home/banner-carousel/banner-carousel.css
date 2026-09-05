@@ -1,0 +1,89 @@
+/* Container que esconde o que passa das bordas */
+.carousel-container {
+  position: relative;
+  width: 100%;
+  max-width: 1524px; /* Tamanho máximo para não esticar demais em TVs */
+  height: 600px;
+  margin: 0 auto; /* Centraliza na tela */
+  overflow: hidden;
+  background-color: #f1f1f1; /* Fundo enquanto as fotos carregam */
+}
+
+/* A "pista" que agrupa as imagens lado a lado e faz o efeito de deslizar */
+.carousel-track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s ease-in-out; /* Velocidade do deslizamento */
+}
+
+/* Configuração individual de cada foto */
+.slide {
+  min-width: 100%; /* Cada foto ocupa 100% da tela visível */
+  height: 100%;
+}
+
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Garante que a foto preencha o espaço sem amassar */
+  object-position: center top;
+}
+
+/* =========================================
+   BOTÕES E BOLINHAS
+   ========================================= */
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%); /* Centraliza perfeitamente no eixo Y */
+  background: rgba(0, 0, 0, 0.4);
+  color: white;
+  border: none;
+  font-size: 24px;
+  padding: 15px 20px;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background 0.3s ease;
+  z-index: 10;
+}
+
+.nav-btn:hover { background: rgba(172, 117, 97, 0.9); /* Cor salmão/dourada ao passar o mouse */ }
+.prev { left: 20px; }
+.next { right: 20px; }
+
+/* Indicadores inferiores */
+.dots-container {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  z-index: 10;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.dot.active, .dot:hover { background-color: #fff; }
+
+/* =========================================
+   RESPONSIVIDADE
+   ========================================= */
+@media (max-width: 900px) {
+  .carousel-container { height: 400px; } /* Menor no tablet */
+  .nav-btn { padding: 10px 15px; font-size: 18px; }
+}
+
+@media (max-width: 600px) {
+  .carousel-container { height: 300px; } /* Menor ainda no celular */
+  .prev { left: 10px; }
+  .next { right: 10px; }
+}

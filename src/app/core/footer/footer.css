@@ -1,0 +1,33 @@
+.footer-container {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  background: #050505;
+  overflow: hidden;
+}
+.image-83 {
+  position: absolute;
+  left: 82px;
+  top: 50px;
+  width: 218px;
+  height: 127px;
+  object-fit: cover;
+}
+.contato, .formas-de-pagamento, ._11-99999-0000, .seg-a-sex-08-h-s-18-h, .contato-gmail-com {
+  position: absolute;
+  color: #fff8f8;
+  font-family: "Poppins-Medium", sans-serif;
+}
+.contato { left: 562px; top: 43px; font-size: 25px; }
+.formas-de-pagamento { left: 1013px; top: 37px; font-size: 25px; }
+._11-99999-0000 { left: 562px; top: 91px; font-size: 22px; color: #dac5c5; }
+.contato-gmail-com { left: 562px; top: 121px; font-size: 22px; color: #dac5c5; text-decoration: underline; }
+.seg-a-sex-08-h-s-18-h { left: 562px; top: 152px; font-size: 22px; color: #dac5c5; }
+.image-159 {
+  position: absolute;
+  left: 1072px;
+  top: 91px;
+  width: 197px;
+  height: 101px;
+  object-fit: cover;
+}

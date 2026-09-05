@@ -1,0 +1,52 @@
+/* =========================================
+   FUNDO E ALINHAMENTO
+   ========================================= */
+.categories-container {
+  display: flex; /* Coloca os itens lado a lado */
+  justify-content: center; /* Centraliza no meio da tela */
+  gap: 30px; /* Cria um espaço de 30px entre o cartão rosa e o azul */
+  padding: 60px 5%; /* Dá um respiro de 60px em cima/baixo e 5% nas laterais */
+  width: 100%;
+  background-color: #ffffff; /* Mantém o fundo preto do resto do site */
+}
+
+/* =========================================
+   OS CARTÕES
+   ========================================= */
+.category-card {
+  flex: 1; 
+  max-width: 600px; 
+  border-radius: 20px; 
+  overflow: hidden; 
+  display: flex; /* Muda para flex para a imagem ocupar todo o espaço */
+  background-color: #050505; /* Garante que o fundo do cartão seja preto, não branco */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; 
+}
+
+.category-image {
+  width: 100%;
+  height: 100%; /* Força a ocupar a altura toda */
+  object-fit: cover; /* Estica e corta as rebarbas para preencher 100% da caixa */
+  display: block;
+}
+
+/* Efeito Interativo: Quando o mouse passa por cima */
+.category-card:hover {
+  transform: translateY(-10px); /* O cartão "flutua" 10 pixels para cima */
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5); /* Cria uma sombra realista embaixo */
+}
+
+/* =========================================
+   RESPONSIVIDADE (Celular e Tablet)
+   ========================================= */
+@media (max-width: 900px) {
+  .categories-container {
+    flex-direction: column; /* Em telas menores, coloca UM EMBAIXO DO OUTRO */
+    align-items: center;
+  }
+  
+  .category-card {
+    width: 100%; /* Faz o cartão ocupar a tela toda do celular */
+    max-width: 100%;
+  }
+}

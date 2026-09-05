@@ -1,0 +1,18 @@
+/* You can add global styles to this file, and also import other style files */
+/* Zera as margens e preenchimentos que vêm de fábrica nos navegadores */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  
+  /* Evita que o site crie uma barra de rolagem horizontal indesejada */
+  overflow-x: hidden; 
+  
+  /* Se a sua loja vai ter fundo escuro no corpo inteiro, pode descomentar a linha abaixo: */
+  /* background-color: #050505; */
+}
+
+/* Regra de ouro do CSS moderno: faz com que bordas não estiquem o tamanho dos itens */
+* {
+  box-sizing: border-box;
+}

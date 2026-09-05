@@ -1,0 +1,30 @@
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+
+// 1. Importação dos componentes que criamos
+import { Header } from './header/header'; 
+import { Footer } from './footer/footer'; 
+import { BannerCarousel } from './banner-carousel/banner-carousel'; 
+import { Categories } from './categories/categories';
+import { PopularProducts } from './popular-products/popular-products';
+import { FavoriteFeminino } from './favorite-feminino/favorite-feminino'; 
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  // 2. Avisando ao Angular que vamos usar todos esses componentes na tela
+  imports: [
+    RouterOutlet, 
+    Header, 
+    Footer, 
+    BannerCarousel, 
+    Categories, 
+    PopularProducts, 
+    FavoriteFeminino 
+  ], 
+  templateUrl: './app.html',
+  styleUrl: './app.css'
+})
+export class App { 
+  title = 'thamy-weissinger-store';
+}

@@ -1,0 +1,35 @@
+<section class="popular-section">
+  
+  <!-- Título Superior e Linhas -->
+  <div class="title-wrapper">
+    <h2 class="section-title">DESTAQUES FEMININOS</h2>
+    
+    <div class="decoration-row">
+      <img src="/simboloDireitaTitulo.svg" alt="Seta" class="decor-arrow">
+      <div class="line"></div>
+      <img src="/simboloMeioTitulo.svg" alt="Centro" class="decor-center">
+      <div class="line"></div>
+      <img src="/simboloDireitaTitulo.svg" alt="Seta" class="decor-arrow">
+    </div>
+  </div>
+
+  <!-- Grade de Produtos -->
+  <div class="products-grid">
+    
+    <a href="#" class="product-card" *ngFor="let product of products">
+      <div class="image-container">
+        <img [src]="product.image" [alt]="product.name" class="product-image">
+        <button class="favorite-btn" (click)="$event.preventDefault()">♡</button>
+      </div>
+
+      <div class="product-info">
+        <h3 class="product-name">{{ product.name }}</h3>
+        <div class="price-action">
+          <span class="product-price">$ {{ product.price }}</span>
+          <button class="buy-btn" (click)="$event.preventDefault()">➔</button>
+        </div>
+      </div>
+    </a>
+
+  </div>
+</section>

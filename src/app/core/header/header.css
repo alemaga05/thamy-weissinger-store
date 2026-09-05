@@ -1,0 +1,162 @@
+/* =========================================
+   ESTILOS GERAIS DO CABEÇALHO
+   ========================================= */
+.header-container {
+  width: 100%;
+  background-color: #050505;
+  display: flex;
+  flex-direction: column; /* Organiza o topo e o menu um embaixo do outro */
+  padding: 15px 5%; /* Cria um respiro interno (5% de margem nas laterais) */
+  box-sizing: border-box; /* Garante que o padding não quebre a tela */
+}
+
+/* =========================================
+   LINHA SUPERIOR (Pesquisa, Logo, Ícones)
+   ========================================= */
+.top-bar {
+  display: flex;
+  justify-content: space-between; /* Empurra a busca pra esq. e ícones pra dir. */
+  align-items: center; /* Centraliza todos verticalmente */
+  width: 100%;
+  margin-bottom: 15px; /* Espaço entre a logo e a linha divisória */
+}
+
+/* --- Lado Esquerdo: Pesquisa --- */
+.search-container {
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.05); /* Fundo transparente sutil */
+  border: 1px solid #fee1cf; /* Borda cor de pele/salmão */
+  border-radius: 30px; /* Bordas arredondadas do Figma */
+  padding: 8px 15px;
+  width: 250px;
+}
+
+.search-icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 10px; /* Afasta a lupa do texto */
+}
+
+.search-input {
+  background: transparent;
+  border: none;
+  color: #e9c0aa;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 13px;
+  outline: none; /* Remove aquela borda azul feia ao clicar no campo */
+  width: 100%;
+}
+
+/* Personaliza o texto provisório (placeholder) do input */
+.search-input::placeholder {
+  color: #e9c0aa;
+  opacity: 0.8;
+}
+
+/* --- Centro: Logo --- */
+.logo-container {
+  display: flex;
+  justify-content: center;
+}
+
+.logo {
+  height: 110px; /* ⬅️ AUMENTADO AQUI (antes era 80px). Altere esse número para ajustar! */
+  object-fit: contain;
+}
+/* --- Lado Direito: Ações (Ícones) --- */
+.actions-container {
+  display: flex;
+  gap: 20px; 
+  align-items: center;
+}
+
+.action-icon {
+  width: 32px; /* ⬅️ AUMENTADO AQUI (antes era 24px). */
+  height: auto;
+  cursor: pointer; 
+  transition: transform 0.2s ease; 
+}
+
+/* Efeito: Quando passar o mouse, o ícone cresce um pouquinho */
+.action-icon:hover {
+  transform: scale(1.1); 
+}
+
+/* =========================================
+   LINHA DIVISÓRIA
+   ========================================= */
+.divider {
+  width: 100%;
+  height: 1px;
+  background-color: #876a64; /* A cor avermelhada do seu Figma */
+  margin: 0 auto 15px auto;
+}
+
+/* =========================================
+   MENU DE NAVEGAÇÃO
+   ========================================= */
+.nav-menu {
+  display: flex;
+  justify-content: center; /* Centraliza os links todos */
+  gap: 40px; /* Distância entre Masculino, Feminino, etc. */
+  width: 100%;
+  flex-wrap: wrap; /* IMPORTANTE: Se não couber, joga os links pra linha de baixo! */
+}
+
+.nav-link {
+  color: #f9f5f5;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 16px;
+  text-decoration: none; /* Tira o sublinhado padrão de links */
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+/* Efeito: Quando passar o mouse no link, ele fica com a cor salmão */
+.nav-link:hover {
+  color: #fee1cf; 
+}
+
+/* =========================================
+   RESPONSIVIDADE (Telas Menores / Celular)
+   ========================================= */
+
+/* Quando a tela for menor que 900px (Tablets e Celulares deitados) */
+@media (max-width: 900px) {
+  .top-bar {
+    flex-wrap: wrap; /* Permite quebrar a barra em duas linhas */
+    gap: 15px;
+  }
+  
+  .search-container {
+    order: 3; /* Joga a barra de pesquisa para a linha de baixo */
+    width: 100%; /* Faz a pesquisa ocupar a tela toda */
+    margin-top: 10px;
+  }
+  
+  .logo-container {
+    order: 1; /* Mantém a logo no topo esquerdo */
+  }
+  
+  .actions-container {
+    order: 2; /* Joga os ícones para o topo direito */
+  }
+  
+  .nav-menu {
+    gap: 20px; /* Diminui o espaço entre os menus para caberem melhor */
+  }
+}
+
+/* Quando a tela for menor que 600px (Celulares em pé) */
+@media (max-width: 600px) {
+  .header-container {
+    padding: 10px 5%;
+  }
+  .logo {
+    height: 80px; /* ⬅️ Deixei a logo um pouco maior no celular também */
+  }
+  .nav-link {
+    font-size: 14px; 
+  }
+}
