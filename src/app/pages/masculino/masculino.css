@@ -5,159 +5,108 @@
 }
 
 /* =========================================
-   BANNER PRINCIPAL
+   1. BANNER PRINCIPAL
    ========================================= */
-.banner-container {
-  width: 100%;
-  height: auto;
-  background-color: #050505;
-}
-.main-banner {
-  width: 100%;
-  max-height: 400px;
-  object-fit: cover;
-  display: block;
-}
+.banner-container { width: 100%; height: auto; background-color: #050505; }
+.main-banner { width: 100%; max-height: 400px; object-fit: cover; display: block; }
 
 /* =========================================
-   SUBCATEGORIAS (Círculos)
+   2. SUBCATEGORIAS (Círculos)
    ========================================= */
 .subcategories-track {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  padding: 50px 5%;
+  display: flex; justify-content: center; gap: 40px; padding: 50px 5%;
 }
-.sub-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-.sub-item:hover {
-  transform: translateY(-5px);
-}
-
+.sub-item { display: flex; flex-direction: column; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.2s; }
+.sub-item:hover { transform: translateY(-5px); }
 .circle-box {
-  width: 100px; /* ⬅️ Reduzimos de 130px para 100px */
-  height: 100px; /* ⬅️ Reduzimos de 130px para 100px */
-  border-radius: 50%;
-  overflow: hidden;
-  background-color: #e0e0e0;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  width: 100px; height: 100px; border-radius: 50%; overflow: hidden;
+  background-color: #e0e0e0; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
-.circle-box img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
+.circle-box img { width: 100%; height: 100%; object-fit: cover; }
+.sub-name { font-family: "Impact", "Arial Black", sans-serif; font-size: 14px; letter-spacing: 1px; color: #000; }
 
 /* =========================================
-   TÍTULO DESTAQUES E GRADE (Design Atualizado)
+   3. SEÇÃO DE PRODUTOS (Padrão das outras telas)
    ========================================= */
-.title-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 40px;
-  padding: 0 5%;
-}
+.popular-section { background-color: #ffffff; padding: 60px 5%; width: 100%; }
+
+.title-wrapper { display: flex; flex-direction: column; align-items: center; margin-bottom: 40px; }
 .section-title {
-  color: #a87662;
-  font-family: Impact, "Arial Black", sans-serif; 
-  font-size: 36px;
-  letter-spacing: 1px;
-  margin: 0 0 10px 0;
+  color: #a87662; font-family: Impact, "Arial Black", "Inter-Bold", sans-serif; 
+  font-size: 36px; font-weight: 900; letter-spacing: 1px; margin: 0 0 10px 0; text-transform: uppercase;
 }
-.decoration-row { display: flex; align-items: center; width: 100%; max-width: 1800px; gap: 0; }
+.decoration-row { display: flex; align-items: center; justify-content: center; width: 100%; max-width: 2030px; gap: 0; }
 .line { flex: 1; height: 2px; background-color: #a87662; }
 .decor-arrow { width: 30px; height: auto; position: relative; z-index: 2; }
 .decor-arrow:first-child { margin-right: -5px; }
 .decor-arrow:last-child { transform: scaleX(-1); margin-left: -5px; }
 .decor-center { width: 48px; height: auto; margin: 0 8px; }
 
-.products-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 25px; 
-  padding: 0 5%;
-  max-width: 1400px;
-  margin: 0 auto;
-}
+.products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 25px; }
 
 .product-card {
-  background: #ffffff;
-  border: 1px solid #e0e0e0;
-  border-radius: 15px;
-  overflow: hidden; 
-  display: flex;
-  flex-direction: column;
-  text-decoration: none;
-  color: inherit;
-  transition: transform 0.2s, box-shadow 0.2s;
+  background: #ffffff; border: 1px solid #e0e0e0; border-radius: 15px; overflow: hidden; 
+  display: flex; flex-direction: column; text-decoration: none; color: inherit; 
+  transition: transform 0.2s, box-shadow 0.2s; cursor: pointer;
 }
 .product-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
 
-.image-container { position: relative; width: 100%; aspect-ratio: 1/1.1; background-color: #e0e0e0; }
+.image-container { position: relative; width: 100%; height: 205px; background-color: #f5f5f5; }
 .product-image { width: 100%; height: 100%; object-fit: cover; }
 
-/* Bolinha branca no canto */
 .favorite-btn {
-  position: absolute; top: 12px; right: 12px;
-  background: #fcfcfc; border: none; border-radius: 50%;
-  width: 25px; height: 25px; cursor: pointer;
+  position: absolute; top: 10px; right: 10px; background: rgba(255, 255, 255, 0.9);
+  border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 22px; 
+  color: #9e7565; display: flex; justify-content: center; align-items: center; 
+  cursor: pointer; transition: transform 0.2s;
 }
+.favorite-btn:hover { transform: scale(1.1); }
 
 .product-info { padding: 15px; }
-.product-name { font-size: 14px; color: #000; margin: 0 0 8px 0; font-family: "Inter-Regular", sans-serif; }
-
+.product-name { font-size: 15px; color: #333; margin: 0 0 10px 0; font-family: "Inter-Regular", sans-serif; }
 .price-action { display: flex; justify-content: space-between; align-items: center; }
-.product-price { font-size: 20px; color: #000; font-family: "Inter-Regular", sans-serif; }
-
-/* Botão escuro com setinha */
+.product-price { font-size: 20px; font-weight: 700; color: #000; font-family: "Inter-Bold", sans-serif; }
 .buy-btn {
-  background: #333333; color: #fff; border: none; border-radius: 50%;
-  width: 32px; height: 32px; font-size: 16px; font-weight: bold;
-  cursor: pointer; display: flex; justify-content: center; align-items: center;
+  background: #4a4a4a; color: #fff; border: none; border-radius: 50%;
+  width: 32px; height: 32px; cursor: pointer; display: flex; justify-content: center; align-items: center;
 }
 
 /* =========================================
-   RESPONSIVIDADE (CELULAR)
+   RESPONSIVIDADE (TABLETS E CELULARES)
    ========================================= */
+@media (max-width: 900px) {
+  .products-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; }
+}
+
 @media (max-width: 600px) {
-    
+  /* Banner Mobile */
+  .main-banner { height: 160px; object-fit: cover; object-position: center top; }
+  
+  /* Subcategorias / Stories Mobile */
   .subcategories-track {
-    justify-content: flex-start;
-    overflow-x: auto; /* Habilita a rolagem lateral */
-    -webkit-overflow-scrolling: touch; /* Mágica para o deslizar ficar super suave no iPhone/Android */
-    gap: 15px; 
-    padding: 20px 5%; /* Respiro lateral */
-    
-    /* Esconde a barra de rolagem cinza feia */
-    scrollbar-width: none; 
+    justify-content: flex-start; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    gap: 15px; padding: 20px 5%; scrollbar-width: none; 
   }
   .subcategories-track::-webkit-scrollbar { display: none; }
-  .sub-item { 
-    /* A regra de ouro: impede que os círculos sejam esmagados para caber na tela */
-    flex: 0 0 auto; 
-  }
+  .sub-item { flex: 0 0 auto; }
+  .circle-box { width: 75px; height: 75px; }
+  .sub-name { font-size: 11px; }
 
-  .circle-box { 
-    width: 75px; 
-    height: 75px; 
+  /* Grade de Produtos Mobile (3 Colunas) */
+  .popular-section { padding: 30px 2%; }
+  .products-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .product-card { border-radius: 8px; }
+  .image-container { height: 110px; }
+  .favorite-btn { width: 26px; height: 26px; font-size: 14px; top: 5px; right: 5px; }
+  .product-info { padding: 8px; }
+  .product-name {
+    font-size: 10px; margin: 0 0 6px 0; 
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; 
   }
-
-  .sub-name {
-    font-size: 11px; /* ⬅️ Textinho bem delicado no celular */
-  }
+  .product-price { font-size: 12px; }
+  .buy-btn { width: 22px; height: 22px; font-size: 10px; }
   
-  .products-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-  .product-name { font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .product-price { font-size: 16px; }
-  
+  /* Ajuste no título da seção */
   .section-title { font-size: 24px; }
   .decor-arrow { width: 20px; }
   .decor-center { width: 30px; }

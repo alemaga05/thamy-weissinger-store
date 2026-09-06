@@ -1,6 +1,6 @@
 <section class="category-page">
   
-  <!-- 1. BANNER PRINCIPAL (Exporte a imagem inteira do Figma) -->
+  <!-- 1. BANNER PRINCIPAL -->
   <div class="banner-container">
     <img src="/categoriaMasculinaPage.png" alt="Categoria Masculina" class="main-banner">
   </div>
@@ -15,38 +15,45 @@
     </div>
   </div>
 
-  <!-- 3. TÍTULO DESTAQUES -->
-  <div class="title-wrapper">
-    <h2 class="section-title">PEÇAS EM DESTAQUE</h2>
-    <div class="decoration-row">
-      <img src="/simboloDireitaTitulo.svg" alt="Seta" class="decor-arrow">
-      <div class="line"></div>
-      <img src="/simboloMeioTitulo.svg" alt="Centro" class="decor-center">
-      <div class="line"></div>
-      <img src="/simboloDireitaTitulo.svg" alt="Seta" class="decor-arrow">
-    </div>
-  </div>
-
-  <!-- 4. GRADE DE PRODUTOS -->
-  <div class="products-grid">
-    <a [routerLink]="['/produto', product.id]" class="product-card" *ngFor="let product of products">
+  <!-- 3. SEÇÃO DE PRODUTOS PADRONIZADA -->
+  <section class="popular-section">
+    
+    <!-- Título Superior e Linhas -->
+    <div class="title-wrapper">
+      <h2 class="section-title">DESTAQUES MASCULINOS</h2>
       
-      <div class="image-container">
-        <img [src]="product.image" [alt]="product.name" class="product-image">
-        <!-- Bolinha branca vazia no canto superior -->
-        <button class="favorite-btn" (click)="$event.preventDefault()"></button>
+      <div class="decoration-row">
+        <img src="/simboloDireitaTitulo.svg" alt="Seta" class="decor-arrow">
+        <div class="line"></div>
+        <img src="/simboloMeioTitulo.svg" alt="Centro" class="decor-center">
+        <div class="line"></div>
+        <img src="/simboloDireitaTitulo.svg" alt="Seta" class="decor-arrow">
       </div>
+    </div>
 
-      <div class="product-info">
-        <h3 class="product-name">{{ product.name }}</h3>
-        <div class="price-action">
-          <span class="product-price">$ {{ product.price }}</span>
-          <!-- Botão escuro com a setinha na diagonal -->
-          <button class="buy-btn" (click)="$event.preventDefault()">↗</button>
+    <!-- Grade de Produtos -->
+    <div class="products-grid">
+      
+      <a [routerLink]="['/produto', product.id]" class="product-card" *ngFor="let product of products">
+        
+        <!-- Foto e ícone de coração -->
+        <div class="image-container">
+          <img [src]="product.image" [alt]="product.name" class="product-image">
+          <button class="favorite-btn" (click)="$event.preventDefault()">♡</button>
         </div>
-      </div>
 
-    </a>
-  </div>
+        <!-- Informações do produto -->
+        <div class="product-info">
+          <h3 class="product-name">{{ product.name }}</h3>
+          
+          <div class="price-action">
+            <span class="product-price">$ {{ product.price }}</span>
+            <button class="buy-btn" (click)="$event.preventDefault()">➔</button>
+          </div>
+        </div>
 
+      </a>
+
+    </div>
+  </section>
 </section>
