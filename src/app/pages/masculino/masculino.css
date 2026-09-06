@@ -1,0 +1,164 @@
+.category-page {
+  background-color: #ffffff;
+  width: 100%;
+  padding-bottom: 60px;
+}
+
+/* =========================================
+   BANNER PRINCIPAL
+   ========================================= */
+.banner-container {
+  width: 100%;
+  height: auto;
+  background-color: #050505;
+}
+.main-banner {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  display: block;
+}
+
+/* =========================================
+   SUBCATEGORIAS (Círculos)
+   ========================================= */
+.subcategories-track {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  padding: 50px 5%;
+}
+.sub-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.sub-item:hover {
+  transform: translateY(-5px);
+}
+
+.circle-box {
+  width: 100px; /* ⬅️ Reduzimos de 130px para 100px */
+  height: 100px; /* ⬅️ Reduzimos de 130px para 100px */
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #e0e0e0;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+.circle-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+/* =========================================
+   TÍTULO DESTAQUES E GRADE (Design Atualizado)
+   ========================================= */
+.title-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 40px;
+  padding: 0 5%;
+}
+.section-title {
+  color: #a87662;
+  font-family: Impact, "Arial Black", sans-serif; 
+  font-size: 36px;
+  letter-spacing: 1px;
+  margin: 0 0 10px 0;
+}
+.decoration-row { display: flex; align-items: center; width: 100%; max-width: 1800px; gap: 0; }
+.line { flex: 1; height: 2px; background-color: #a87662; }
+.decor-arrow { width: 30px; height: auto; position: relative; z-index: 2; }
+.decor-arrow:first-child { margin-right: -5px; }
+.decor-arrow:last-child { transform: scaleX(-1); margin-left: -5px; }
+.decor-center { width: 48px; height: auto; margin: 0 8px; }
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px; 
+  padding: 0 5%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.product-card {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 15px;
+  overflow: hidden; 
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.product-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+
+.image-container { position: relative; width: 100%; aspect-ratio: 1/1.1; background-color: #e0e0e0; }
+.product-image { width: 100%; height: 100%; object-fit: cover; }
+
+/* Bolinha branca no canto */
+.favorite-btn {
+  position: absolute; top: 12px; right: 12px;
+  background: #fcfcfc; border: none; border-radius: 50%;
+  width: 25px; height: 25px; cursor: pointer;
+}
+
+.product-info { padding: 15px; }
+.product-name { font-size: 14px; color: #000; margin: 0 0 8px 0; font-family: "Inter-Regular", sans-serif; }
+
+.price-action { display: flex; justify-content: space-between; align-items: center; }
+.product-price { font-size: 20px; color: #000; font-family: "Inter-Regular", sans-serif; }
+
+/* Botão escuro com setinha */
+.buy-btn {
+  background: #333333; color: #fff; border: none; border-radius: 50%;
+  width: 32px; height: 32px; font-size: 16px; font-weight: bold;
+  cursor: pointer; display: flex; justify-content: center; align-items: center;
+}
+
+/* =========================================
+   RESPONSIVIDADE (CELULAR)
+   ========================================= */
+@media (max-width: 600px) {
+    
+  .subcategories-track {
+    justify-content: flex-start;
+    overflow-x: auto; /* Habilita a rolagem lateral */
+    -webkit-overflow-scrolling: touch; /* Mágica para o deslizar ficar super suave no iPhone/Android */
+    gap: 15px; 
+    padding: 20px 5%; /* Respiro lateral */
+    
+    /* Esconde a barra de rolagem cinza feia */
+    scrollbar-width: none; 
+  }
+  .subcategories-track::-webkit-scrollbar { display: none; }
+  .sub-item { 
+    /* A regra de ouro: impede que os círculos sejam esmagados para caber na tela */
+    flex: 0 0 auto; 
+  }
+
+  .circle-box { 
+    width: 75px; 
+    height: 75px; 
+  }
+
+  .sub-name {
+    font-size: 11px; /* ⬅️ Textinho bem delicado no celular */
+  }
+  
+  .products-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .product-name { font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .product-price { font-size: 16px; }
+  
+  .section-title { font-size: 24px; }
+  .decor-arrow { width: 20px; }
+  .decor-center { width: 30px; }
+}

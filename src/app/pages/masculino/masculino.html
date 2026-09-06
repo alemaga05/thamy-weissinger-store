@@ -1,0 +1,52 @@
+<section class="category-page">
+  
+  <!-- 1. BANNER PRINCIPAL (Exporte a imagem inteira do Figma) -->
+  <div class="banner-container">
+    <img src="/categoriaMasculinaPage.png" alt="Categoria Masculina" class="main-banner">
+  </div>
+
+  <!-- 2. SUBCATEGORIAS (Círculos) -->
+  <div class="subcategories-track">
+    <div class="sub-item" *ngFor="let sub of subcategories">
+      <div class="circle-box">
+        <img [src]="sub.image" [alt]="sub.name">
+      </div>
+      <span class="sub-name">{{ sub.name }}</span>
+    </div>
+  </div>
+
+  <!-- 3. TÍTULO DESTAQUES -->
+  <div class="title-wrapper">
+    <h2 class="section-title">PEÇAS EM DESTAQUE</h2>
+    <div class="decoration-row">
+      <img src="/simboloDireitaTitulo.svg" alt="Seta" class="decor-arrow">
+      <div class="line"></div>
+      <img src="/simboloMeioTitulo.svg" alt="Centro" class="decor-center">
+      <div class="line"></div>
+      <img src="/simboloDireitaTitulo.svg" alt="Seta" class="decor-arrow">
+    </div>
+  </div>
+
+  <!-- 4. GRADE DE PRODUTOS -->
+  <div class="products-grid">
+    <a [routerLink]="['/produto', product.id]" class="product-card" *ngFor="let product of products">
+      
+      <div class="image-container">
+        <img [src]="product.image" [alt]="product.name" class="product-image">
+        <!-- Bolinha branca vazia no canto superior -->
+        <button class="favorite-btn" (click)="$event.preventDefault()"></button>
+      </div>
+
+      <div class="product-info">
+        <h3 class="product-name">{{ product.name }}</h3>
+        <div class="price-action">
+          <span class="product-price">$ {{ product.price }}</span>
+          <!-- Botão escuro com a setinha na diagonal -->
+          <button class="buy-btn" (click)="$event.preventDefault()">↗</button>
+        </div>
+      </div>
+
+    </a>
+  </div>
+
+</section>

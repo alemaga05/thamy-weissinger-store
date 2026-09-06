@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FavoriteFeminino } from './favorite-feminino';
+import { Masculino } from './masculino';
 
-describe('FavoriteFeminino', () => {
-  let component: FavoriteFeminino;
-  let fixture: ComponentFixture<FavoriteFeminino>;
+describe('Masculino', () => {
+  let component: Masculino;
+  let fixture: ComponentFixture<Masculino>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FavoriteFeminino],
+      imports: [Masculino],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(FavoriteFeminino);
+    fixture = TestBed.createComponent(Masculino);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
@@ -20,9 +20,3 @@ describe('FavoriteFeminino', () => {
     expect(component).toBeTruthy();
   });
 });
-
-
-
-
-
-  

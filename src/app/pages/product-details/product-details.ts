@@ -40,6 +40,16 @@ export class ProductDetails implements OnInit {
       estoque: 5,
       descricao: 'Camiseta leve e respirável para o dia a dia.',
       imagens: ['/produto1.png', '/image0.png', '/image1.png', '/image2.png']
+    },
+    {
+      id: 21,
+      nome: 'teste de la teste',
+      categoria: 'Feminino',
+      vendedor: 'Thamy Weissinger',
+      preco: 79.90,
+      estoque: 5,
+      descricao: 'Camiseta leve e respirável para o dia a dia.',
+      imagens: ['/produto1.png', '/image0.png', '/image1.png', '/image2.png']
     }
   ];
 
