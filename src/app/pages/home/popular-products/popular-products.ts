@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common'; // Necessário para o *ngFor
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-popular-products',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './popular-products.html',
   styleUrl: './popular-products.css'
 })

@@ -1,25 +1,7 @@
-<!-- 1. Cabeçalho (Sempre no topo) -->
 <app-header></app-header>
 
-<!-- 2. Conteúdo Principal da Loja -->
-<main style="min-height: 500px;">
-  
-  <!-- Carrossel de Banners da Home -->
-  <app-banner-carousel></app-banner-carousel>
-  
-  <!-- Seção de Categorias (Masculina / Feminina) -->
-  <app-categories></app-categories>
+<!-- O conteúdo da página (Home ou Produto) aparece aqui no meio -->
+<router-outlet></router-outlet> 
 
-  <!-- Seção de Produtos Mais Populares -->
-  <app-popular-products></app-popular-products>
-
-  <!-- NOVA SEÇÃO: Destaques Femininos -->
-  <app-favorite-feminino></app-favorite-feminino>
-
-  <!-- O Router Outlet é onde o Angular vai carregar outras páginas no futuro (ex: Carrinho) -->
-  <router-outlet></router-outlet>
-  
-</main>
-
-<!-- 3. Rodapé (Sempre no final) -->
+<!-- O Rodapé fixo no final de tudo -->
 <app-footer></app-footer>

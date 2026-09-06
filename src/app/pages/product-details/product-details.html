@@ -1,0 +1,103 @@
+<section class="product-page">
+  
+  <div class="product-container">
+    
+    <!-- LADO ESQUERDO: GALERIA DE FOTOS -->
+    <!-- LADO ESQUERDO: GALERIA DE FOTOS -->
+    <div class="gallery-section">
+      
+      <!-- VERSÃO COMPUTADOR (Miniaturas + Foto Grande) -->
+      <div class="desktop-gallery">
+        <div class="thumbnails">
+          <img *ngFor="let img of produto.imagens" 
+               [src]="img" 
+               (click)="trocarImagem(img)" 
+               [class.active]="img === imagemPrincipal"
+               class="thumb-img">
+        </div>
+        
+        <div class="main-image-box">
+          <img [src]="imagemPrincipal" class="main-img" alt="Produto">
+        </div>
+      </div>
+
+      <!-- VERSÃO CELULAR (Arrastar com o dedo) -->
+      <div class="mobile-gallery">
+        <!-- Pista onde as imagens vão deslizar -->
+        <div class="swipe-track">
+          <img *ngFor="let img of produto.imagens" 
+               [src]="img" 
+               class="swipe-img" 
+               alt="Produto">
+        </div>
+        <!-- Um textinho discreto ensinando o usuário -->
+        <div class="swipe-hint">← Deslize para ver mais →</div>
+      </div>
+
+    </div>
+
+    <!-- LADO DIREITO: INFORMAÇÕES E COMPRA -->
+    <div class="info-section">
+      <div class="breadcrumb">{{ produto.categoria }}</div>
+      
+      <div class="title-header">
+        <h1 class="product-title">{{ produto.nome }}</h1>
+        <div class="action-icons">
+          <button class="icon-btn">♡</button>
+          <button class="icon-btn">➦</button>
+        </div>
+      </div>
+
+      <p class="seller">Vendido e entregue por <strong>{{ produto.vendedor }}</strong></p>
+      
+      <!-- O Angular formata o número para moeda brasileira automaticamente -->
+      <div class="price">R$ {{ produto.preco | number:'1.2-2' }}</div>
+
+      <!-- SELEÇÃO DE TAMANHO -->
+      <div class="size-section">
+        <div class="size-header">
+          <span>Selecione um tamanho</span>
+          <a href="#" class="size-guide">📏 Tabela de medidas</a>
+        </div>
+        <div class="size-options">
+          <button *ngFor="let tamanho of tamanhos" 
+                  class="size-btn" 
+                  [class.selected]="tamanho === tamanhoSelecionado"
+                  (click)="selecionarTamanho(tamanho)">
+            {{ tamanho }}
+          </button>
+        </div>
+      </div>
+
+      <!-- AVISO DE ESTOQUE -->
+      <div class="stock-info">
+        <span *ngIf="produto.estoque > 0" class="in-stock">
+          🟢 Apenas <strong>{{ produto.estoque }}</strong> unidades em estoque!
+        </span>
+        <span *ngIf="produto.estoque === 0" class="out-of-stock">
+          🔴 Produto Esgotado
+        </span>
+      </div>
+
+      <!-- BOTÕES DE COMPRA -->
+      <div class="buy-section" *ngIf="produto.estoque > 0">
+        
+        <div class="qty-selector">
+          <button (click)="diminuirQuantidade()">-</button>
+          <span>{{ quantidadeSelecionada }}</span>
+          <button (click)="aumentarQuantidade()">+</button>
+        </div>
+
+        <button class="buy-btn" (click)="comprar()">Adicionar ao carrinho</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PARTE INFERIOR: DESCRIÇÃO -->
+  <div class="description-section">
+    <h2 class="desc-title">DESCRIÇÃO DO PRODUTO</h2>
+    <p class="desc-text">{{ produto.descricao }}</p>
+  </div>
+
+</section>
