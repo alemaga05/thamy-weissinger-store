@@ -1,0 +1,60 @@
+<!-- Fundo escuro que cobre a tela toda -->
+<div class="modal-backdrop" *ngIf="isOpen" (click)="fecharModal()">
+  
+  <!-- Caixa principal do Modal (precisa do position relative no CSS agora) -->
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    
+    <!-- ⬅️ NOVO: BOTÃO DE FECHAR (X) -->
+    <button class="close-btn" (click)="fecharModal()">✕</button>
+
+    <!-- LADO ESQUERDO (PC) / PARTE DE BAIXO (CELULAR): FORMULÁRIOS -->
+    <div class="form-section">
+      
+      <!-- TELA DE LOGIN -->
+      <div class="form-container" *ngIf="isLoginView">
+        <h2 class="title gradient-text">LOGIN</h2>
+        
+        <div class="input-group">
+          <input type="text" placeholder="Usuário">
+          <input type="password" placeholder="Senha">
+        </div>
+
+        <button class="btn-primary">Entrar</button>
+        <a href="#" class="forgot-password">Esqueceu a senha?</a>
+        
+        <button class="btn-secondary" (click)="alternarTela()">Criar nova conta</button>
+        
+        <div class="social-login">
+          <button class="btn-facebook"><img src="/facebook-10.png" alt="FB"> Facebook</button>
+          <button class="btn-google"><img src="/google-10.png" alt="G"> Google</button>
+        </div>
+      </div>
+
+      <!-- TELA DE CADASTRO -->
+      <div class="form-container" *ngIf="!isLoginView">
+        <h2 class="title gradient-text">CADASTRE-SE</h2>
+        
+        <div class="input-group">
+          <input type="text" placeholder="Nome completo">
+          <input type="email" placeholder="Email">
+          <input type="password" placeholder="Senha">
+          <input type="password" placeholder="Confirmar senha">
+        </div>
+
+        <button class="btn-primary">Cadastrar - se</button>
+        
+        <button class="btn-secondary" (click)="alternarTela()">Login</button>
+      </div>
+
+    </div>
+
+    <!-- LADO DIREITO (PC) / PARTE DE CIMA (CELULAR): IMAGEM -->
+    <div class="image-section">
+      <!-- Imagem do PC -->
+      <img src="/loginEcadastro.png" alt="Thamy Fitwear" class="banner-img desktop-img">
+      <!-- Imagem do Celular (Coloque a sua imagem menor aqui) -->
+      <img src="/loginEcadastroMobile.png" alt="Thamy Fitwear" class="banner-img mobile-img">
+    </div>
+
+  </div>
+</div>

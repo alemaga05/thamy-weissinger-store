@@ -28,7 +28,10 @@
     <div class="actions-container">
       <img class="action-icon" src="/favorito.svg" alt="Favoritos" />
       <img class="action-icon" src="/sacola.svg" alt="Carrinho" />
-      <img class="action-icon" src="/perfil.svg" alt="Usuário" />
+
+      <a style="cursor: pointer;" (click)="abrirModal()">
+        <img class="action-icon" src="/perfil.svg" alt="Usuário" />
+      </a>
     </div>
 
   </div>
@@ -70,3 +73,8 @@
   </div>
 
 </header>
+
+<app-auth-modal 
+  [isOpen]="isModalOpen" 
+  (close)="fecharModal()">
+</app-auth-modal>
