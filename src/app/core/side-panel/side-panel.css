@@ -1,0 +1,278 @@
+.panel-backdrop {
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 9999; display: flex; justify-content: flex-end;
+}
+
+/* O fundo degradê perfeito do Figma */
+.side-panel-content {
+  background: linear-gradient(
+    180deg,
+    rgba(222, 207, 188, 1) 0%,
+    rgba(171, 159, 145, 1) 66%,
+    rgba(145, 136, 123, 1) 84%,
+    rgba(120, 112, 102, 1) 100%
+  );
+  width: 420px; max-width: 85vw; height: 100%;
+  padding: 40px 30px; display: flex; flex-direction: column;
+  position: relative; box-shadow: -5px 0 25px rgba(0,0,0,0.3);
+  animation: slideIn 0.3s forwards;
+}
+
+@keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+
+.close-panel-btn {
+  position: absolute; top: 15px; right: 20px;
+  background: transparent; border: none; font-size: 20px; font-weight: bold;
+  color: #7f614f; cursor: pointer; transition: 0.2s; z-index: 10;
+}
+.close-panel-btn:hover { transform: scale(1.1); }
+
+/* Título degradê */
+.panel-title {
+  background: linear-gradient(to left, #ac7561, #b17a66, #a36c58, #845440);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; text-align: center;
+  font-family: "PassionOne-Regular", "Impact", sans-serif;
+  font-size: 45px; font-weight: 400; margin: 20px 0 30px 0;
+}
+
+/* ================== ESTADO VAZIO ================== */
+.empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; gap: 30px; }
+.ellipse-10 {
+  background: linear-gradient(180deg, rgba(94, 85, 76, 1) 0%, rgba(196, 178, 158, 1) 100%);
+  border-radius: 50%; width: 110px; height: 110px;
+  display: flex; justify-content: center; align-items: center; position: relative; z-index: 1;
+}
+.ellipse-10::before {
+  content: ""; position: absolute; top: -3px; left: -3px; right: -3px; bottom: -3px;
+  border-radius: 50%; background: linear-gradient(180deg, rgba(217, 202, 183, 1) 0%, rgba(166, 155, 140, 1) 50%);
+  z-index: -1;
+}
+.mock-icon { font-size: 40px; }
+.empty-text {
+  color: #7f614f; text-align: center; font-family: "Inter-Regular", sans-serif;
+  font-size: 20px; width: 230px; line-height: 1.2;
+}
+
+/* ================== ESTADO CHEIO E PRODUTOS ================== */
+.filled-state { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+.divider-line { width: 100%; height: 1px; background-color: rgba(166, 148, 133, 0.5); margin: 10px 0; }
+
+.items-list { 
+  flex: 1; 
+  overflow-y: auto; 
+  overflow-x: hidden; /* ⬅️ No GERAL: Impede que a lixeira aumente a largura da tela */
+  padding-right: 5px; 
+  margin: 15px 0; 
+}
+
+.cart-item-wrapper {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  margin-bottom: 25px; 
+}
+
+/* O card inteiro do produto */
+.cart-item { 
+  flex: 0 0 100%; 
+  display: flex; 
+  gap: 18px; 
+  align-items: center; 
+}
+
+/* Moldura chique para a foto */
+.img-wrapper {
+  position: relative;
+  width: 90px;
+  height: 110px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+}
+.item-img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Container dos textos */
+.item-details { 
+  flex: 1; 
+  display: flex; 
+  flex-direction: column; 
+  justify-content: center;
+  height: 100%;
+}
+
+.item-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 5px; }
+
+/* Título do produto com limite de 2 linhas */
+.item-name { 
+  font-size: 14px; 
+  font-family: "Inter-Bold", sans-serif; 
+  color: #3b2d28; 
+  margin: 0; 
+  text-transform: uppercase; 
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; 
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.swipe-trash {
+  flex: 0 0 70px; 
+  background: linear-gradient(135deg, #d13022 0%, #a82418 100%);
+  border-radius: 12px 0 0 12px;
+  margin-left: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: inset 5px 0 10px rgba(0,0,0,0.1);
+}
+
+/* Ícone de Excluir SVG */
+.remove-btn { 
+  background: none; border: none; color: #8c786d; 
+  cursor: pointer; padding: 0; transition: 0.2s;
+  display: flex; align-items: center; justify-content: center;
+}
+.remove-btn:hover { color: #d13022; transform: scale(1.1); }
+
+/* Tamanho */
+.item-size { font-size: 13px; color: #61534b; font-family: "Inter-Regular", sans-serif; margin-bottom: 12px; }
+.item-size strong { color: #3b2d28; font-family: "Inter-Bold", sans-serif; }
+
+/* Preço e Caixinha de Quantidade */
+.item-price-row { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+.item-price { font-size: 16px; font-family: "Inter-Bold", sans-serif; color: #2b1f1a; }
+
+.qty-wrapper { display: flex; align-items: center; gap: 8px; }
+.qtd-label { font-size: 12px; color: #61534b; font-family: "Inter-Regular", sans-serif; }
+
+/* O Design da Caixinha de + e - */
+.qty-control { 
+  display: flex; 
+  align-items: center; 
+  border: 1px solid rgba(166, 148, 133, 0.6); 
+  border-radius: 4px; 
+  background: rgba(255, 255, 255, 0.4); 
+}
+.qtd-btn { 
+  background: transparent; border: none; font-size: 16px; 
+  cursor: pointer; color: #3b2d28; padding: 2px 10px; 
+  transition: 0.2s; 
+}
+.qtd-btn:hover { background: rgba(0,0,0,0.05); }
+.qtd-number { font-family: "Inter-Bold", sans-serif; font-size: 13px; min-width: 22px; text-align: center; color: #3b2d28; }
+
+/* ================== RODAPÉ ================== */
+.panel-footer { margin-top: auto; display: flex; flex-direction: column; align-items: center; padding-top: 20px; }
+.total-price { font-size: 16px; font-family: "Inter-Bold", sans-serif; color: #000; margin-bottom: 25px; }
+
+/* Botões baseados na imagem */
+.btn-checkout {
+  width: 80%; padding: 12px; border-radius: 30px; border: none;
+  background: #644a41; color: #fff; font-family: "Inter-Regular", sans-serif;
+  font-size: 14px; cursor: pointer; transition: 0.2s; margin-bottom: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+.btn-checkout:hover { background: #4f3931; }
+
+.btn-continue {
+  width: 80%; padding: 12px; border-radius: 30px; border: 1px solid #333;
+  background: rgba(255,255,255,0.4); color: #333; font-family: "Inter-Regular", sans-serif;
+  font-size: 14px; cursor: pointer; transition: 0.2s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+.btn-continue:hover { background: rgba(255,255,255,0.6); }
+
+.items-list::-webkit-scrollbar {
+  width: 6px; /* Barrinha bem fininha e delicada */
+}
+.items-list::-webkit-scrollbar-track {
+  background: rgba(166, 148, 133, 0.2); /* Fundo da barra combinando com o tema */
+  border-radius: 10px;
+}
+.items-list::-webkit-scrollbar-thumb {
+  background: #8c786d; /* Cor marrom da barrinha em si */
+  border-radius: 10px;
+}
+.items-list::-webkit-scrollbar-thumb:hover {
+  background: #644a41; /* Fica mais escura ao passar o mouse */
+}
+
+/* =========================================
+   RESPONSIVIDADE (CELULARES E TABLETS)
+   ========================================= */
+@media (max-width: 768px) {
+  
+  /* O painel ocupa mais espaço na tela (90%) para os itens não ficarem espremidos */
+  .side-panel-content {
+    width: 75vw; /* ⬅️ Diminuímos de 90vw para 75vw (mais fino!) */
+    max-width: 320px; /* Garante que não fique muito largo em celulares grandes */
+    padding: 25px 12px; /* Diminui um pouco o respiro interno para caber tudo */
+  }
+  .panel-title {
+    font-size: 34px; /* Título um pouco menor */
+    margin: 10px 0 20px 0;
+  }
+
+  /* ================== A MÁGICA DO DESLIZE PELO DEDO ================== */
+  .items-list {
+    -webkit-overflow-scrolling: touch; /* Deixa a rolagem suave igual app nativo no celular */
+    padding-right: 5px; /* Reduz o espaço da barrinha já que no cel ela é invisível/fininha */
+  }
+
+  /* Ajustes do Produto para caber na telinha */
+  .cart-item {
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  
+  /* Foto menor */
+  .img-wrapper {
+    width: 70px;
+    height: 90px;
+  }
+
+  /* Textos mais enxutos */
+  .item-name { font-size: 12px; }
+  .item-size { font-size: 11px; margin-bottom: 8px; }
+  .item-price { font-size: 14px; }
+  /* ⬅️ NO MOBILE: Esconde o botão 'X' normal no celular, obrigando o usuário a arrastar! */
+  .remove-btn { display: none; }
+
+  /* Caixinha de quantidade com botões maiores para facilitar o toque do dedo */
+  .qtd-btn { 
+    padding: 4px 10px; 
+    font-size: 18px; 
+  }
+  .qtd-number { font-size: 12px; min-width: 18px; }
+
+  /* Rodapé e Botões Finais */
+  .panel-footer {
+    padding-top: 20px;
+    padding-bottom: 25px; /* Mais espaço embaixo para não grudar na borda do celular */
+    gap: 12px; /* Cria um espaçamento perfeito e automático entre os botões */
+  }
+    .total-price {
+        font-size: 18px; /* Dá um super destaque para o valor no celular */
+        margin-bottom: 5px;
+    }
+  .btn-checkout, .btn-continue {
+    width: 100%; /* Botões grandes de ponta a ponta */
+    padding: 15px; /* Mais gordinhos para facilitar o clique com o dedo */
+    font-size: 14px;
+    font-family: "Inter-Bold", sans-serif; /* Fonte mais forte e legível */
+    margin-bottom: 0; /* O espaçamento agora é controlado pelo 'gap' ali em cima */
+  }
+
+  /* Estado Vazio um pouco mais delicado */
+  .ellipse-10 {
+    width: 90px;
+    height: 90px;
+  }
+  .mock-icon { font-size: 32px; }
+  .empty-text { font-size: 18px; }
+}

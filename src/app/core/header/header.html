@@ -26,8 +26,9 @@
 
     <!-- Lado Direito: Ícones de Ação (Favoritos, Carrinho, Perfil) -->
     <div class="actions-container">
-      <img class="action-icon" src="/favorito.svg" alt="Favoritos" />
-      <img class="action-icon" src="/sacola.svg" alt="Carrinho" />
+      <a style="cursor: pointer;" (click)="abrirFavoritos()"><img src="/favorito.svg" alt="Favoritos" class="action-icon"></a>
+      <a style="cursor: pointer;" (click)="abrirCarrinho()"><img src="/sacola.svg" alt="Sacola" class="action-icon"></a>
+      
 
       <a style="cursor: pointer;" (click)="abrirModal()">
         <img class="action-icon" src="/perfil.svg" alt="Usuário" />
@@ -78,3 +79,9 @@
   [isOpen]="isModalOpen" 
   (close)="fecharModal()">
 </app-auth-modal>
+
+<app-side-panel 
+  [isOpen]="isSidePanelOpen" 
+  [mode]="sidePanelMode"
+  (close)="fecharPainelLateral()">
+</app-side-panel>

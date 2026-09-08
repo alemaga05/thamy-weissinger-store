@@ -1,0 +1,94 @@
+<div class="panel-backdrop" *ngIf="isOpen" (click)="fecharPainel()">
+  
+  <div class="side-panel-content" (click)="$event.stopPropagation()">
+    
+    <button class="close-panel-btn" (click)="fecharPainel()">✕</button>
+
+    <h2 class="panel-title">
+      {{ mode === 'cart' ? 'Meu carrinho' : 'Meus favoritos' }}
+    </h2>
+
+    <!-- ESTADO VAZIO -->
+    <div class="empty-state" *ngIf="cartItems.length === 0">
+      <div class="ellipse-10">
+        <span class="mock-icon">{{ mode === 'cart' ? '🛍️' : '🖤' }}</span>
+      </div>
+      <p class="empty-text">
+        {{ mode === 'cart' ? 'Ops! Carrinho vazio' : 'Não há nada curtido por aqui ;(' }}
+      </p>
+    </div>
+
+    <!-- ESTADO CHEIO -->
+    <div class="filled-state" *ngIf="cartItems.length > 0">
+      
+      <!-- Linha divisória superior -->
+      <div class="divider-line"></div>
+
+      <div class="items-list">
+        
+        <!-- ENVELOPE QUE OUVE O DEDO E MOVE -->
+        <div class="cart-item-wrapper" *ngFor="let item of cartItems"
+             (touchstart)="onTouchStart($event, item)"
+             (touchmove)="onTouchMove($event, item)"
+             (touchend)="onTouchEnd(item)"
+             [style.transform]="'translateX(' + (item.swipeOffset || 0) + 'px)'"
+             [style.transition]="item.isSwiping ? 'none' : 'transform 0.3s ease'">
+          
+          <!-- SEU PRODUTO INTACTO -->
+          <div class="cart-item">
+            <div class="img-wrapper">
+              <img [src]="item.image" [alt]="item.name" class="item-img">
+            </div>
+            <div class="item-details">
+              <div class="item-header">
+                <h3 class="item-name">{{ item.name }}</h3>
+                <!-- Botão X normal (que será escondido no celular via CSS) -->
+                <button class="remove-btn" (click)="removerItem(item)">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </div>
+              <span class="item-size">Tamanho: <strong>{{ item.size }}</strong></span>
+              <div class="item-price-row">
+                <span class="item-price">R$ {{ formatarPreco(item.price) }}</span>
+                <div class="qty-wrapper" *ngIf="mode === 'cart'">
+                  <span class="qtd-label">Qtd.</span>
+                  <div class="qty-control">
+                    <button class="qtd-btn" (click)="diminuirQtd(item)">–</button>
+                    <span class="qtd-number">{{ item.quantity }}</span>
+                    <button class="qtd-btn" (click)="aumentarQtd(item)">+</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- LIXEIRA OCULTA (Arrastou pra esquerda, ela aparece!) -->
+          <div class="swipe-trash" (click)="removerItem(item)">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              <line x1="10" y1="11" x2="10" y2="17"></line>
+              <line x1="14" y1="11" x2="14" y2="17"></line>
+            </svg>
+          </div>
+
+        </div>
+      </div>
+      <!-- Linha divisória inferior -->
+      <div class="divider-line"></div>
+
+      <!-- Rodapé (Total e Botões) -->
+      <div class="panel-footer" *ngIf="mode === 'cart'">
+        <h3 class="total-price">TOTAL: R${{ valorTotalFormatado }}</h3>
+        
+        <button class="btn-checkout">Finalizar compra ➔</button>
+        <button class="btn-continue" (click)="fecharPainel()">Continuar comprando</button>
+      </div>
+
+    </div>
+
+  </div>
+</div>
