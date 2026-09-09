@@ -21,7 +21,9 @@
 
     <!-- Centro: Logo da Loja -->
     <div class="logo-container">
-      <img class="logo" src="/logo.png" alt="Logo Thamy Weissinger" />
+      <a routerLink="/" style="cursor: pointer;">
+        <img class="logo" src="/logo.png" alt="Logo Thamy Weissinger" />
+      </a>
     </div>
 
     <!-- Lado Direito: Ícones de Ação (Favoritos, Carrinho, Perfil) -->
@@ -42,11 +44,10 @@
 
   <!-- Linha inferior: Menu de Navegação Principal -->
   <nav class="nav-menu">
-    <a href="#" class="nav-link">Masculino</a>
-    <a href="#" class="nav-link">Feminino</a>
-    <a href="#" class="nav-link">Peças Avulsas</a>
-    <a href="#" class="nav-link">Acessórios</a>
-    <a href="#" class="nav-link">Conjuntos</a>
+    <a routerLink="/categoria/masculino" class="nav-link">Masculino</a>
+    <a routerLink="/categoria/feminino" class="nav-link">Feminino</a>
+    <a routerLink="/categoria/acessorios" class="nav-link">Acessórios</a>
+    <a routerLink="/categoria/conjuntos" class="nav-link">Conjuntos</a>
   </nav>
 
   <!-- ========================================== -->

@@ -1,0 +1,54 @@
+<section class="category-page">
+  
+  <!-- Título Superior e Linhas -->
+  <div class="title-wrapper">
+    <!-- O nome muda sozinho dependendo do link clicado! -->
+    <h2 class="section-title">{{ categoriaAtual }}</h2>
+    
+    <!-- Linha decorativa inferior (Puxando seus SVGs) -->
+    <div class="decoration-row">
+      <img src="/simboloDireitaTitulo.svg" alt="Seta" class="decor-arrow">
+      <div class="line"></div>
+      <img src="/simboloMeioTitulo.svg" alt="Centro" class="decor-center">
+      <div class="line"></div>
+      <img src="/simboloDireitaTitulo.svg" alt="Seta" class="decor-arrow">
+    </div>
+  </div>
+
+  <!-- Mensagem se a categoria não tiver produtos -->
+  <div class="empty-category" *ngIf="produtosFiltrados.length === 0">
+    <h2>Novidades chegando em breve!</h2>
+    <p>Ainda não temos produtos cadastrados nesta categoria.</p>
+  </div>
+
+  <!-- Grade de Produtos -->
+  <div class="products-grid" *ngIf="produtosFiltrados.length > 0">
+    
+    <!-- Cartão do Produto (100% Clicável) -->
+    <a [routerLink]="['/produto', prod.id]" class="product-card" *ngFor="let prod of produtosFiltrados">
+      
+      <!-- Foto e ícone de coração -->
+      <div class="image-container">
+        <img [src]="prod.imagem" [alt]="prod.nome" class="product-image">
+        <!-- preventDefault() impede que o clique no coração abra a página da roupa -->
+        <button class="favorite-btn" (click)="$event.preventDefault()" title="Adicionar aos favoritos">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Informações do produto -->
+      <div class="product-info">
+        <h3 class="product-name">{{ prod.nome }}</h3>
+        
+        <div class="price-action">
+          <span class="product-price">R$ {{ formatarPreco(prod.preco) }}</span>
+          <button class="buy-btn" (click)="$event.preventDefault()">➔</button>
+        </div>
+      </div>
+
+    </a>
+
+  </div>
+</section>
