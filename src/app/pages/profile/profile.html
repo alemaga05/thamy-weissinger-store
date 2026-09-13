@@ -1,0 +1,113 @@
+<!-- ... (O Menu lateral continua igual ao anterior) ... -->
+<!-- Substitua apenas de <div class="content-card"> para baixo -->
+
+    <div class="content-card">
+      
+      <!-- ================= ABA 1: MEUS DADOS ================= -->
+      <div *ngIf="abaAtiva === 'dados'" class="tab-dados">
+        <div class="card-header">
+          <h2 class="tab-title">MEUS DADOS</h2>
+          <button class="action-text-btn" (click)="toggleEditarDados()" *ngIf="!editandoDados">Editar dados ✎</button>
+        </div>
+        
+        <div class="dados-grid">
+          <div class="big-avatar">
+            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#a87662" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          </div>
+          <div class="vertical-divider"></div>
+          
+          <div class="dados-info">
+            <!-- MODO VISUALIZAÇÃO -->
+            <ng-container *ngIf="!editandoDados">
+              <div class="info-row"><span class="label">Nome Completo:</span> <span class="value">{{ usuario.nome }}</span></div>
+              <div class="info-row"><span class="label">Email:</span> <span class="value">{{ usuario.email }}</span></div>
+              <div class="info-row"><span class="label">Telefone:</span> <span class="value">{{ usuario.telefone }}</span></div>
+              <div class="info-row"><span class="label">Nascimento:</span> <span class="value">{{ usuario.dataNascimento }}</span></div>
+              <div class="info-row"><span class="label">Senha:</span> <span class="value">••••••••</span></div>
+            </ng-container>
+
+            <!-- MODO EDIÇÃO (Formulário) -->
+            <ng-container *ngIf="editandoDados">
+              <div class="form-group">
+                <label>Nome Completo</label>
+                <input type="text" [(ngModel)]="usuario.nome" class="form-input">
+              </div>
+              <div class="form-group">
+                <label>Telefone</label>
+                <input type="text" [(ngModel)]="usuario.telefone" class="form-input">
+              </div>
+              <div class="form-group">
+                <label>Nascimento</label>
+                <input type="text" [(ngModel)]="usuario.dataNascimento" class="form-input">
+              </div>
+              
+              <div class="form-actions">
+                <button class="btn-cancel" (click)="toggleEditarDados()">Cancelar</button>
+                <button class="btn-save" (click)="salvarDados()">Salvar Alterações</button>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= ABA 2: MEUS PEDIDOS (Continua Igual) ================= -->
+      <div *ngIf="abaAtiva === 'pedidos'" class="tab-pedidos">
+        <!-- Seu código antigo de pedidos fica aqui... -->
+      </div>
+
+      <!-- ================= ABA 3: ENDEREÇOS ================= -->
+      <div *ngIf="abaAtiva === 'enderecos'" class="tab-enderecos">
+        <div class="card-header">
+          <h2 class="tab-title">MEUS ENDEREÇOS</h2>
+          <button class="action-text-btn" (click)="novoEndereco()" *ngIf="!editandoEndereco">Adicionar novo endereço ➕</button>
+        </div>
+
+        <!-- MODO VISUALIZAÇÃO DE ENDEREÇOS -->
+        <div class="enderecos-list" *ngIf="!editandoEndereco">
+          <div class="endereco-card" *ngFor="let end of enderecos">
+            <span class="badge-principal" *ngIf="end.principal">Principal</span>
+            
+            <div class="endereco-text">
+              <p><strong>{{ end.rua }}</strong></p>
+              <p>{{ end.bairro }}</p>
+              <p>{{ end.cidade }}</p>
+              <p>{{ end.pais }}</p>
+            </div>
+
+            <div class="endereco-actions">
+              <button class="edit-btn" (click)="editarEndereco(end)">✎ Editar</button>
+              <button class="delete-btn" (click)="excluirEndereco(end.id)">🗑 Delete</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- MODO EDIÇÃO/CRIAR ENDEREÇO (Formulário) -->
+        <div class="endereco-form-container" *ngIf="editandoEndereco">
+          <h3>{{ enderecoAtual.rua ? 'Editar Endereço' : 'Novo Endereço' }}</h3>
+          
+          <div class="form-row">
+            <div class="form-group full-width">
+              <label>Rua e Número</label>
+              <input type="text" [(ngModel)]="enderecoAtual.rua" class="form-input" placeholder="Ex: Rua das Flores, 123">
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>Bairro</label>
+              <input type="text" [(ngModel)]="enderecoAtual.bairro" class="form-input">
+            </div>
+            <div class="form-group">
+              <label>Cidade/Estado/CEP</label>
+              <input type="text" [(ngModel)]="enderecoAtual.cidade" class="form-input">
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn-cancel" (click)="cancelarEdicaoEndereco()">Cancelar</button>
+            <button class="btn-save" (click)="salvarEndereco()">Salvar Endereço</button>
+          </div>
+        </div>
+      </div>
+
+    </div>

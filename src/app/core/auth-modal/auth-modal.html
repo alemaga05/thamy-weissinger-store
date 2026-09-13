@@ -15,11 +15,11 @@
         <h2 class="title gradient-text">LOGIN</h2>
         
         <div class="input-group">
-          <input type="text" placeholder="Usuário">
-          <input type="password" placeholder="Senha">
+          <input type="email" placeholder="Email" [(ngModel)]="loginData.email">
+          <input type="password" placeholder="Senha" [(ngModel)]="loginData.password">
         </div>
 
-        <button class="btn-primary">Entrar</button>
+        <button class="btn-primary" (click)="fazerLogin()">Entrar</button>
         <a href="#" class="forgot-password">Esqueceu a senha?</a>
         
         <button class="btn-secondary" (click)="alternarTela()">Criar nova conta</button>
@@ -35,13 +35,13 @@
         <h2 class="title gradient-text">CADASTRE-SE</h2>
         
         <div class="input-group">
-          <input type="text" placeholder="Nome completo">
-          <input type="email" placeholder="Email">
-          <input type="password" placeholder="Senha">
-          <input type="password" placeholder="Confirmar senha">
+          <input type="text" placeholder="Nome completo" [(ngModel)]="cadastroData.name">
+          <input type="email" placeholder="Email" [(ngModel)]="cadastroData.email">
+          <input type="password" placeholder="Senha" [(ngModel)]="cadastroData.password">
+          <input type="password" placeholder="Confirmar senha" [(ngModel)]="cadastroData.confirmPassword">
         </div>
 
-        <button class="btn-primary">Cadastrar - se</button>
+        <button class="btn-primary" (click)="fazerCadastro()">Cadastrar - se</button>
         
         <button class="btn-secondary" (click)="alternarTela()">Login</button>
       </div>

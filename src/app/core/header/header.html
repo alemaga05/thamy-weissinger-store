@@ -32,7 +32,7 @@
       <a style="cursor: pointer;" (click)="abrirCarrinho()"><img src="/sacola.svg" alt="Sacola" class="action-icon"></a>
       
 
-      <a style="cursor: pointer;" (click)="abrirModal()">
+      <a style="cursor: pointer;" (click)="clicarNoPerfil()">
         <img class="action-icon" src="/perfil.svg" alt="Usuário" />
       </a>
     </div>
@@ -65,12 +65,12 @@
     </div>
 
     <ul class="sidebar-links">
-      <!-- (click)="toggleSidebar()" faz o menu fechar sozinho ao clicar em um link -->
-      <li><a href="#" (click)="toggleSidebar()">Masculino</a></li>
-      <li><a href="#" (click)="toggleSidebar()">Feminino</a></li>
-      <li><a href="#" (click)="toggleSidebar()">Peças Avulsas</a></li>
-      <li><a href="#" (click)="toggleSidebar()">Acessórios</a></li>
-      <li><a href="#" (click)="toggleSidebar()">Conjuntos</a></li>
+      <!-- O routerLink faz a navegação, e o (click) fecha o menu na mesma hora -->
+      <li><a routerLink="/categoria/masculino" (click)="toggleSidebar()">Masculino</a></li>
+      <li><a routerLink="/categoria/feminino" (click)="toggleSidebar()">Feminino</a></li>
+      <li><a routerLink="/categoria/pecas-avulsas" (click)="toggleSidebar()">Peças Avulsas</a></li>
+      <li><a routerLink="/categoria/acessorios" (click)="toggleSidebar()">Acessórios</a></li>
+      <li><a routerLink="/categoria/conjuntos" (click)="toggleSidebar()">Conjuntos</a></li>
     </ul>
   </div>
 

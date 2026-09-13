@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router'; 
 import { AuthModal } from '../auth-modal/auth-modal'; 
 import { SidePanel } from '../side-panel/side-panel';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -16,13 +17,27 @@ export class Header {
   isSidebarOpen = false;
   isModalOpen = false;
   
-  // ⬅️ AQUI ESTAVA O ERRO! Faltou declarar essa variável:
   isSidePanelOpen = false; 
-  
   sidePanelMode: 'cart' | 'favorites' = 'cart';
 
-  // ⬅️ Variável que simula se o cliente está logado (Começa falsa)
+  // Variável que simula se o cliente está logado
   isLoggedIn = true; 
+
+  // ⬅️ NOVO: Injetando o Router para conseguirmos mudar de página pelo TypeScript
+  constructor(private router: Router) {}
+
+  // ⬅️ NOVO: Lógica inteligente do botão de perfil
+  clicarNoPerfil() {
+    const token = localStorage.getItem('token');
+    
+    if (token) {
+      // Se achou o crachá (token), vai direto para o painel de perfil
+      this.router.navigate(['/perfil']); 
+    } else {
+      // Se não tem crachá, abre a tela de login
+      this.abrirModal(); 
+    }
+  }
 
   // ==========================================
   // LÓGICA DO CARRINHO E FAVORITOS
