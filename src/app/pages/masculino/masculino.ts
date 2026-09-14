@@ -22,15 +22,10 @@ export class Masculino {
 
   // 2. Produtos em Destaque
   products = [
-    { id: 21, name: 'Camiseta Poliamida', price: '79,90', image: '/prod-masc1.png' },
-    { id: 22, name: 'Short Aero Pulse', price: '89,90', image: '/prod-masc2.png' },
-    { id: 23, name: 'nome do produto', price: '000,00', image: '/cinza-quadrado.png' },
-    { id: 24, name: 'nome do produto', price: '000,00', image: '/cinza-quadrado.png' },
-    { id: 25, name: 'nome do produto', price: '000,00', image: '/cinza-quadrado.png' }, 
-    { id: 26, name: 'Camiseta Poliamida', price: '79,90', image: '/prod-masc1.png' },
-    { id: 27, name: 'Short Aero Pulse', price: '89,90', image: '/prod-masc2.png' },
-    { id: 28, name: 'nome do produto', price: '000,00', image: '/cinza-quadrado.png' },
-    { id: 29, name: 'nome do produto', price: '000,00', image: '/cinza-quadrado.png' },
-    { id: 30, name: 'nome do produto', price: '000,00', image: '/cinza-quadrado.png' }, 
+    { id: 21, name: 'regata masculina', price: '79,90', image: '/blusa regata.webp' },
+    { id: 22, name: 'Short Masculino', price: '89,90', image: '/shortmasculino.webp' },
+    { id: 23, name: 'Calça Masculina', price: '100,00', image: '/calcaomasculina.webp' },
+    { id: 24, name: 'blusa oversize Masculina', price: '75,00', image: '/oversize.webp' },
+    
   ];
 }

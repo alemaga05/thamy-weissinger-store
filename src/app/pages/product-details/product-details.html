@@ -43,10 +43,12 @@
       <div class="title-header">
         <h1 class="product-title">{{ produto.nome }}</h1>
         <div class="action-icons">
-          <button class="icon-btn">♡</button>
+          <!-- Conectamos o click do coração aqui -->
+          <button class="icon-btn" (click)="favoritar()">♡</button>
           <button class="icon-btn">➦</button>
         </div>
       </div>
+
 
       <p class="seller">Vendido e entregue por <strong>{{ produto.vendedor }}</strong></p>
       
@@ -81,13 +83,12 @@
 
       <!-- BOTÕES DE COMPRA -->
       <div class="buy-section" *ngIf="produto.estoque > 0">
-        
         <div class="qty-selector">
           <button (click)="diminuirQuantidade()">-</button>
           <span>{{ quantidadeSelecionada }}</span>
           <button (click)="aumentarQuantidade()">+</button>
         </div>
-
+        
         <button class="buy-btn" (click)="comprar()">Adicionar ao carrinho</button>
       </div>
 

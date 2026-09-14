@@ -16,6 +16,9 @@ export class Profile implements OnInit {
 
   editandoDados = false;
   editandoEndereco = false;
+
+  salvando = false;
+
   enderecoAtual: any = {};
 
   usuario = {
@@ -27,9 +30,7 @@ export class Profile implements OnInit {
 
   // Avisando o TypeScript que são listas (any[]) para não dar erro!
   pedidos: any[] = [];
-  enderecos: any[] = [
-    { id: 1, rua: 'Rua afonso Cunha, 31', bairro: 'Jardim de Abril', cidade: 'São Paulo, SP, 0539-200', pais: 'Brasil', principal: true }
-  ];
+  enderecos: any[] = [];
 
   constructor(private http: HttpClient) {}
 
@@ -54,6 +55,9 @@ export class Profile implements OnInit {
           this.usuario.email = dadosDoBanco.email;
           this.usuario.telefone = dadosDoBanco.telefone || 'Não cadastrado';
           this.usuario.dataNascimento = dadosDoBanco.dataNascimento || 'Não cadastrada';
+          
+          // MÁGICA AQUI: Pega os endereços que vieram do banco e joga na tela!
+          this.enderecos = dadosDoBanco.enderecos || []; 
         },
         error: (erro) => {
           console.error('Erro de autenticação', erro);
@@ -75,22 +79,119 @@ export class Profile implements OnInit {
   }
 
   toggleEditarDados() { this.editandoDados = !this.editandoDados; }
-  salvarDados() { this.editandoDados = false; }
+
+  // ATUALIZAR DADOS
+  salvarDados() {
+    // Se já estiver salvando, ignora cliques duplos
+    if (this.salvando) return; 
+    
+    this.salvando = true; // Bloqueia o botão
+
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    this.http.put('http://localhost:3000/perfil', this.usuario, { headers })
+      .subscribe({
+        next: (usuarioAtualizado: any) => {
+          this.usuario.nome = usuarioAtualizado.name;
+          this.usuario.telefone = usuarioAtualizado.telefone || 'Não cadastrado';
+          this.usuario.dataNascimento = usuarioAtualizado.dataNascimento || 'Não cadastrada';
+          
+          this.editandoDados = false;
+          this.salvando = false; // Libera o botão
+          
+          // Dica: Colocar o alert num setTimeout faz a tela fechar ANTES do alerta travar o navegador
+          setTimeout(() => alert('Dados atualizados com sucesso!'), 10);
+        },
+        error: (erro) => {
+          console.error('Erro ao atualizar dados', erro);
+          this.salvando = false; // Libera o botão em caso de erro
+          alert('Erro ao atualizar os dados.');
+        }
+      });
+  }
+ 
   
   novoEndereco() {
-    this.enderecoAtual = { id: Date.now(), principal: false };
+    // Quando é novo, a gente NÃO manda ID. Assim sabemos que é pra criar.
+    this.enderecoAtual = { principal: false };
     this.editandoEndereco = true;
   }
+
   editarEndereco(end: any) {
     this.enderecoAtual = { ...end };
     this.editandoEndereco = true;
   }
-  excluirEndereco(id: number) { this.enderecos = this.enderecos.filter(e => e.id !== id); }
+  
+ excluirEndereco(id: number) {
+    const confirmacao = confirm('Tem certeza que deseja excluir este endereço?');
+    if (!confirmacao) return;
+
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    // Dispara a requisição DELETE para o back-end
+    this.http.delete(`http://localhost:3000/enderecos/${id}`, { headers })
+      .subscribe({
+        next: () => {
+          alert('Endereço excluído com sucesso!');
+          // Remove o endereço da lista da tela
+          this.enderecos = this.enderecos.filter(e => e.id !== id);
+        },
+        error: (erro) => {
+          console.error('Erro ao excluir', erro);
+          alert('Erro ao excluir endereço.');
+        }
+      });
+  }
+
+
+  // SALVAR ENDEREÇO
   salvarEndereco() {
-    const index = this.enderecos.findIndex(e => e.id === this.enderecoAtual.id);
-    if (index > -1) this.enderecos[index] = this.enderecoAtual;
-    else this.enderecos.push(this.enderecoAtual);
-    this.editandoEndereco = false;
+    if (this.salvando) return;
+    this.salvando = true;
+
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    if (this.enderecoAtual.id) {
+      this.http.put(`http://localhost:3000/enderecos/${this.enderecoAtual.id}`, this.enderecoAtual, { headers })
+        .subscribe({
+          next: (endAtualizado: any) => {
+            const index = this.enderecos.findIndex(e => e.id === endAtualizado.id);
+            if (index > -1) this.enderecos[index] = endAtualizado;
+            
+            this.editandoEndereco = false;
+            this.salvando = false;
+            setTimeout(() => alert('Endereço atualizado com sucesso!'), 10);
+          },
+          error: (erro) => {
+            console.error('Erro ao atualizar endereço', erro);
+            this.salvando = false;
+            alert('Erro ao atualizar o endereço.');
+          }
+        });
+    } else {
+      this.http.post('http://localhost:3000/enderecos', this.enderecoAtual, { headers })
+        .subscribe({
+          next: (novoEndereco: any) => {
+            this.enderecos.push(novoEndereco);
+            
+            this.editandoEndereco = false;
+            this.salvando = false;
+            setTimeout(() => alert('Endereço salvo com sucesso!'), 10);
+          },
+          error: (erro) => {
+            console.error('Erro ao salvar endereço', erro);
+            this.salvando = false;
+            alert('Erro ao salvar o endereço.');
+          }
+        });
+    }
   }
   cancelarEdicaoEndereco() { this.editandoEndereco = false; }
+
+  
+
 }
+
