@@ -1,0 +1,1056 @@
+<div class="checkout-page">
+
+  <!-- =========================================================
+       HEADER
+       ========================================================== -->
+
+  <header class="checkout-header">
+
+    <button
+      type="button"
+      class="btn-voltar"
+      (click)="voltarCarrinho()"
+    >
+      ← Voltar
+    </button>
+
+
+    <div class="logo">
+      THAMY <span>FITWEAR</span>
+    </div>
+
+
+    <div class="checkout-title">
+      Finalizar compra
+    </div>
+
+  </header>
+
+
+  <!-- =========================================================
+       CONTEÚDO
+       ========================================================== -->
+
+  <main class="checkout-container">
+
+
+    <!-- =======================================================
+         MENSAGEM DE ERRO
+         ======================================================== -->
+
+    <div
+      class="mensagem-erro"
+      *ngIf="erro"
+    >
+      {{ erro }}
+    </div>
+
+
+    <!-- =======================================================
+         CARREGANDO
+         ======================================================== -->
+
+    <div
+      class="checkout-loading"
+      *ngIf="carregando"
+    >
+      Carregando seu pedido...
+    </div>
+
+
+    <!-- =======================================================
+         CHECKOUT NORMAL
+         ======================================================== -->
+
+    <ng-container
+      *ngIf="
+        !carregando &&
+        !pedidoCriado &&
+        itens.length
+      "
+    >
+
+      <div class="checkout-grid">
+
+
+        <!-- ===================================================
+             ESQUERDA
+             ==================================================== -->
+
+        <section class="checkout-left">
+
+
+          <!-- =================================================
+               PRODUTOS
+               ================================================== -->
+
+          <div class="checkout-card">
+
+
+            <div class="card-title">
+
+              <h2>
+                Seus produtos
+              </h2>
+
+
+              <span>
+
+                {{ itens.length }}
+
+                {{
+                  itens.length === 1
+                    ? 'item'
+                    : 'itens'
+                }}
+
+              </span>
+
+            </div>
+
+
+            <div
+              class="produto-checkout"
+              *ngFor="let item of itens"
+            >
+
+
+              <div class="produto-imagem">
+
+                <img
+                  [src]="item.imagem"
+                  [alt]="item.nome"
+                />
+
+              </div>
+
+
+              <div class="produto-info">
+
+                <h3>
+                  {{ item.nome }}
+                </h3>
+
+
+                <p>
+
+                  Tamanho:
+
+                  <strong>
+                    {{ item.tamanho }}
+                  </strong>
+
+                </p>
+
+
+                <p>
+
+                  Quantidade:
+
+                  <strong>
+                    {{ item.quantidade }}
+                  </strong>
+
+                </p>
+
+              </div>
+
+
+              <div class="produto-preco">
+
+                <span>
+                  {{ formatarMoeda(item.preco) }}
+                </span>
+
+
+                <strong>
+                  {{ formatarMoeda(item.subtotal) }}
+                </strong>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- =================================================
+               ENDEREÇO
+               ================================================== -->
+
+          <div class="checkout-card">
+
+
+            <div class="card-title">
+
+              <h2>
+                Endereço de entrega
+              </h2>
+
+            </div>
+
+
+            <div
+              class="endereco-box"
+              *ngIf="endereco"
+            >
+
+
+              <div class="endereco-icon">
+                📍
+              </div>
+
+
+              <div class="endereco-info">
+
+
+                <strong>
+                  Endereço principal
+                </strong>
+
+
+                <p>
+                  {{ endereco.rua }}
+                </p>
+
+
+                <p>
+
+                  {{ endereco.bairro }}
+
+                  ·
+
+                  {{ endereco.cidade }}
+
+                </p>
+
+
+                <p>
+                  {{ endereco.pais }}
+                </p>
+
+              </div>
+
+            </div>
+
+
+            <div
+              class="sem-endereco"
+              *ngIf="!endereco"
+            >
+
+              <p>
+
+                Você ainda não possui um endereço
+                de entrega cadastrado.
+
+              </p>
+
+
+              <button
+                type="button"
+              >
+                Cadastrar endereço
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <!-- =================================================
+               PAGAMENTO
+               ================================================== -->
+
+          <div class="checkout-card">
+
+
+            <div class="card-title">
+
+              <h2>
+                Forma de pagamento
+              </h2>
+
+            </div>
+
+
+            <div class="pagamentos">
+
+
+              <!-- =============================================
+                   PIX
+                   ============================================== -->
+
+              <button
+                type="button"
+                class="pagamento-option"
+                [class.selected]="
+                  metodoPagamento === 'pix'
+                "
+                (click)="
+                  selecionarPagamento('pix')
+                "
+              >
+
+
+                <div class="pagamento-radio">
+
+                  <span
+                    *ngIf="
+                      metodoPagamento === 'pix'
+                    "
+                  ></span>
+
+                </div>
+
+
+                <div
+                  class="pagamento-icon pix"
+                >
+                  PIX
+                </div>
+
+
+                <div class="pagamento-info">
+
+                  <strong>
+                    Pix
+                  </strong>
+
+
+                  <small>
+                    Pagamento instantâneo
+                  </small>
+
+                </div>
+
+              </button>
+
+
+              <!-- =============================================
+                   CARTÃO
+                   ============================================== -->
+
+              <button
+                type="button"
+                class="pagamento-option"
+                [class.selected]="
+                  metodoPagamento === 'cartao'
+                "
+                (click)="
+                  selecionarPagamento('cartao')
+                "
+              >
+
+
+                <div class="pagamento-radio">
+
+                  <span
+                    *ngIf="
+                      metodoPagamento === 'cartao'
+                    "
+                  ></span>
+
+                </div>
+
+
+                <div
+                  class="pagamento-icon cartao"
+                >
+                  CARD
+                </div>
+
+
+                <div class="pagamento-info">
+
+                  <strong>
+                    Cartão
+                  </strong>
+
+
+                  <small>
+                    Crédito ou débito
+                  </small>
+
+                </div>
+
+              </button>
+
+            </div>
+
+
+            <!-- =================================================
+                 FORMULÁRIO DO CARTÃO
+                 ================================================== -->
+
+            <form
+              id="form-checkout"
+              class="cartao-form"
+              *ngIf="
+                metodoPagamento === 'cartao'
+              "
+            >
+
+
+              <div class="cartao-header">
+
+                <h3>
+                  Dados do cartão
+                </h3>
+
+
+                <p>
+
+                  Seus dados são processados com segurança
+                  pelo Mercado Pago.
+
+                </p>
+
+              </div>
+
+
+              <!-- =============================================
+                   NÚMERO DO CARTÃO
+                   ============================================== -->
+
+              <div class="campo-cartao">
+
+
+                <label
+                  for="form-checkout__cardNumber"
+                >
+                  Número do cartão
+                </label>
+
+
+                <div
+                  id="form-checkout__cardNumber"
+                  class="campo-mp"
+                ></div>
+
+              </div>
+
+
+              <!-- =============================================
+                   VALIDADE + CVV
+                   ============================================== -->
+
+              <div class="cartao-linha">
+
+
+                <div class="campo-cartao">
+
+
+                  <label
+                    for="form-checkout__expirationDate"
+                  >
+                    Validade
+                  </label>
+
+
+                  <div
+                    id="form-checkout__expirationDate"
+                    class="campo-mp"
+                  ></div>
+
+                </div>
+
+
+                <div class="campo-cartao">
+
+
+                  <label
+                    for="form-checkout__securityCode"
+                  >
+                    Código de segurança
+                  </label>
+
+
+                  <div
+                    id="form-checkout__securityCode"
+                    class="campo-mp"
+                  ></div>
+
+                </div>
+
+              </div>
+
+
+              <!-- =============================================
+                   NOME DO TITULAR
+                   ============================================== -->
+
+              <div class="campo-cartao">
+
+
+                <label
+                  for="form-checkout__cardholderName"
+                >
+                  Nome do titular
+                </label>
+
+
+                <input
+                  type="text"
+                  id="form-checkout__cardholderName"
+                  name="cardholderName"
+                  placeholder="Nome completo do titular"
+                  autocomplete="cc-name"
+                />
+
+              </div>
+
+
+              <!-- =============================================
+                   BANCO EMISSOR
+                   ============================================== -->
+
+              <div class="campo-cartao">
+
+
+                <label
+                  for="form-checkout__issuer"
+                >
+                  Banco emissor
+                </label>
+
+
+                <select
+                  id="form-checkout__issuer"
+                  name="issuer"
+                >
+
+                  <option value="">
+                    Selecione o banco emissor
+                  </option>
+
+                </select>
+
+              </div>
+
+
+              <!-- =============================================
+                   PARCELAS
+                   ============================================== -->
+
+              <div class="campo-cartao">
+
+
+                <label
+                  for="form-checkout__installments"
+                >
+                  Parcelas
+                </label>
+
+
+                <select
+                  id="form-checkout__installments"
+                  name="installments"
+                >
+
+                  <option value="">
+                    Selecione as parcelas
+                  </option>
+
+                </select>
+
+              </div>
+
+
+              <!-- =============================================
+                   TIPO DE DOCUMENTO
+                   ============================================== -->
+
+              <div class="campo-cartao">
+
+
+                <label
+                  for="form-checkout__identificationType"
+                >
+                  Tipo de documento
+                </label>
+
+
+                <select
+                  id="form-checkout__identificationType"
+                  name="identificationType"
+                >
+
+                  <option value="">
+                    Selecione o documento
+                  </option>
+
+                </select>
+
+              </div>
+
+
+              <!-- =============================================
+                   CPF
+                   ============================================== -->
+
+              <div class="campo-cartao">
+
+
+                <label
+                  for="form-checkout__identificationNumber"
+                >
+                  CPF do titular
+                </label>
+
+
+                <input
+                  type="text"
+                  id="form-checkout__identificationNumber"
+                  name="identificationNumber"
+                  placeholder="Digite o CPF"
+                  inputmode="numeric"
+                  autocomplete="off"
+                />
+
+              </div>
+
+
+              <!-- =============================================
+                   E-MAIL
+                   ============================================== -->
+
+              <div class="campo-cartao">
+
+
+                <label
+                  for="form-checkout__cardholderEmail"
+                >
+                  E-mail
+                </label>
+
+
+                <input
+                  type="email"
+                  id="form-checkout__cardholderEmail"
+                  name="cardholderEmail"
+                  placeholder="seuemail@email.com"
+                  autocomplete="email"
+                />
+
+              </div>
+
+
+              <!-- =============================================
+                   SEGURANÇA
+                   ============================================== -->
+
+              <div class="cartao-seguranca">
+
+                🔒
+
+                Seus dados de cartão são processados
+                de forma segura pelo Mercado Pago.
+
+                As informações sensíveis do cartão
+                não são armazenadas pela Thamy Fitwear.
+
+              </div>
+
+
+              <!-- =============================================
+                   SUBMIT REAL DO CARD FORM
+                   ============================================== -->
+
+              <button
+                type="submit"
+                id="form-checkout__submit"
+                class="mp-submit-hidden"
+                tabindex="-1"
+                aria-hidden="true"
+              >
+                Pagar
+              </button>
+
+
+            </form>
+
+
+            <!-- =================================================
+                 AVISO GERAL
+                 ================================================== -->
+
+            <div class="pagamento-aviso">
+
+              🔒
+
+              Seus dados de pagamento serão
+              protegidos e processados com segurança.
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- ===================================================
+             DIREITA
+             ==================================================== -->
+
+        <aside class="resumo-card">
+
+
+          <h2>
+            Resumo do pedido
+          </h2>
+
+
+          <div class="resumo-linha">
+
+
+            <span>
+              Subtotal
+            </span>
+
+
+            <strong>
+              {{ formatarMoeda(valorSubtotal) }}
+            </strong>
+
+          </div>
+
+
+          <div class="resumo-linha">
+
+
+            <span>
+              Frete
+            </span>
+
+
+            <strong
+              *ngIf="
+                valorFrete > 0
+              "
+            >
+              {{ formatarMoeda(valorFrete) }}
+            </strong>
+
+
+            <strong
+              class="frete-gratis"
+              *ngIf="
+                valorFrete === 0
+              "
+            >
+              Grátis
+            </strong>
+
+          </div>
+
+
+          <div
+            class="resumo-divisor"
+          ></div>
+
+
+          <div class="resumo-total">
+
+
+            <span>
+              Total
+            </span>
+
+
+            <strong>
+              {{ formatarMoeda(valorTotal) }}
+            </strong>
+
+          </div>
+
+
+          <button
+            type="button"
+            class="btn-finalizar"
+            [disabled]="
+              !endereco ||
+              !itens.length
+            "
+            (click)="
+              continuarPagamento()
+            "
+          >
+
+            Continuar pagamento
+
+
+            <span>
+              →
+            </span>
+
+          </button>
+
+
+          <div class="compra-segura">
+
+
+            <span>
+              🔒
+            </span>
+
+
+            <div>
+
+              <strong>
+                Compra segura
+              </strong>
+
+
+              <small>
+                Seus dados são protegidos.
+              </small>
+
+            </div>
+
+          </div>
+
+        </aside>
+
+      </div>
+
+    </ng-container>
+
+
+    <!-- =======================================================
+         PAGAMENTO PIX
+         ======================================================== -->
+
+    <div
+      class="pix-container"
+      *ngIf="
+        pedidoCriado &&
+        metodoPagamento === 'pix'
+      "
+    >
+
+
+      <div class="pix-header">
+
+
+        <h2>
+          Pagamento via Pix
+        </h2>
+
+
+        <p>
+
+          Pedido
+
+          <strong>
+            {{ numeroPedidoCriado }}
+          </strong>
+
+        </p>
+
+
+        <span>
+          Escaneie o QR Code pelo aplicativo do seu banco
+        </span>
+
+      </div>
+
+
+      <!-- =====================================================
+           QR CODE
+           ====================================================== -->
+
+      <div
+        class="pix-qrcode"
+        *ngIf="qrCodeBase64"
+      >
+
+
+        <img
+          [src]="
+            'data:image/png;base64,' +
+            qrCodeBase64
+          "
+          alt="QR Code Pix"
+        />
+
+      </div>
+
+
+      <!-- =====================================================
+           SEM QR CODE
+           ====================================================== -->
+
+      <div
+        class="pix-sem-qrcode"
+        *ngIf="!qrCodeBase64"
+      >
+
+        <p>
+
+          O pedido foi criado, mas o QR Code ainda não
+          foi disponibilizado.
+
+        </p>
+
+      </div>
+
+
+      <!-- =====================================================
+           PIX COPIA E COLA
+           ====================================================== -->
+
+      <div
+        class="pix-copia-cola"
+        *ngIf="qrCode"
+      >
+
+
+        <label for="pixCodigo">
+          Pix Copia e Cola
+        </label>
+
+
+        <div class="pix-input-group">
+
+
+          <input
+            id="pixCodigo"
+            type="text"
+            [value]="qrCode"
+            readonly
+          />
+
+
+          <button
+            type="button"
+            (click)="copiarPix()"
+          >
+            Copiar
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- =====================================================
+           LINK DO MERCADO PAGO
+           ====================================================== -->
+
+      <a
+        *ngIf="ticketUrl"
+        [href]="ticketUrl"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="pix-link"
+      >
+        Abrir pagamento Pix
+      </a>
+
+
+      <!-- =====================================================
+           STATUS
+           ====================================================== -->
+
+      <p class="pix-status">
+        Aguardando pagamento...
+      </p>
+
+    </div>
+
+
+    <!-- =======================================================
+     PAGAMENTO CARTÃO
+     ======================================================== -->
+<div
+  class="cartao-sucesso"
+  *ngIf="
+    pedidoCriado &&
+    metodoPagamento === 'cartao'
+  "
+>
+
+  <!-- ÍCONE DE SUCESSO -->
+  <div class="sucesso-icone">
+    ✓
+  </div>
+
+  <!-- TÍTULO -->
+  <div class="sucesso-header">
+
+    <h2>
+      Pagamento aprovado!
+    </h2>
+
+    <p>
+      Seu pagamento foi confirmado com sucesso.
+    </p>
+
+  </div>
+
+  <!-- PEDIDO -->
+  <div class="sucesso-pedido">
+
+    <span>
+      Número do pedido
+    </span>
+
+    <strong>
+      {{ numeroPedidoCriado }}
+    </strong>
+
+  </div>
+
+  <!-- VALOR -->
+  <div class="sucesso-valor">
+
+    <span>
+      Total pago
+    </span>
+
+    <strong>
+      {{ formatarMoeda(valorTotal) }}
+    </strong>
+
+  </div>
+
+  <!-- INFORMAÇÃO -->
+  <div class="sucesso-mensagem">
+
+    <span>✓</span>
+
+    <p>
+      Recebemos o seu pagamento e seu pedido foi
+      registrado com sucesso.
+    </p>
+
+  </div>
+
+  <!-- AÇÕES -->
+  <div class="sucesso-acoes">
+
+    <button
+      type="button"
+      class="btn-meus-pedidos"
+      (click)="irParaMeusPedidos()"
+    >
+      Ver meus pedidos
+    </button>
+
+    <button
+      type="button"
+      class="btn-continuar"
+      (click)="voltarCarrinho()"
+    >
+      Continuar comprando
+    </button>
+
+  </div>
+
+</div>
+
+
+  </main>
+
+</div>

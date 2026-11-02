@@ -122,3 +122,141 @@
     height: 10px;
   }
 }
+
+
+/* Indicadores do banner */
+.dots-container {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  z-index: 5;
+}
+
+/* Bolinhas inativas */
+.dots-container .dot {
+  display: block;
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border-radius: 50%;
+  background: rgba(255, 239, 226, 0.65);
+  border: 1px solid rgba(110, 75, 58, 0.45);
+  cursor: pointer;
+  transition:
+    width 0.3s ease,
+    background-color 0.3s ease,
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+/* Banner ativo */
+.dots-container .dot.active {
+  width: 25px;
+  border-radius: 10px;
+  background: #C99B82;
+  border-color: #C99B82;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Interação */
+.dots-container .dot:hover {
+  transform: scale(1.15);
+}
+
+/* Acessibilidade: foco pelo teclado */
+.dots-container .dot:focus-visible {
+  outline: 2px solid #C99B82;
+  outline-offset: 4px;
+}
+
+
+/* Setas de navegação do banner */
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgba(254, 225, 207, 0.55);
+  border-radius: 50%;
+
+  background: rgba(15, 12, 10, 0.42);
+  color: #fee1cf;
+
+  font-size: 28px;
+  font-weight: 300;
+  line-height: 1;
+
+  cursor: pointer;
+  z-index: 10;
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+
+/* Seta da esquerda */
+.nav-btn.prev {
+  left: 20px;
+}
+
+/* Seta da direita */
+.nav-btn.next {
+  right: 20px;
+}
+
+/* Efeito ao passar o mouse */
+.nav-btn:hover {
+  background: rgba(201, 155, 130, 0.92);
+  border-color: #fee1cf;
+  color: #fffaf6;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.22);
+}
+
+/* Pequeno movimento individual das setas */
+.nav-btn.prev:hover {
+  transform: translateY(-50%) translateX(-2px);
+}
+
+.nav-btn.next:hover {
+  transform: translateY(-50%) translateX(2px);
+}
+
+/* Foco acessível pelo teclado */
+.nav-btn:focus-visible {
+  outline: 2px solid #fee1cf;
+  outline-offset: 4px;
+}
+
+/* Ajuste para celulares */
+@media (max-width: 600px) {
+  .nav-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 23px;
+  }
+
+  .nav-btn.prev {
+    left: 10px;
+  }
+
+  .nav-btn.next {
+    right: 10px;
+  }
+}
+

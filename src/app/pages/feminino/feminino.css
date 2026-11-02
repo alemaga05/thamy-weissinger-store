@@ -10,6 +10,11 @@
 .banner-container { width: 100%; height: auto; background-color: #050505; }
 .main-banner { width: 100%; max-height: 400px; object-fit: cover; display: block; }
 
+.circle-box.active-circle {
+  border: 2px solid #a86f55;
+  box-shadow: 0 0 0 1px #a86f55;
+}
+
 /* =========================================
    2. SUBCATEGORIAS (Círculos)
    ========================================= */
@@ -42,7 +47,12 @@
 .decor-arrow:last-child { transform: scaleX(-1); margin-left: -5px; }
 .decor-center { width: 48px; height: auto; margin: 0 8px; }
 
-.products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 25px; }
+.products-grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fill, minmax(220px, 260px)); 
+  gap: 25px; 
+  justify-content: flex-start; /* Alinha à esquerda se houver poucos produtos */
+}
 
 .product-card {
   background: #ffffff; border: 1px solid #e0e0e0; border-radius: 15px; overflow: hidden; 

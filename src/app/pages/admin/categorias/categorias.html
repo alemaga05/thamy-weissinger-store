@@ -1,0 +1,364 @@
+<section class="categorias-container">
+
+  <!-- CABEÇALHO -->
+  <div class="section-header">
+
+    <div>
+      <h2>Gestão de Categorias</h2>
+
+      <p>
+        Gerencie as categorias exibidas na loja.
+      </p>
+    </div>
+
+    <button
+      class="btn-primary"
+      (click)="abrirModalNova()"
+    >
+      + Nova Categoria
+    </button>
+
+  </div>
+
+
+  <!-- ABAS -->
+  <div class="category-tabs">
+
+    <button
+      [class.active]="abaCategoria === 'feminino'"
+      (click)="mudarAba('feminino')"
+    >
+      👩 Feminino
+    </button>
+
+    <button
+      [class.active]="abaCategoria === 'masculino'"
+      (click)="mudarAba('masculino')"
+    >
+      👨 Masculino
+    </button>
+
+    <button
+      [class.active]="abaCategoria === 'topbar'"
+      (click)="mudarAba('topbar')"
+    >
+      🔝 Topbar
+    </button>
+
+  </div>
+
+
+  <!-- TÍTULO -->
+  <div class="category-title">
+
+    <div>
+
+      <h3>
+        {{ nomeAbaAtual }}
+      </h3>
+
+      <span>
+        {{ categoriasFiltradas.length }}
+        categoria(s) cadastrada(s)
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <!-- CARREGANDO -->
+  <div
+    *ngIf="carregando"
+    class="loading"
+  >
+    Carregando categorias...
+  </div>
+
+
+  <!-- LISTA -->
+  <div
+    *ngIf="!carregando && categoriasFiltradas.length > 0"
+    class="categories-grid"
+  >
+
+    <div
+      class="category-card"
+      *ngFor="let categoria of categoriasFiltradas"
+    >
+
+      <!-- IMAGEM -->
+
+      <div class="category-image-wrapper">
+
+        <img
+          [src]="categoria.imagemUrl || '/placeholder.png'"
+          [alt]="categoria.nome"
+          class="category-image"
+        />
+
+        <div class="order-badge">
+          #{{ categoria.ordem }}
+        </div>
+
+      </div>
+
+
+      <!-- INFORMAÇÕES -->
+
+      <div class="category-info">
+
+        <h4>
+          {{ categoria.nome }}
+        </h4>
+
+        <span class="category-type">
+          {{ categoria.tipo }}
+        </span>
+
+      </div>
+
+
+      <!-- AÇÕES -->
+
+      <div class="category-actions">
+
+        <button
+          class="btn-edit"
+          (click)="abrirModalEditar(categoria)"
+        >
+          ✏️ Editar
+        </button>
+
+        <button
+          class="btn-delete"
+          (click)="excluirCategoria(categoria.id)"
+        >
+          🗑️ Excluir
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- VAZIO -->
+
+  <div
+    *ngIf="!carregando && categoriasFiltradas.length === 0"
+    class="empty-state"
+  >
+
+    <div class="empty-icon">
+      📂
+    </div>
+
+    <h3>
+      Nenhuma categoria cadastrada
+    </h3>
+
+    <p>
+      Crie a primeira categoria desta seção.
+    </p>
+
+    <button
+      class="btn-primary"
+      (click)="abrirModalNova()"
+    >
+      + Criar Categoria
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- ===================================================== -->
+<!-- MODAL -->
+<!-- ===================================================== -->
+
+<div
+  class="modal-overlay"
+  *ngIf="exibirModal"
+>
+
+  <div class="modal-card">
+
+    <!-- HEADER -->
+
+    <div class="modal-header">
+
+      <div>
+
+        <h3>
+          {{
+            editando
+              ? 'Editar Categoria'
+              : 'Nova Categoria'
+          }}
+        </h3>
+
+        <span>
+          {{ formCategoria.tipo }}
+        </span>
+
+      </div>
+
+      <button
+        class="btn-close"
+        (click)="fecharModal()"
+      >
+        ✕
+      </button>
+
+    </div>
+
+
+    <!-- FORM -->
+
+    <form
+      (ngSubmit)="salvarCategoria()"
+    >
+
+      <!-- NOME -->
+
+      <div class="form-group">
+
+        <label>
+          Nome da Categoria
+        </label>
+
+        <input
+          type="text"
+          [(ngModel)]="formCategoria.nome"
+          name="nome"
+          placeholder="Ex: Tops"
+          required
+        />
+
+      </div>
+
+
+      <!-- TIPO -->
+
+      <div class="form-group">
+
+        <label>
+          Onde será exibida?
+        </label>
+
+        <select
+          [(ngModel)]="formCategoria.tipo"
+          name="tipo"
+          required
+        >
+
+          <option value="feminino">
+            Feminino
+          </option>
+
+          <option value="masculino">
+            Masculino
+          </option>
+
+          <option value="topbar">
+            Topbar
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- IMAGEM -->
+
+      <div class="form-group">
+
+        <label>
+          URL da Imagem
+        </label>
+
+        <input
+          type="text"
+          [(ngModel)]="formCategoria.imagemUrl"
+          name="imagemUrl"
+          placeholder="/assets/categorias/tops.jpg"
+        />
+
+        <small>
+          Informe o caminho ou URL da imagem da categoria.
+        </small>
+
+      </div>
+
+
+      <!-- ORDEM -->
+
+      <div class="form-group">
+
+        <label>
+          Ordem de exibição
+        </label>
+
+        <input
+          type="number"
+          [(ngModel)]="formCategoria.ordem"
+          name="ordem"
+          min="1"
+          required
+        />
+
+      </div>
+
+
+      <!-- PREVIEW -->
+
+      <div
+        class="image-preview"
+        *ngIf="formCategoria.imagemUrl"
+      >
+
+        <span>
+          Pré-visualização
+        </span>
+
+        <img
+          [src]="formCategoria.imagemUrl"
+          [alt]="formCategoria.nome"
+        />
+
+      </div>
+
+
+      <!-- FOOTER -->
+
+      <div class="modal-footer">
+
+        <button
+          type="button"
+          class="btn-secondary"
+          (click)="fecharModal()"
+        >
+          Cancelar
+        </button>
+
+        <button
+          type="submit"
+          class="btn-primary"
+        >
+          {{
+            editando
+              ? 'Atualizar Categoria'
+              : 'Criar Categoria'
+          }}
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>

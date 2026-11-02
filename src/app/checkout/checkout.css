@@ -1,0 +1,1602 @@
+/* =========================================================
+   CHECKOUT - BASE
+   ========================================================= */
+
+.checkout-page {
+  min-height: 100vh;
+  background: #f7f7f7;
+  color: #151515;
+  font-family: Arial, Helvetica, sans-serif;
+  box-sizing: border-box;
+}
+
+.checkout-page *,
+.checkout-page *::before,
+.checkout-page *::after {
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.checkout-header {
+  width: 100%;
+  height: 76px;
+  background: #ffffff;
+  border-bottom: 1px solid #e8e8e8;
+
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+
+  padding: 0 50px;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #151515;
+}
+
+.logo span {
+  font-weight: 400;
+}
+
+.checkout-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #666;
+}
+
+.btn-voltar {
+  justify-self: start;
+
+  border: none;
+  background: transparent;
+
+  font-size: 14px;
+  font-weight: 600;
+  color: #222;
+
+  cursor: pointer;
+  padding: 8px 0;
+
+  transition: opacity 0.2s ease;
+}
+
+.btn-voltar:hover {
+  opacity: 0.55;
+}
+
+
+/* =========================================================
+   CONTAINER PRINCIPAL
+   ========================================================= */
+
+.checkout-container {
+  width: min(1200px, calc(100% - 40px));
+  margin: 40px auto 70px;
+}
+
+.checkout-grid {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    360px;
+
+  gap: 28px;
+  align-items: start;
+}
+
+.checkout-left {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  min-width: 0;
+}
+
+
+/* =========================================================
+   CARDS
+   ========================================================= */
+
+.checkout-card,
+.resumo-card {
+  background: #ffffff;
+  border: 1px solid #e8e8e8;
+  border-radius: 14px;
+
+  box-sizing: border-box;
+}
+
+.checkout-card {
+  padding: 25px;
+}
+
+.resumo-card {
+  padding: 26px;
+
+  position: sticky;
+  top: 20px;
+}
+
+
+/* =========================================================
+   TÍTULOS
+   ========================================================= */
+
+.card-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 22px;
+}
+
+.card-title h2,
+.resumo-card h2 {
+  margin: 0;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  color: #151515;
+}
+
+.card-title span {
+  font-size: 13px;
+  color: #777;
+}
+
+
+/* =========================================================
+   PRODUTOS
+   ========================================================= */
+
+.produto-checkout {
+  display: grid;
+
+  grid-template-columns:
+    80px
+    minmax(0, 1fr)
+    auto;
+
+  gap: 16px;
+  align-items: center;
+
+  padding: 16px 0;
+
+  border-bottom: 1px solid #eeeeee;
+}
+
+.produto-checkout:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.produto-checkout:first-of-type {
+  padding-top: 0;
+}
+
+.produto-imagem {
+  width: 80px;
+  height: 100px;
+
+  border-radius: 9px;
+  overflow: hidden;
+
+  background: #f2f2f2;
+
+  flex-shrink: 0;
+}
+
+.produto-imagem img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  display: block;
+}
+
+.produto-info {
+  min-width: 0;
+}
+
+.produto-info h3 {
+  margin: 0 0 8px;
+
+  font-size: 15px;
+  font-weight: 650;
+
+  color: #222;
+
+  word-break: break-word;
+}
+
+.produto-info p {
+  margin: 3px 0;
+
+  font-size: 13px;
+  color: #777;
+}
+
+.produto-info strong {
+  color: #222;
+}
+
+.produto-preco {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  gap: 5px;
+
+  white-space: nowrap;
+}
+
+.produto-preco span {
+  font-size: 12px;
+  color: #777;
+}
+
+.produto-preco strong {
+  font-size: 15px;
+  color: #151515;
+}
+
+
+/* =========================================================
+   ENDEREÇO
+   ========================================================= */
+
+.endereco-box {
+  display: flex;
+  gap: 15px;
+
+  padding: 17px;
+
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+
+  background: #fff;
+}
+
+.endereco-icon {
+  font-size: 21px;
+  flex-shrink: 0;
+}
+
+.endereco-info {
+  min-width: 0;
+}
+
+.endereco-info strong {
+  display: block;
+
+  font-size: 14px;
+
+  margin-bottom: 8px;
+
+  color: #222;
+}
+
+.endereco-info p {
+  margin: 3px 0;
+
+  font-size: 13px;
+  color: #666;
+}
+
+.sem-endereco {
+  padding: 18px;
+
+  background: #fafafa;
+
+  border-radius: 9px;
+
+  text-align: center;
+}
+
+.sem-endereco p {
+  margin: 0 0 15px;
+
+  font-size: 14px;
+  color: #666;
+}
+
+.sem-endereco button {
+  border: 1px solid #222;
+
+  background: #222;
+  color: #fff;
+
+  padding: 10px 18px;
+
+  border-radius: 7px;
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   MÉTODOS DE PAGAMENTO
+   ========================================================= */
+
+.pagamentos {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 12px;
+}
+
+.pagamento-option {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 16px;
+
+  border: 1px solid #dedede;
+  border-radius: 10px;
+
+  background: #fff;
+
+  cursor: pointer;
+
+  text-align: left;
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.pagamento-option:hover {
+  border-color: #999;
+
+  box-shadow:
+    0 3px 12px rgba(0, 0, 0, 0.05);
+}
+
+.pagamento-option:active {
+  transform: scale(0.99);
+}
+
+.pagamento-option.selected {
+  border-color: #222;
+
+  background: #fafafa;
+
+  box-shadow:
+    0 0 0 1px #222;
+}
+
+.pagamento-radio {
+  width: 17px;
+  height: 17px;
+
+  min-width: 17px;
+
+  border: 1px solid #aaa;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+}
+
+.pagamento-radio span {
+  width: 9px;
+  height: 9px;
+
+  border-radius: 50%;
+
+  background: #222;
+}
+
+.pagamento-icon {
+  width: 42px;
+  height: 30px;
+
+  min-width: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 5px;
+
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.pagamento-icon.pix {
+  border: 1px solid #222;
+}
+
+.pagamento-icon.cartao {
+  background: #222;
+  color: #fff;
+}
+
+.pagamento-info {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.pagamento-info strong {
+  font-size: 13px;
+  color: #222;
+}
+
+.pagamento-info small {
+  color: #777;
+  font-size: 11px;
+}
+
+
+/* =========================================================
+   FORMULÁRIO DO CARTÃO
+   ========================================================= */
+
+.cartao-form {
+  width: 100%;
+
+  margin-top: 22px;
+
+  padding: 24px;
+
+  border: 1px solid #dedede;
+
+  border-radius: 14px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff 0%,
+      #fafafa 100%
+    );
+
+  box-shadow:
+    0 8px 25px rgba(0, 0, 0, 0.04);
+
+  position: relative;
+
+  overflow: hidden;
+}
+
+
+/* detalhe visual no topo */
+
+.cartao-form::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 3px;
+
+  background: #151515;
+}
+
+
+/* =========================================================
+   CABEÇALHO DO CARTÃO
+   ========================================================= */
+
+.cartao-header {
+  margin-bottom: 24px;
+
+  padding-bottom: 18px;
+
+  border-bottom: 1px solid #eeeeee;
+}
+
+.cartao-header h3 {
+  margin: 0 0 7px;
+
+  font-size: 17px;
+
+  font-weight: 700;
+
+  color: #181818;
+}
+
+.cartao-header p {
+  margin: 0;
+
+  color: #777;
+
+  font-size: 12px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   CADA CAMPO
+   ========================================================= */
+
+.campo-cartao {
+  width: 100%;
+
+  margin-bottom: 17px;
+
+  min-width: 0;
+}
+
+.campo-cartao label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  color: #333;
+}
+
+
+/* =========================================================
+   CAMPOS DO MERCADO PAGO
+   =========================================================
+
+   Os campos abaixo são containers de iframes.
+
+   Não tentamos estilizar o input interno porque
+   ele pertence ao Mercado Pago.
+   */
+
+.campo-mp {
+  width: 100%;
+
+  height: 50px;
+
+  min-height: 50px;
+
+  display: block;
+
+  position: relative;
+
+  border: 1px solid #d8d8d8;
+
+  border-radius: 9px;
+
+  background: #ffffff;
+
+  padding: 0;
+
+  margin: 0;
+
+  overflow: hidden;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+
+/* iframe do Mercado Pago */
+
+.campo-mp iframe {
+  display: block !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  min-width: 100% !important;
+  min-height: 48px !important;
+
+  max-width: 100% !important;
+
+  border: 0 !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  background: transparent !important;
+
+  opacity: 1 !important;
+
+  visibility: visible !important;
+
+  pointer-events: auto !important;
+}
+
+
+/* =========================================================
+   CAMPOS MP - FOCO
+   ========================================================= */
+
+.campo-mp:focus-within {
+  border-color: #111;
+
+  box-shadow:
+    0 0 0 1px #111,
+    0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+
+/* =========================================================
+   CAMPOS NORMAIS DO CARD FORM
+   ========================================================= */
+
+.campo-cartao input,
+.campo-cartao select {
+  width: 100%;
+
+  height: 50px;
+
+  min-height: 50px;
+
+  display: block;
+
+  border: 1px solid #d8d8d8;
+
+  border-radius: 9px;
+
+  background: #ffffff;
+
+  padding: 0 14px;
+
+  font-family: inherit;
+
+  font-size: 14px;
+
+  color: #222;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.campo-cartao input::placeholder {
+  color: #a0a0a0;
+}
+
+.campo-cartao input:hover,
+.campo-cartao select:hover {
+  border-color: #bdbdbd;
+}
+
+.campo-cartao input:focus,
+.campo-cartao select:focus {
+  border-color: #111;
+
+  box-shadow:
+    0 0 0 1px #111,
+    0 4px 12px rgba(0, 0, 0, 0.04);
+
+  background: #fff;
+}
+
+
+/* =========================================================
+   SELECTS
+   ========================================================= */
+
+.campo-cartao select {
+  cursor: pointer;
+
+  appearance: auto;
+
+  padding-right: 12px;
+}
+
+
+/* =========================================================
+   LINHA VALIDADE + CVV
+   ========================================================= */
+
+.cartao-linha {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr);
+
+  gap: 14px;
+}
+
+
+/* =========================================================
+   AVISO DE SEGURANÇA DO CARTÃO
+   ========================================================= */
+
+.cartao-seguranca {
+  margin-top: 6px;
+
+  padding: 13px 14px;
+
+  border-radius: 9px;
+
+  border: 1px solid #e8e8e8;
+
+  background: #f8f8f8;
+
+  color: #666;
+
+  font-size: 11px;
+
+  line-height: 1.55;
+}
+
+
+/* =========================================================
+   BOTÃO INTERNO DO MERCADO PAGO
+
+   IMPORTANTE:
+   Ele precisa existir para o submit real do formulário,
+   mas NÃO deve aparecer para o cliente.
+   ========================================================= */
+
+.mp-submit-hidden {
+  position: absolute !important;
+
+  width: 1px !important;
+  height: 1px !important;
+
+  padding: 0 !important;
+  margin: -1px !important;
+
+  overflow: hidden !important;
+
+  clip: rect(0, 0, 0, 0) !important;
+  clip-path: inset(50%) !important;
+
+  white-space: nowrap !important;
+
+  border: 0 !important;
+
+  opacity: 0 !important;
+
+  pointer-events: none !important;
+}
+
+
+/* =========================================================
+   AVISO GERAL DE PAGAMENTO
+   ========================================================= */
+
+.pagamento-aviso {
+  margin-top: 15px;
+
+  padding: 12px;
+
+  background: #f7f7f7;
+
+  border-radius: 8px;
+
+  color: #666;
+
+  font-size: 12px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   RESUMO DO PEDIDO
+   ========================================================= */
+
+.resumo-card h2 {
+  margin: 0 0 24px;
+
+  font-size: 18px;
+
+  font-weight: 700;
+}
+
+.resumo-linha {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 15px;
+
+  margin-bottom: 15px;
+
+  font-size: 14px;
+}
+
+.resumo-linha span {
+  color: #666;
+}
+
+.resumo-linha strong {
+  font-weight: 600;
+
+  color: #222;
+}
+
+.frete-gratis {
+  color: #222;
+}
+
+.resumo-divisor {
+  height: 1px;
+
+  background: #e8e8e8;
+
+  margin: 20px 0;
+}
+
+.resumo-total {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 24px;
+}
+
+.resumo-total span {
+  font-size: 16px;
+
+  font-weight: 600;
+}
+
+.resumo-total strong {
+  font-size: 22px;
+
+  font-weight: 800;
+}
+
+
+/* =========================================================
+   BOTÃO CONTINUAR PAGAMENTO
+   ========================================================= */
+
+.btn-finalizar {
+  width: 100%;
+
+  min-height: 52px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  border: none;
+
+  background: #151515;
+
+  color: #fff;
+
+  border-radius: 9px;
+
+  padding: 16px 18px;
+
+  font-family: inherit;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.btn-finalizar:hover:not(:disabled) {
+  transform: translateY(-1px);
+
+  background: #252525;
+
+  box-shadow:
+    0 6px 15px rgba(0, 0, 0, 0.12);
+}
+
+.btn-finalizar:active:not(:disabled) {
+  transform: translateY(0);
+
+  box-shadow: none;
+}
+
+.btn-finalizar:disabled {
+  opacity: 0.4;
+
+  cursor: not-allowed;
+}
+
+.btn-finalizar span {
+  font-size: 18px;
+}
+
+
+/* =========================================================
+   COMPRA SEGURA
+   ========================================================= */
+
+.compra-segura {
+  display: flex;
+
+  gap: 10px;
+
+  margin-top: 20px;
+
+  padding-top: 18px;
+
+  border-top: 1px solid #eeeeee;
+}
+
+.compra-segura > span {
+  font-size: 17px;
+
+  flex-shrink: 0;
+}
+
+.compra-segura div {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.compra-segura strong {
+  font-size: 12px;
+}
+
+.compra-segura small {
+  font-size: 11px;
+
+  color: #777;
+
+  line-height: 1.4;
+}
+
+
+/* =========================================================
+   MENSAGEM DE ERRO
+   ========================================================= */
+
+.mensagem-erro {
+  padding: 14px 18px;
+
+  margin-bottom: 20px;
+
+  background: #fff2f2;
+
+  border: 1px solid #f0cccc;
+
+  color: #a33;
+
+  border-radius: 9px;
+
+  font-size: 14px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.checkout-loading {
+  padding: 80px 20px;
+
+  text-align: center;
+
+  color: #777;
+}
+
+
+/* =========================================================
+   PIX
+   ========================================================= */
+
+.pix-container {
+  margin-top: 30px;
+
+  padding: 30px;
+
+  border-radius: 18px;
+
+  background: #fff;
+
+  border: 1px solid #e5e5e5;
+
+  text-align: center;
+}
+
+.pix-header h2 {
+  margin: 0 0 10px;
+
+  font-size: 24px;
+}
+
+.pix-header p {
+  margin: 5px 0;
+
+  color: #444;
+}
+
+.pix-header span {
+  display: block;
+
+  margin-top: 10px;
+
+  color: #666;
+}
+
+.pix-qrcode {
+  display: flex;
+
+  justify-content: center;
+
+  margin: 25px 0;
+}
+
+.pix-qrcode img {
+  width: 280px;
+  height: 280px;
+
+  object-fit: contain;
+
+  display: block;
+}
+
+.pix-copia-cola {
+  max-width: 650px;
+
+  margin: 0 auto;
+
+  text-align: left;
+}
+
+.pix-copia-cola label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  font-weight: 600;
+}
+
+.pix-input-group {
+  display: flex;
+
+  gap: 10px;
+
+  width: 100%;
+}
+
+.pix-input-group input {
+  flex: 1;
+
+  min-width: 0;
+
+  height: 46px;
+
+  padding: 13px 15px;
+
+  border: 1px solid #ccc;
+
+  border-radius: 8px;
+
+  font-size: 13px;
+
+  outline: none;
+}
+
+.pix-input-group input:focus {
+  border-color: #222;
+}
+
+.pix-input-group button {
+  min-height: 46px;
+
+  padding: 0 22px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  font-weight: 600;
+
+  background: #111;
+
+  color: #fff;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.pix-input-group button:hover {
+  background: #2a2a2a;
+
+  transform: translateY(-1px);
+}
+
+.pix-link {
+  display: inline-block;
+
+  margin-top: 20px;
+
+  text-decoration: none;
+
+  font-weight: 600;
+
+  color: #111;
+}
+
+.pix-status {
+  margin-top: 20px;
+
+  font-weight: 600;
+}
+
+
+
+/* =========================================================
+   PAGAMENTO COM CARTÃO - SUCESSO
+   ========================================================= */
+
+.cartao-sucesso {
+  width: 100%;
+  max-width: 760px;
+  margin: 40px auto;
+  padding: 48px 40px;
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 20px;
+  text-align: center;
+  box-sizing: border-box;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+}
+
+/* ÍCONE */
+
+.sucesso-icone {
+  width: 76px;
+  height: 76px;
+  margin: 0 auto 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #e9f8ef;
+  color: #1b9b50;
+
+  font-size: 42px;
+  font-weight: 700;
+
+  border: 2px solid #bfe8ce;
+}
+
+/* CABEÇALHO */
+
+.sucesso-header h2 {
+  margin: 0 0 10px;
+
+  font-size: 30px;
+  font-weight: 700;
+
+  color: #111111;
+}
+
+.sucesso-header p {
+  margin: 0;
+
+  color: #666666;
+  font-size: 16px;
+}
+
+/* PEDIDO */
+
+.sucesso-pedido {
+  margin: 32px auto 0;
+  padding: 18px 22px;
+
+  max-width: 430px;
+
+  background: #f8f8f8;
+  border-radius: 12px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.sucesso-pedido span {
+  font-size: 13px;
+  color: #777777;
+}
+
+.sucesso-pedido strong {
+  font-size: 18px;
+  color: #111111;
+}
+
+/* VALOR */
+
+.sucesso-valor {
+  margin-top: 18px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.sucesso-valor span {
+  color: #666666;
+  font-size: 15px;
+}
+
+.sucesso-valor strong {
+  color: #111111;
+  font-size: 20px;
+}
+
+/* MENSAGEM */
+
+.sucesso-mensagem {
+  max-width: 520px;
+  margin: 28px auto 0;
+
+  padding: 16px 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  background: #f5fbf7;
+  border: 1px solid #d9efdf;
+  border-radius: 10px;
+
+  text-align: left;
+}
+
+.sucesso-mensagem span {
+  color: #1b9b50;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.sucesso-mensagem p {
+  margin: 0;
+
+  color: #555555;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* BOTÕES */
+
+.sucesso-acoes {
+  margin-top: 30px;
+
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+
+  flex-wrap: wrap;
+}
+
+.sucesso-acoes button {
+  min-width: 190px;
+  height: 48px;
+
+  padding: 0 22px;
+
+  border-radius: 8px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease,
+    background 0.2s ease;
+}
+
+.sucesso-acoes button:hover {
+  transform: translateY(-1px);
+}
+
+/* MEUS PEDIDOS */
+
+.btn-meus-pedidos {
+  border: none;
+  background: #111111;
+  color: #ffffff;
+}
+
+.btn-meus-pedidos:hover {
+  opacity: 0.88;
+}
+
+/* CONTINUAR */
+
+.btn-continuar {
+  background: #ffffff;
+  color: #111111;
+
+  border: 1px solid #cccccc;
+}
+
+.btn-continuar:hover {
+  background: #f5f5f5;
+}
+
+
+/* =========================================================
+   RESPONSIVO
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  .cartao-sucesso {
+    margin: 25px auto;
+    padding: 35px 20px;
+    border-radius: 15px;
+  }
+
+  .sucesso-icone {
+    width: 65px;
+    height: 65px;
+    font-size: 34px;
+  }
+
+  .sucesso-header h2 {
+    font-size: 24px;
+  }
+
+  .sucesso-header p {
+    font-size: 14px;
+  }
+
+  .sucesso-acoes {
+    flex-direction: column;
+  }
+
+  .sucesso-acoes button {
+    width: 100%;
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVO - TABLET
+   ========================================================= */
+
+@media (max-width: 850px) {
+
+  .checkout-header {
+    grid-template-columns: 1fr auto;
+
+    padding: 0 20px;
+  }
+
+  .checkout-title {
+    display: none;
+  }
+
+  .checkout-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .resumo-card {
+    position: static;
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVO - CELULAR
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  .checkout-container {
+    width: calc(100% - 24px);
+
+    max-width: 550px;
+
+    margin: 20px auto 50px;
+  }
+
+  .checkout-header {
+    height: 65px;
+
+    padding: 0 16px;
+  }
+
+  .logo {
+    font-size: 16px;
+  }
+
+  .btn-voltar {
+    font-size: 13px;
+  }
+
+  .checkout-card,
+  .resumo-card {
+    padding: 18px;
+
+    border-radius: 11px;
+  }
+
+  .produto-checkout {
+    grid-template-columns:
+      65px
+      minmax(0, 1fr);
+
+    gap: 12px;
+  }
+
+  .produto-imagem {
+    width: 65px;
+
+    height: 82px;
+  }
+
+  .produto-preco {
+    grid-column: 2;
+
+    align-items: flex-start;
+
+    margin-top: -4px;
+  }
+
+  .pagamentos {
+    grid-template-columns: 1fr;
+  }
+
+  .card-title h2,
+  .resumo-card h2 {
+    font-size: 16px;
+  }
+
+  /* ================================================
+     CARTÃO MOBILE
+     ================================================ */
+
+  .cartao-form {
+    padding: 17px;
+
+    margin-top: 18px;
+
+    border-radius: 12px;
+  }
+
+  .cartao-header {
+    margin-bottom: 20px;
+  }
+
+  .cartao-header h3 {
+    font-size: 16px;
+  }
+
+  .cartao-linha {
+    grid-template-columns: 1fr;
+
+    gap: 0;
+  }
+
+  .campo-mp {
+    height: 50px;
+
+    min-height: 50px;
+  }
+
+  .campo-mp iframe {
+    min-height: 48px !important;
+  }
+
+  .campo-cartao input,
+  .campo-cartao select {
+    height: 50px;
+
+    min-height: 50px;
+  }
+
+  .pix-container {
+    padding: 20px 15px;
+  }
+
+  .pix-qrcode img {
+    width: 240px;
+
+    height: 240px;
+  }
+
+  .pix-input-group {
+    flex-direction: column;
+  }
+
+  .pix-input-group button {
+    min-height: 46px;
+
+    padding: 12px 20px;
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVO - CELULARES MUITO PEQUENOS
+   ========================================================= */
+
+@media (max-width: 380px) {
+
+  .checkout-container {
+    width: calc(100% - 16px);
+  }
+
+  .checkout-card,
+  .resumo-card {
+    padding: 14px;
+  }
+
+  .cartao-form {
+    padding: 13px;
+  }
+
+  .pagamento-option {
+    padding: 13px;
+  }
+
+  .pagamento-icon {
+    display: none;
+  }
+
+  .produto-checkout {
+    grid-template-columns:
+      55px
+      minmax(0, 1fr);
+  }
+
+  .produto-imagem {
+    width: 55px;
+
+    height: 70px;
+  }
+}

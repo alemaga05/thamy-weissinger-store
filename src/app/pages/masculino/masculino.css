@@ -21,12 +21,18 @@
 .circle-box {
   width: 100px; height: 100px; border-radius: 50%; overflow: hidden;
   background-color: #e0e0e0; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  border: 2px solid transparent;
+  transition: transform 0.2s, border 0.2s;
+}
+.circle-box.active-circle {
+  border: 2px solid #a86f55;
+  box-shadow: 0 0 0 1px #a86f55;
 }
 .circle-box img { width: 100%; height: 100%; object-fit: cover; }
 .sub-name { font-family: "Impact", "Arial Black", sans-serif; font-size: 14px; letter-spacing: 1px; color: #000; }
 
 /* =========================================
-   3. SEÇÃO DE PRODUTOS (Padrão das outras telas)
+   3. SEÇÃO DE PRODUTOS
    ========================================= */
 .popular-section { background-color: #ffffff; padding: 60px 5%; width: 100%; }
 
@@ -42,7 +48,13 @@
 .decor-arrow:last-child { transform: scaleX(-1); margin-left: -5px; }
 .decor-center { width: 48px; height: auto; margin: 0 8px; }
 
-.products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 25px; }
+/* Grade otimizada para não esticar card único */
+.products-grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fill, minmax(220px, 260px)); 
+  gap: 25px; 
+  justify-content: flex-start; 
+}
 
 .product-card {
   background: #ffffff; border: 1px solid #e0e0e0; border-radius: 15px; overflow: hidden; 
@@ -79,10 +91,8 @@
 }
 
 @media (max-width: 600px) {
-  /* Banner Mobile */
   .main-banner { height: 145px; object-fit: cover; object-position: center top; }
   
-  /* Subcategorias / Stories Mobile */
   .subcategories-track {
     justify-content: flex-start; overflow-x: auto; -webkit-overflow-scrolling: touch;
     gap: 15px; padding: 20px 5%; scrollbar-width: none; 
@@ -92,7 +102,6 @@
   .circle-box { width: 75px; height: 75px; }
   .sub-name { font-size: 11px; }
 
-  /* Grade de Produtos Mobile (3 Colunas) */
   .popular-section { padding: 30px 2%; }
   .products-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .product-card { border-radius: 8px; }
@@ -106,7 +115,6 @@
   .product-price { font-size: 12px; }
   .buy-btn { width: 22px; height: 22px; font-size: 10px; }
   
-  /* Ajuste no título da seção */
   .section-title { font-size: 24px; }
   .decor-arrow { width: 20px; }
   .decor-center { width: 30px; }

@@ -1,9 +1,63 @@
+
 <footer class="footer-container">
-  <img class="image-83" src="assets/image-830.png" alt="Logo Rodapé" />
-  <div class="contato">CONTATO</div>
-  <div class="formas-de-pagamento">FORMAS DE PAGAMENTO</div>
-  <div class="_11-99999-0000">(11) 99999-0000</div>
-  <div class="seg-a-sex-08-h-s-18-h">Seg a Sex 08h ás 18h</div>
-  <div class="contato-gmail-com">contato@gmail.com</div>
-  <img class="image-159" src="assets/image-1590.png" alt="Formas de Pagamento" />
+  <div class="footer-content">
+
+    <!-- Identidade da loja -->
+    <div class="footer-brand">
+      <a routerLink="/" aria-label="Thamy Fitwear - Página inicial">
+        <img
+          class="footer-logo"
+          src="assets/image-830.png"
+          alt="Thamy Fitwear"
+        />
+      </a>
+
+      <p class="footer-description">
+        Estilo, conforto e performance em cada movimento.
+      </p>
+    </div>
+
+    <!-- Contato -->
+    <div class="footer-column">
+      <h3 class="footer-title">CONTATO</h3>
+
+      <a class="footer-link" href="tel:+5511999990000">
+        <span class="footer-icon">✆</span>
+        (11) 99999-0000
+      </a>
+
+      <p class="footer-text">
+        <span class="footer-icon">◷</span>
+        Seg a sex, das 08h às 18h
+      </p>
+
+      <a class="footer-link" href="mailto:contato@gmail.com">
+        <span class="footer-icon">✉</span>
+        contato@gmail.com
+      </a>
+    </div>
+
+    <!-- Pagamentos -->
+    <div class="footer-column footer-payments">
+      <h3 class="footer-title">FORMAS DE PAGAMENTO</h3>
+
+      <div class="payment-card">
+        <img
+          class="payment-image"
+          src="MPcartão.png"
+          alt="Formas de pagamento aceitas"
+        />
+      </div>
+
+      <p class="footer-small">
+        Compre com praticidade e segurança.
+      </p>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <span>© {{ anoAtual }} Thamy Fitwear.</span>
+    <span>Todos os direitos reservados.</span>
+  </div>
 </footer>

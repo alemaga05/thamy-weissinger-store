@@ -1,43 +1,135 @@
 <section class="popular-section">
-  
-  <!-- Título Superior e Linhas -->
+
+  <!-- TÍTULO -->
   <div class="title-wrapper">
-    <h2 class="section-title">DESTAQUES FEMININOS</h2>
-    
-    <!-- Linha decorativa inferior (Exporte os 3 SVGs do Figma e coloque na pasta public) -->
+
+    <h2 class="section-title">
+      MAIS POPULARES
+    </h2>
+
     <div class="decoration-row">
-      <img src="/simboloDireitaTitulo.svg" alt="Seta" class="decor-arrow">
+
+      <img
+        src="/simboloDireitaTitulo.svg"
+        alt="Seta"
+        class="decor-arrow"
+      >
+
       <div class="line"></div>
-      <img src="/simboloMeioTitulo.svg" alt="Centro" class="decor-center">
+
+      <img
+        src="/simboloMeioTitulo.svg"
+        alt="Centro"
+        class="decor-center"
+      >
+
       <div class="line"></div>
-      <img src="/simboloDireitaTitulo.svg" alt="Seta" class="decor-arrow">
+
+      <img
+        src="/simboloDireitaTitulo.svg"
+        alt="Seta"
+        class="decor-arrow"
+      >
+
     </div>
+
   </div>
 
-  <!-- Grade de Produtos -->
-  <div class="products-grid">
-    
-    <!-- Cartão do Produto: Agora é a tag <a> para ser 100% clicável -->
-    <a [routerLink]="['/produto', product.id]" class="product-card" *ngFor="let product of products">
-      
-      <!-- Foto e ícone de coração -->
+
+  <!-- CARREGANDO -->
+  <div
+    *ngIf="carregando"
+    class="loading-products"
+  >
+    Carregando produtos...
+  </div>
+
+
+  <!-- PRODUTOS POPULARES -->
+  <div
+    *ngIf="!carregando && products.length > 0"
+    class="products-grid"
+  >
+
+    <a
+      *ngFor="let product of products"
+      [routerLink]="['/produto', product.id]"
+      class="product-card"
+    >
+
+      <!-- IMAGEM -->
       <div class="image-container">
-        <img [src]="product.image" [alt]="product.name" class="product-image">
-        <!-- preventDefault() impede que o clique no coração abra a página do produto -->
-        <button class="favorite-btn" (click)="$event.preventDefault()">♡</button>
+
+        <img
+          [src]="product.imagemUrl || '/placeholder.png'"
+          [alt]="product.nome"
+          class="product-image"
+        >
+
+        
+          
+    <button
+      class="favorite-btn"
+      [class.is-favorite]="estaFavoritado(product.id)"
+      [disabled]="estaProcessandoFavorito(product.id)"
+      [attr.aria-label]="estaFavoritado(product.id)
+        ? 'Remover dos favoritos'
+        : 'Adicionar aos favoritos'"
+      [attr.aria-pressed]="estaFavoritado(product.id)"
+      type="button"
+      (click)="alternarFavorito($event, product)"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        class="favorite-icon"
+        [class.heart-filled]="estaFavoritado(product.id)"
+        aria-hidden="true"
+      >
+        <path
+          d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"
+        />
+      </svg>
+    </button>
+
       </div>
 
-      <!-- Informações do produto -->
+
+      <!-- INFORMAÇÕES -->
       <div class="product-info">
-        <h3 class="product-name">{{ product.name }}</h3>
-        
+
+        <h3 class="product-name">
+          {{ product.nome }}
+        </h3>
+
         <div class="price-action">
-          <span class="product-price">$ {{ product.price }}</span>
-          <button class="buy-btn" (click)="$event.preventDefault()">➔</button>
+
+          <span class="product-price">
+            R$ {{ product.preco | number:'1.2-2' }}
+          </span>
+
+          <button
+            class="buy-btn"
+            type="button"
+            (click)="$event.preventDefault(); $event.stopPropagation()"
+          >
+            ➔
+          </button>
+
         </div>
+
       </div>
 
     </a>
 
   </div>
+
+
+  <!-- NENHUM PRODUTO -->
+  <div
+    *ngIf="!carregando && products.length === 0"
+    class="empty-products"
+  >
+    Nenhum produto popular disponível no momento.
+  </div>
+
 </section>

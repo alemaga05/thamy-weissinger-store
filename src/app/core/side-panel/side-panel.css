@@ -80,6 +80,11 @@
   display: flex; 
   gap: 18px; 
   align-items: center; 
+  cursor: pointer;
+}
+
+.cart-item:hover {
+  opacity: 0.9;
 }
 
 /* Moldura chique para a foto */

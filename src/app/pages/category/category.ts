@@ -1,6 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { LojaService } from '../../core/services/loja.service';
+import { Produto, ProdutoService } from '../../core/services/produto.service';
+
+export interface Product {
+  id: number;
+  nome: string;
+  preco: number;
+  imagemUrl: string;
+  categoria: string;
+  isFavorito: boolean;
+}
 
 @Component({
   selector: 'app-category',
@@ -11,37 +23,132 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 })
 export class Category implements OnInit {
   categoriaAtual: string = '';
-  produtosFiltrados: any[] = [];
+  todosOsProdutos: Product[] = [];
+  produtosFiltrados: Product[] = [];
 
-  // Banco de dados simulado (Futuramente virá do painel da Thamy)
-  todosOsProdutos = [
-    { id: 1, nome: 'Conjunto com Top e Calça', preco: 105.00, categoria: 'feminino', imagem: '/produto1.png' },
-    { id: 2, nome: 'Legging Alta Compressão', preco: 89.90, categoria: 'feminino', imagem: '/produto2.png' },
-    { id: 3, nome: 'Bermuda Térmica', preco: 65.00, categoria: 'masculino', imagem: '/produto3.png' },
-    { id: 4, nome: 'Camiseta Dry Fit', preco: 55.00, categoria: 'masculino', imagem: '/produto4.png' },
-    { id: 5, nome: 'Garrafa Térmica 1L', preco: 45.00, categoria: 'acessorios', imagem: '/produto5.png' },
-    { id: 6, nome: 'Boné Esportivo', preco: 35.00, categoria: 'acessorios', imagem: '/produto6.png' }
-  ];
+  constructor(
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private lojaService: LojaService,
+    private produtoService: ProdutoService
+  ) {}
 
-  constructor(private route: ActivatedRoute) {}
-
-  ngOnInit() {
-    // Fica "escutando" as mudanças na URL
-    this.route.paramMap.subscribe(params => {
-      // Pega o nome da categoria na URL (ex: "masculino")
+  ngOnInit(): void {
+    this.route.paramMap.subscribe((params: any) => {
       this.categoriaAtual = params.get('nome') || '';
-      this.filtrarProdutos();
+      this.carregarProdutosDaAPI();
     });
   }
 
-  filtrarProdutos() {
-    // Filtra a lista para mostrar só os produtos da categoria atual
-    this.produtosFiltrados = this.todosOsProdutos.filter(
-      produto => produto.categoria === this.categoriaAtual.toLowerCase()
-    );
+  carregarProdutosDaAPI(): void {
+    this.produtoService.obterProdutos().subscribe({
+      next: (dadosBanco: Produto[]) => {
+        this.todosOsProdutos = dadosBanco.map((p: Produto) => ({
+          id: p.id!,
+          nome: p.nome,
+          preco: p.preco,
+          imagemUrl: p.imagemUrl || '/placeholder.png',
+          categoria: p.categoria ? p.categoria.toLowerCase() : '',
+          isFavorito: false
+        }));
+
+        this.filtrarProdutos();
+        this.sincronizarFavoritosComBanco();
+      },
+      error: (err: any) => console.error('Erro ao carregar produtos da categoria', err)
+    });
+  }
+
+  filtrarProdutos(): void {
+    const categoriaUrl = this.categoriaAtual.toLowerCase().trim()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+    this.produtosFiltrados = this.todosOsProdutos.filter((produto: Product) => {
+      const catProduto = produto.categoria.toLowerCase().trim()
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+      return catProduto === categoriaUrl;
+    });
+  }
+
+  sincronizarFavoritosComBanco(): void {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    
+    // Adicionado tipo genérico 
+    this.http.get<any[]>('http://localhost:3000/favoritos', { headers }).subscribe({
+      next: (favoritosDoBanco: any[]) => {
+        const idsFavoritados = favoritosDoBanco.map((f: any) => f.produtoId);
+        this.produtosFiltrados.forEach((p: Product) => {
+          p.isFavorito = idsFavoritados.includes(p.id);
+        });
+      },
+      error: (err: any) => console.error('Erro ao sincronizar favoritos:', err)
+    });
+  }
+
+  toggleFavorito(event: Event, product: Product): void {
+    event.stopPropagation();
+    event.preventDefault();
+
+    product.isFavorito = !product.isFavorito;
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Você precisa estar logado para favoritar!');
+      return;
+    }
+
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    if (product.isFavorito) {
+      this.http.post('http://localhost:3000/favoritos', { produtoId: product.id }, { headers })
+        .subscribe({
+          next: () => this.lojaService.notificarAtualizacao(),
+          error: (err: any) => console.error('Erro ao favoritar:', err)
+        });
+    } else {
+      // Adicionado tipo genérico 
+      this.http.get<any[]>('http://localhost:3000/favoritos', { headers }).subscribe({
+        next: (favoritos: any[]) => {
+          const itemFav = favoritos.find((f: any) => f.produtoId === product.id);
+          if (itemFav) {
+            this.http.delete(`http://localhost:3000/favoritos/${itemFav.id}`, { headers }).subscribe({
+              next: () => this.lojaService.notificarAtualizacao(),
+              error: (err: any) => console.error('Erro ao remover favorito:', err)
+            });
+          }
+        },
+        error: (err: any) => console.error('Erro ao buscar favoritos:', err)
+      });
+    }
+  }
+
+  adicionarCarrinhoRapido(event: Event, product: Product): void {
+    event.preventDefault();
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Você precisa estar logado para adicionar ao carrinho!');
+      return;
+    }
+
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    const payload = { produtoId: product.id, tamanho: 'Único', quantidade: 1 };
+
+    this.http.post('http://localhost:3000/carrinho', payload, { headers })
+      .subscribe({
+        next: () => {
+          alert('Produto adicionado ao carrinho!');
+          this.lojaService.notificarAtualizacao();
+        },
+        error: (err: any) => console.error('Erro ao adicionar ao carrinho:', err)
+      });
   }
 
   formatarPreco(valor: number): string {
-    return valor.toFixed(2).replace('.', ',');
+    return valor ? valor.toFixed(2).replace('.', ',') : '0,00';
   }
 }

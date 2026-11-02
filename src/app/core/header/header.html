@@ -15,9 +15,82 @@
 
     <!-- Lado Esquerdo: Barra de Pesquisa transformável -->
     <div class="search-container">
-      <img class="search-icon" src="/lupa.svg" alt="Lupa" />
-      <input type="text" class="search-input" placeholder="Pesquise por um produto" />
+  <img class="search-icon" src="/lupa.svg" alt="Lupa" />
+
+  <input
+    type="text"
+    class="search-input"
+    placeholder="Pesquise por um produto"
+    [(ngModel)]="termoPesquisa"
+    (focus)="abrirPesquisa()"
+    (click)="abrirPesquisa()"
+    (input)="pesquisaAberta = true"
+    (keydown.escape)="fecharPesquisa()"
+    autocomplete="off"
+    aria-label="Pesquisar produtos"
+  />
+
+  <div
+    class="search-results"
+    *ngIf="pesquisaAberta"
+  >
+    <div class="search-status" *ngIf="carregandoPesquisa">
+      Carregando produtos...
     </div>
+
+    <div class="search-status" *ngIf="erroPesquisa">
+      Não foi possível carregar os produtos.
+      Tente novamente.
+      <button
+        type="button"
+        (click)="tentarCarregarProdutosPesquisa()"
+      >
+        Tentar novamente
+      </button>
+    </div>
+
+    <ng-container *ngIf="!carregandoPesquisa && !erroPesquisa">
+      <div class="search-heading" *ngIf="produtosFiltrados.length">
+        {{ termoPesquisa.trim() ? 'RESULTADOS DA PESQUISA' : 'PRODUTOS CADASTRADOS' }}
+      </div>
+
+      <button
+        type="button"
+        class="search-product"
+        *ngFor="let produto of produtosFiltrados"
+        (click)="abrirProduto(produto.id)"
+      >
+        
+      <img
+        class="search-product-image"
+        [src]="produto.imagemUrl || '/placeholder.png'"
+        [alt]="produto.nome"
+        loading="lazy"
+        decoding="async"
+        (error)="onErroImagemPesquisa($event)"
+      />
+
+        <span class="search-product-info">
+          <span class="search-product-name">{{ produto.nome }}</span>
+          <span class="search-product-price">
+            {{ produto.preco | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+          </span>
+        </span>
+
+        <span class="search-product-arrow">›</span>
+      </button>
+
+      <div
+        class="search-status"
+        *ngIf="produtosFiltrados.length === 0"
+      >
+        {{ termoPesquisa.trim()
+          ? 'Nenhum produto encontrado.'
+          : 'Nenhum produto cadastrado no momento.' }}
+      </div>
+    </ng-container>
+  </div>
+</div>
 
     <!-- Centro: Logo da Loja -->
     <div class="logo-container">
@@ -27,11 +100,22 @@
     </div>
 
     <!-- Lado Direito: Ícones de Ação (Favoritos, Carrinho, Perfil) -->
+    <!-- Lado Direito: Ícones de Ação (Favoritos, Carrinho, Perfil) -->
     <div class="actions-container">
-      <a style="cursor: pointer;" (click)="abrirFavoritos()"><img src="/favorito.svg" alt="Favoritos" class="action-icon"></a>
-      <a style="cursor: pointer;" (click)="abrirCarrinho()"><img src="/sacola.svg" alt="Sacola" class="action-icon"></a>
       
+      <!-- FAVORITOS COM BADGE -->
+      <a class="icon-wrapper" (click)="abrirFavoritos()">
+        <img src="/favorito.svg" alt="Favoritos" class="action-icon">
+        <span class="badge" *ngIf="favoritesCount > 0">{{ favoritesCount }}</span>
+      </a>
 
+      <!-- CARRINHO COM BADGE -->
+      <a class="icon-wrapper" (click)="abrirCarrinho()">
+        <img src="/sacola.svg" alt="Sacola" class="action-icon">
+        <span class="badge" *ngIf="cartCount > 0">{{ cartCount }}</span>
+      </a>
+
+      <!-- PERFIL -->
       <a style="cursor: pointer;" (click)="clicarNoPerfil()">
         <img class="action-icon" src="/perfil.svg" alt="Usuário" />
       </a>
@@ -44,10 +128,15 @@
 
   <!-- Linha inferior: Menu de Navegação Principal -->
   <nav class="nav-menu">
-    <a routerLink="/categoria/masculino" class="nav-link">Masculino</a>
-    <a routerLink="/categoria/feminino" class="nav-link">Feminino</a>
-    <a routerLink="/categoria/acessorios" class="nav-link">Acessórios</a>
-    <a routerLink="/categoria/conjuntos" class="nav-link">Conjuntos</a>
+    <a routerLink="/masculino" class="nav-link">Masculino</a>
+    <a routerLink="/feminino" class="nav-link">Feminino</a>
+    <a
+      *ngFor="let categoria of categoriasTopbar"
+      [routerLink]="['/categoria', normalizarNomeCategoria(categoria.nome)]"
+      class="nav-link"
+    >
+      {{ categoria.nome }}
+    </a>
   </nav>
 
   <!-- ========================================== -->
@@ -65,12 +154,39 @@
     </div>
 
     <ul class="sidebar-links">
-      <!-- O routerLink faz a navegação, e o (click) fecha o menu na mesma hora -->
-      <li><a routerLink="/categoria/masculino" (click)="toggleSidebar()">Masculino</a></li>
-      <li><a routerLink="/categoria/feminino" (click)="toggleSidebar()">Feminino</a></li>
-      <li><a routerLink="/categoria/pecas-avulsas" (click)="toggleSidebar()">Peças Avulsas</a></li>
-      <li><a routerLink="/categoria/acessorios" (click)="toggleSidebar()">Acessórios</a></li>
-      <li><a routerLink="/categoria/conjuntos" (click)="toggleSidebar()">Conjuntos</a></li>
+
+      <li>
+        <a
+          routerLink="/masculino"
+          (click)="toggleSidebar()"
+        >
+          Masculino
+        </a>
+      </li>
+
+      <li>
+        <a
+          routerLink="/feminino"
+          (click)="toggleSidebar()"
+        >
+          Feminino
+        </a>
+      </li>
+
+      <li
+        *ngFor="let categoria of categoriasTopbar"
+      >
+        <a
+          [routerLink]="[
+            '/categoria',
+            normalizarNomeCategoria(categoria.nome)
+          ]"
+          (click)="toggleSidebar()"
+        >
+          {{ categoria.nome }}
+        </a>
+      </li>
+
     </ul>
   </div>
 
@@ -83,6 +199,7 @@
 
 <app-side-panel 
   [isOpen]="isSidePanelOpen" 
-  [mode]="sidePanelMode"
-  (close)="fecharPainelLateral()">
+  [mode]="sidePanelMode" 
+  (close)="isSidePanelOpen = false"
+  (itemRemovido)="onItemRemovidoDoPainel($event)">
 </app-side-panel>

@@ -1,28 +1,78 @@
-<!-- Adicionamos o touchstart e touchend para o celular reconhecer o dedo -->
-<div class="carousel-container" 
-     (mouseenter)="stopAutoPlay()" 
-     (mouseleave)="startAutoPlay()"
-     (touchstart)="onTouchStart($event)"
-     (touchend)="onTouchEnd($event)">
-  
-  <!-- "Pista" que desliza para os lados -->
-  <div class="carousel-track" [style.transform]="'translateX(-' + currentIndex * 100 + '%)'">
-    <div class="slide" *ngFor="let slide of slides">
-      <img [src]="slide.url" [alt]="slide.alt">
+
+<div
+  class="carousel-container"
+  (mouseenter)="stopAutoPlay()"
+  (mouseleave)="startAutoPlay()"
+  (touchstart)="onTouchStart($event)"
+  (touchend)="onTouchEnd($event)"
+>
+  <div
+    class="carousel-track"
+    [style.transform]="'translateX(-' + currentIndex * 100 + '%)'"
+  >
+    <div
+      class="slide"
+      *ngFor="let slide of slides; let i = index"
+    >
+      <a
+        *ngIf="slide.link; else imagemSemLink"
+        [href]="slide.link"
+        class="slide-link"
+      >
+        <img
+          [src]="slide.url"
+          [alt]="slide.alt"
+          [attr.loading]="i === 0 ? 'eager' : 'lazy'"
+          [attr.fetchpriority]="i === 0 ? 'high' : 'auto'"
+          decoding="async"
+          width="1524"
+          height="600"
+        />
+      </a>
+
+      <ng-template #imagemSemLink>
+        <img
+          [src]="slide.url"
+          [alt]="slide.alt"
+          [attr.loading]="i === 0 ? 'eager' : 'lazy'"
+          [attr.fetchpriority]="i === 0 ? 'high' : 'auto'"
+          decoding="async"
+          width="1524"
+          height="600"
+        />
+      </ng-template>
     </div>
   </div>
 
-  <!-- Botões de Navegação (Setas) -->
-  <button class="nav-btn prev" (click)="prevSlide()">&#10094;</button>
-  <button class="nav-btn next" (click)="nextSlide()">&#10095;</button>
+  <ng-container *ngIf="slides.length > 1">
+    <button
+      type="button"
+      class="nav-btn prev"
+      (click)="prevSlide()"
+      aria-label="Banner anterior"
+    >
+      &#10094;
+    </button>
 
-  <!-- Bolinhas indicadoras -->
-  <div class="dots-container">
-    <span class="dot" 
-          *ngFor="let slide of slides; let i = index" 
-          [ngClass]="{'active': i === currentIndex}" 
-          (click)="currentIndex = i">
-    </span>
-  </div>
+    <button
+      type="button"
+      class="nav-btn next"
+      (click)="nextSlide()"
+      aria-label="Próximo banner"
+    >
+      &#10095;
+    </button>
 
+    <div class="dots-container">
+      <button
+        type="button"
+        class="dot"
+        *ngFor="let slide of slides; let i = index"
+        [class.active]="i === currentIndex"
+        [attr.aria-label]="'Ir para banner ' + (i + 1)"
+        [attr.aria-current]="i === currentIndex ? 'true' : null"
+        (click)="irParaSlide(i)"
+      ></button>
+    </div>
+  </ng-container>
 </div>

@@ -5,10 +5,10 @@
     <img src="/categoriaMasculinaPage.png" alt="Categoria Masculina" class="main-banner">
   </div>
 
-  <!-- 2. SUBCATEGORIAS (Círculos) -->
+  <!-- 2. SUBCATEGORIAS (Círculos com clique de filtro) -->
   <div class="subcategories-track">
-    <div class="sub-item" *ngFor="let sub of subcategories">
-      <div class="circle-box">
+    <div class="sub-item" *ngFor="let sub of subcategories" (click)="filtrarPorSubcategoria(sub.sub, sub.name)">
+      <div class="circle-box" [class.active-circle]="subcategoriaSelecionada === sub.sub">
         <img [src]="sub.image" [alt]="sub.name">
       </div>
       <span class="sub-name">{{ sub.name }}</span>
@@ -18,9 +18,9 @@
   <!-- 3. SEÇÃO DE PRODUTOS PADRONIZADA -->
   <section class="popular-section">
     
-    <!-- Título Superior e Linhas -->
+    <!-- Título Superior Dinâmico -->
     <div class="title-wrapper">
-      <h2 class="section-title">DESTAQUES MASCULINOS</h2>
+      <h2 class="section-title">{{ tituloSecao }}</h2>
       
       <div class="decoration-row">
         <img src="/simboloDireitaTitulo.svg" alt="Seta" class="decor-arrow">
@@ -38,17 +38,22 @@
         
         <!-- Foto e ícone de coração -->
         <div class="image-container">
-          <img [src]="product.image" [alt]="product.name" class="product-image">
-          <button class="favorite-btn" (click)="$event.preventDefault()">♡</button>
+          <img [src]="product.imagemUrl" [alt]="product.nome" class="product-image">
+          
+          <button class="favorite-btn" 
+                  [style.color]="product.isFavorito ? 'red' : 'inherit'" 
+                  (click)="toggleFavorito($event, product)">
+            {{ product.isFavorito ? '♥' : '♡' }}
+          </button>
         </div>
 
         <!-- Informações do produto -->
         <div class="product-info">
-          <h3 class="product-name">{{ product.name }}</h3>
+          <h3 class="product-name">{{ product.nome }}</h3>
           
           <div class="price-action">
-            <span class="product-price">$ {{ product.price }}</span>
-            <button class="buy-btn" (click)="$event.preventDefault()">➔</button>
+            <span class="product-price">R$ {{ product.preco | number:'1.2-2' }}</span>
+            <button class="buy-btn" (click)="adicionarCarrinhoRapido($event, product)">➔</button>
           </div>
         </div>
 

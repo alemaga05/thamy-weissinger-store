@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router'; // ⬅️ Importação que lê a URL
+import { ActivatedRoute } from '@angular/router'; 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { LojaService } from '../../core/services/loja.service'; 
+import { Produto, ProdutoService } from '../../core/services/produto.service';
 
 @Component({
   selector: 'app-product-details',
@@ -12,139 +14,156 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class ProductDetails implements OnInit {
   
-  constructor(private route: ActivatedRoute, private http: HttpClient) {}
-
-  // Variável que vai guardar o produto que deve aparecer na tela
-  produto: any;
-  
+  produto: any = null;
   imagemPrincipal = '';
-  tamanhos = ['P', 'M', 'G', 'GG'];
+  tamanhos: string[] = [];
   tamanhoSelecionado = '';
   quantidadeSelecionada = 1;
 
-  // Mini "Banco de Dados" simulado para testarmos
-  bancoDeDadosSimulado = [
-    {
-      id: 1, // ID TEM QUE BATER COM O DA VITRINE
-      nome: 'Conjunto Azul',
-      categoria: 'Conjuntos',
-      vendedor: 'Thamy Weissinger',
-      preco: 105.00,
-      estoque: 15,
-      descricao: 'Lindo conjunto azul para seus treinos.',
-      imagens: ['/produto1.png', '/image0.png', '/image1.png', '/image2.png']
-    },
-    {
-      id: 2,
-      nome: 'Camiseta Poliamida',
-      categoria: 'Feminino',
-      vendedor: 'Thamy Weissinger',
-      preco: 79.90,
-      estoque: 5,
-      descricao: 'Camiseta leve e respirável para o dia a dia.',
-      imagens: ['/produto1.png', '/image0.png', '/image1.png', '/image2.png']
-    },
-    {
-      id: 21,
-      nome: 'teste de la teste',
-      categoria: 'Feminino',
-      vendedor: 'Thamy Weissinger',
-      preco: 79.90,
-      estoque: 5,
-      descricao: 'Camiseta leve e respirável para o dia a dia.',
-      imagens: ['/produto1.png', '/image0.png', '/image1.png', '/image2.png']
-    }
-  ];
+  constructor(
+    private route: ActivatedRoute, 
+    private http: HttpClient,
+    private lojaService: LojaService,
+    private produtoService: ProdutoService,
+    private cdr: ChangeDetectorRef // Injetamos o detector de mudanças
+  ) {}
+
+  ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+      const idParam = params.get('id') || params.get('nome');
+      if (idParam) {
+        this.carregarProduto(idParam);
+      }
+    });
+  }
+
+  carregarProduto(parametro: string): void {
+    this.produtoService.obterProdutos().subscribe({
+      next: (dadosBanco: any[]) => {
+        const produtoEncontrado = dadosBanco.find((p: any) => 
+          String(p.id) === parametro || 
+          p.nome?.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '-') === parametro.toLowerCase()
+        );
+
+        if (!produtoEncontrado) {
+          console.warn('Produto não encontrado na lista.');
+          return;
+        }
+
+        // Criamos o objeto completo do produto
+        this.produto = {
+          id: produtoEncontrado.id,
+          nome: produtoEncontrado.nome || produtoEncontrado.titulo || 'Produto sem nome',
+          categoria: produtoEncontrado.categoria || 'Geral',
+          vendedor: 'Thamy Fitwear',
+          preco: produtoEncontrado.preco || produtoEncontrado.valor || 0,
+          estoque: produtoEncontrado.estoque ?? 10,
+          descricao: produtoEncontrado.descricao || 'Sem descrição cadastrada.',
+          imagens: produtoEncontrado.imagemUrl ? [produtoEncontrado.imagemUrl] : (produtoEncontrado.imagens || ['/placeholder.png']),
+          isFavorito: false
+        };
+
+        this.imagemPrincipal = this.produto.imagens[0];
+
+        if (produtoEncontrado.tamanhos) {
+          this.tamanhos = typeof produtoEncontrado.tamanhos === 'string' 
+            ? produtoEncontrado.tamanhos.split(',').map((t: string) => t.trim()) 
+            : produtoEncontrado.tamanhos;
+        } else {
+          this.tamanhos = ['P', 'M', 'G', 'GG'];
+        }
+
+        // Força a atualização imediata da tela
+        this.cdr.detectChanges();
+
+        this.sincronizarFavoritoComBanco();
+      },
+      error: (err: any) => console.error('Erro ao carregar produtos:', err)
+    });
+  }
 
   verificarLogin(): boolean {
     const token = localStorage.getItem('token');
     if (!token) {
-      alert('Você precisa estar logado para adicionar itens!');
-      // Dica: Futuramente, você pode fazer abrir o modal de login aqui direto!
+      alert('Você precisa estar logado para realizar esta ação!');
       return false;
     }
     return true;
   }
 
-  favoritar() {
-    if (!this.verificarLogin()) return; // Barra se não tiver logado
+  sincronizarFavoritoComBanco(): void {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    
+    this.http.get<any[]>('http://localhost:3000/favoritos', { headers }).subscribe({
+      next: (favoritosDoBanco: any[]) => {
+        const idsFavoritados = favoritosDoBanco.map((f: any) => f.produtoId);
+        if (this.produto) {
+          this.produto.isFavorito = idsFavoritados.includes(this.produto.id);
+          this.cdr.detectChanges(); // Atualiza a tela após checar os favoritos
+        }
+      },
+      error: (err: any) => console.error('Erro ao sincronizar favoritos', err)
+    });
+  }
+
+  favoritar(): void {
+    if (!this.verificarLogin()) return; 
+    this.produto.isFavorito = !this.produto.isFavorito; 
 
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     
-    // Supondo que você crie essa rota no Node.js
-    this.http.post('http://localhost:3000/favoritos', { produtoId: this.produto.id }, { headers })
-      .subscribe({
-        next: () => alert('Produto adicionado aos favoritos! 🖤'),
-        error: (err) => alert('Erro ao favoritar.')
-      });
-  }
-
-
-
-  // O ngOnInit roda automaticamente assim que a página abre
-  ngOnInit() {
-    // 1. Lê o ID que está lá na URL (ex: seu-site.com/produto/2)
-    const idDaUrl = Number(this.route.snapshot.paramMap.get('id'));
-
-    // 2. Procura no nosso "banco de dados" qual produto tem esse ID
-    const produtoEncontrado = this.bancoDeDadosSimulado.find(p => p.id === idDaUrl);
-
-    // 3. Se encontrar, coloca ele na tela. Se não, mostra o primeiro por padrão.
-    if (produtoEncontrado) {
-      this.produto = produtoEncontrado;
+    if (this.produto.isFavorito) {
+      this.http.post('http://localhost:3000/favoritos', { produtoId: this.produto.id }, { headers }).subscribe();
     } else {
-      this.produto = this.bancoDeDadosSimulado[0]; 
+      this.http.get<any[]>('http://localhost:3000/favoritos', { headers }).subscribe({
+        next: (favoritos: any[]) => {
+          const itemFav = favoritos.find((f: any) => f.produtoId === this.produto.id);
+          if (itemFav) {
+            this.http.delete(`http://localhost:3000/favoritos/${itemFav.id}`, { headers }).subscribe();
+          }
+        }
+      });
     }
-
-    // 4. Define a foto principal
-    this.imagemPrincipal = this.produto.imagens[0];
   }
 
-  // --- Funções Interativas ---
-  trocarImagem(img: string) { this.imagemPrincipal = img; }
-  selecionarTamanho(tamanho: string) { this.tamanhoSelecionado = tamanho; }
+  trocarImagem(img: string): void { this.imagemPrincipal = img; }
+  selecionarTamanho(tamanho: string): void { this.tamanhoSelecionado = tamanho; }
   
-  aumentarQuantidade() {
-    if (this.quantidadeSelecionada < this.produto.estoque) {
-      this.quantidadeSelecionada++;
-    }
+  aumentarQuantidade(): void {
+    if (this.quantidadeSelecionada < this.produto.estoque) this.quantidadeSelecionada++;
   }
 
-  diminuirQuantidade() {
-    if (this.quantidadeSelecionada > 1) {
-      this.quantidadeSelecionada--;
-    }
+  diminuirQuantidade(): void {
+    if (this.quantidadeSelecionada > 1) this.quantidadeSelecionada--;
   }
 
-  comprar() {
-    if (!this.verificarLogin()) return; // Barra se não tiver logado
-    
+  comprar(): void {
+    if (!this.verificarLogin()) return;
+
     if (!this.tamanhoSelecionado) {
-      alert('Por favor, selecione um tamanho antes de comprar!');
+      alert('⚠️ Por favor, selecione um tamanho antes de adicionar ao carrinho!');
       return;
     }
 
-    if (this.produto.estoque >= this.quantidadeSelecionada) {
-      const token = localStorage.getItem('token');
-      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-      
-      const payload = {
-        produtoId: this.produto.id,
-        tamanho: this.tamanhoSelecionado,
-        quantidade: this.quantidadeSelecionada
-      };
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    const payload = {
+      produtoId: this.produto.id,
+      tamanho: this.tamanhoSelecionado,
+      quantidade: this.quantidadeSelecionada
+    };
 
-      // Supondo que você crie essa rota no Node.js
-      this.http.post('http://localhost:3000/carrinho', payload, { headers })
-        .subscribe({
-          next: () => {
-            alert(`Adicionado ao carrinho!`);
-            this.quantidadeSelecionada = 1; 
-            this.tamanhoSelecionado = '';
-          },
-          error: (err) => alert('Erro ao adicionar ao carrinho.')
-        });
-    }
+    this.http.post('http://localhost:3000/carrinho', payload, { headers })
+      .subscribe({
+        next: () => {
+          alert('✅ Item adicionado ao carrinho com sucesso!');
+          this.lojaService.notificarAtualizacao();
+        },
+        error: (err: any) => console.error('Erro ao adicionar ao carrinho.', err)
+      });
   }
 }

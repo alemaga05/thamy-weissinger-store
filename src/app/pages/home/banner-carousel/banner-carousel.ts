@@ -1,5 +1,23 @@
+
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+
+interface Banner {
+  id: number;
+  titulo: string;
+  imagemUrl: string;
+  link?: string | null;
+  ativo: boolean;
+  ordem: number;
+}
+
+interface Slide {
+  id: number;
+  url: string;
+  alt: string;
+  link: string | null;
+}
 
 @Component({
   selector: 'app-banner-carousel',
@@ -9,60 +27,128 @@ import { CommonModule } from '@angular/common';
   styleUrl: './banner-carousel.css'
 })
 export class BannerCarousel implements OnInit, OnDestroy {
-  slides = [
-    { id: 1, url: '/banner1.jpg', alt: 'Conforto, Performance e Estilo' },
-    { id: 2, url: '/banner1.jpg', alt: 'Moda Fitness Feminina' },
-    { id: 3, url: '/banner1.jpg', alt: 'Coleção Masculina' }
-  ];
+  private readonly apiUrl = 'http://localhost:3000';
 
+  slides: Slide[] = [];
   currentIndex = 0;
-  autoPlayInterval: any;
 
-  // Variáveis para rastrear o toque na tela
+  autoPlayInterval: ReturnType<typeof setInterval> | null = null;
+
   touchStartX = 0;
   touchEndX = 0;
 
-  ngOnInit() { this.startAutoPlay(); }
-  ngOnDestroy() { this.stopAutoPlay(); }
+  carregando = true;
+  erro = false;
 
-  startAutoPlay() {
-    this.autoPlayInterval = setInterval(() => { this.nextSlide(); }, 5000); 
+  constructor(private http: HttpClient) {}
+
+  ngOnInit(): void {
+    this.carregarBanners();
   }
 
-  stopAutoPlay() { clearInterval(this.autoPlayInterval); }
-
-  nextSlide() {
-    this.currentIndex = (this.currentIndex === this.slides.length - 1) ? 0 : this.currentIndex + 1;
+  ngOnDestroy(): void {
+    this.stopAutoPlay();
   }
 
-  prevSlide() {
-    this.currentIndex = (this.currentIndex === 0) ? this.slides.length - 1 : this.currentIndex - 1;
+  carregarBanners(): void {
+    this.carregando = false;
+    this.erro = false;
+    this.prepararImagens(this.slides);
+
+    // IMPORTANTE: esta rota precisa existir no backend
+    // e retornar os banners ativos sem exigir acesso administrativo.
+    this.http.get<Banner[]>(`${this.apiUrl}/banners`).subscribe({
+      next: (banners) => {
+        this.slides = (Array.isArray(banners) ? banners : [])
+          .filter(banner => banner.ativo && !!banner.imagemUrl)
+          .sort((a, b) => a.ordem - b.ordem)
+          .map(banner => ({
+            id: banner.id,
+            url: banner.imagemUrl,
+            alt: banner.titulo || 'Banner Thamy Fitwear',
+            link: banner.link || null
+          }));
+
+        this.currentIndex = 0;
+        this.carregando = false;
+        this.startAutoPlay();
+      },
+      error: (erro) => {
+        console.error('Erro ao carregar banners:', erro);
+        this.slides = [];
+        this.carregando = false;
+        this.erro = true;
+        this.stopAutoPlay();
+      }
+    });
   }
 
-  // ==========================================
-  // LÓGICA DO ARRASTAR (SWIPE) NO CELULAR
-  // ==========================================
-  
-  onTouchStart(event: TouchEvent) {
-    // Marca a posição inicial do dedo na tela
+  startAutoPlay(): void {
+    this.stopAutoPlay();
+
+    if (this.slides.length <= 1) {
+      return;
+    }
+
+    this.autoPlayInterval = setInterval(() => {
+      this.nextSlide();
+    }, 5000);
+  }
+
+  stopAutoPlay(): void {
+    if (this.autoPlayInterval !== null) {
+      clearInterval(this.autoPlayInterval);
+      this.autoPlayInterval = null;
+    }
+  }
+
+  nextSlide(): void {
+    if (this.slides.length <= 1) return;
+
+    this.currentIndex =
+      (this.currentIndex + 1) % this.slides.length;
+  }
+
+  prevSlide(): void {
+    if (this.slides.length <= 1) return;
+
+    this.currentIndex =
+      (this.currentIndex - 1 + this.slides.length) %
+      this.slides.length;
+  }
+
+  irParaSlide(index: number): void {
+    if (index < 0 || index >= this.slides.length) return;
+    this.currentIndex = index;
+  }
+
+  onTouchStart(event: TouchEvent): void {
     this.touchStartX = event.changedTouches[0].screenX;
   }
 
-  onTouchEnd(event: TouchEvent) {
-    // Marca a posição final de quando o usuário soltou o dedo
+  onTouchEnd(event: TouchEvent): void {
     this.touchEndX = event.changedTouches[0].screenX;
-    this.checkDirection();
-  }
 
-  checkDirection() {
-    const minSwipeDistance = 50; // Distância mínima para não contar um toque acidental
+    const distancia = this.touchEndX - this.touchStartX;
 
-    if (this.touchEndX < this.touchStartX - minSwipeDistance) {
-      // Dedo foi para a esquerda: avança a foto
-      this.nextSlide(); 
-    } else if (this.touchEndX > this.touchStartX + minSwipeDistance) {
-      // Dedo foi para a direita: volta a foto
-      this.prevSlide(); 
+    if (distancia < -50) {
+      this.nextSlide();
+    } else if (distancia > 50) {
+      this.prevSlide();
     }
   }
+
+  private prepararImagens(slides: Slide[]): void {
+    slides.forEach((slide, index) => {
+      const imagem = new Image();
+
+      if (index === 0) {
+        imagem.fetchPriority = 'high';
+      }
+
+      imagem.decoding = 'async';
+      imagem.src = slide.url;
+    });
+  }
+
 }

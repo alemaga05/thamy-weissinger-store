@@ -23,7 +23,7 @@
 
 .decoration-row {
   display: flex; align-items: center; justify-content: center;
-  width: 100%; max-width: 1200px; /* Largura controlada para acompanhar a grade */
+  width: 100%; max-width: 1200px;
   gap: 0; 
 }
 
@@ -39,9 +39,9 @@
    ========================================= */
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* ⬅️ Força as 5 colunas iguas à imagem */
+  grid-template-columns: repeat(5, 1fr);
   gap: 25px; 
-  max-width: 1400px; /* Centraliza e limita a largura na tela de PCs muito grandes */
+  max-width: 1400px;
   margin: 0 auto;
 }
 
@@ -69,7 +69,7 @@
 .product-info { padding: 15px; }
 .product-name {
   font-size: 14px; color: #333; margin: 0 0 10px 0; font-family: "Inter-Regular", sans-serif;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; /* Reticências se o nome for grande */
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
 .price-action { display: flex; justify-content: space-between; align-items: center; }
@@ -87,17 +87,14 @@
 /* =========================================
    RESPONSIVIDADE E CELULARES
    ========================================= */
-/* Notebooks menores */
 @media (max-width: 1200px) {
   .products-grid { grid-template-columns: repeat(4, 1fr); }
 }
 
-/* Tablets */
 @media (max-width: 900px) {
   .products-grid { grid-template-columns: repeat(3, 1fr); gap: 15px; }
 }
 
-/* Celulares (A Mágica das 3 Colunas reduzidas) */
 @media (max-width: 600px) {
   .category-page { padding: 30px 2%; }
   

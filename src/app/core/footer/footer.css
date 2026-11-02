@@ -1,33 +1,228 @@
-.footer-container {
-  position: relative;
+
+:host {
+  display: block;
   width: 100%;
-  height: 220px;
+}
+
+.footer-container {
+  width: 100%;
   background: #050505;
+  color: #f9f5f2;
+  box-sizing: border-box;
+  padding: 48px 7% 0;
+  border-top: 1px solid rgba(238, 205, 185, 0.35);
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr 1fr;
+  gap: 48px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-bottom: 38px;
+}
+
+.footer-brand,
+.footer-column {
+  min-width: 0;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.footer-brand a {
+  display: inline-flex;
+  align-items: center;
+}
+
+.footer-logo {
+  display: block;
+  width: 210px;
+  max-width: 100%;
+  height: 105px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.footer-description {
+  max-width: 280px;
+  margin: 16px 0 0;
+  color: #b9aaa3;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.footer-title {
+  position: relative;
+  margin: 8px 0 28px;
+  padding-bottom: 13px;
+  color: #fee1cf;
+  font-family: "Poppins-Medium", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+}
+
+.footer-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 42px;
+  height: 2px;
+  background: #c99b82;
+  border-radius: 2px;
+}
+
+.footer-link,
+.footer-text {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 18px;
+  color: #d8ccc6;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+  color: #fee1cf;
+}
+
+.footer-icon {
+  display: inline-flex;
+  flex: 0 0 30px;
+  width: 30px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(254, 225, 207, 0.25);
+  border-radius: 50%;
+  color: #fee1cf;
+  font-size: 16px;
+}
+
+.payment-card {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 200px;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
   overflow: hidden;
 }
-.image-83 {
-  position: absolute;
-  left: 82px;
-  top: 50px;
-  width: 218px;
-  height: 127px;
-  object-fit: cover;
+
+
+
+.payment-image {
+  display: block;
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  object-fit: contain;
+  object-position: center;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
 }
-.contato, .formas-de-pagamento, ._11-99999-0000, .seg-a-sex-08-h-s-18-h, .contato-gmail-com {
-  position: absolute;
-  color: #fff8f8;
-  font-family: "Poppins-Medium", sans-serif;
+
+
+
+.footer-small {
+  margin: 14px 0 0;
+  color: #b9aaa3;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 12px;
+  line-height: 1.7;
 }
-.contato { left: 562px; top: 43px; font-size: 25px; }
-.formas-de-pagamento { left: 1013px; top: 37px; font-size: 25px; }
-._11-99999-0000 { left: 562px; top: 91px; font-size: 22px; color: #dac5c5; }
-.contato-gmail-com { left: 562px; top: 121px; font-size: 22px; color: #dac5c5; text-decoration: underline; }
-.seg-a-sex-08-h-s-18-h { left: 562px; top: 152px; font-size: 22px; color: #dac5c5; }
-.image-159 {
-  position: absolute;
-  left: 1072px;
-  top: 91px;
-  width: 197px;
-  height: 101px;
-  object-fit: cover;
+
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  color: #a99a93;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+@media (max-width: 900px) {
+  .footer-container {
+    padding: 38px 5% 0;
+  }
+
+  .footer-content {
+    grid-template-columns: 1fr 1fr;
+    gap: 36px 28px;
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+  }
+
+  .footer-logo {
+    width: 190px;
+    height: 90px;
+  }
+}
+
+@media (max-width: 560px) {
+  .footer-container {
+    padding: 32px 22px 0;
+  }
+
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    padding-bottom: 28px;
+  }
+
+  .footer-brand {
+    grid-column: auto;
+  }
+
+  .footer-title {
+    margin-top: 0;
+    margin-bottom: 22px;
+    font-size: 15px;
+  }
+
+  .footer-logo {
+    width: 180px;
+    height: 85px;
+  }
+
+  .payment-card {
+    max-width: 100%;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    padding: 17px 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-link {
+    transition: none;
+  }
 }

@@ -179,3 +179,135 @@
     order: 4; /* Pesquisa vai para baixo */
   }
 }
+
+.icon-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.badge {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  background-color: #ff3b30;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: bold;
+  border-radius: 50%;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+}
+
+.search-container {
+  position: relative;
+  z-index: 100;
+}
+
+.search-results {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 0;
+  width: min(380px, 90vw);
+  max-height: 420px;
+  overflow-y: auto;
+  background: #fff;
+  color: #222;
+  border: 1px solid #e8d0bd;
+  border-radius: 12px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.24);
+  z-index: 1000;
+}
+
+.search-heading {
+  padding: 14px 16px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #88664f;
+}
+
+.search-product {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  border: 0;
+  border-top: 1px solid #f0ece8;
+  background: #fff;
+  color: #222;
+  text-align: left;
+  cursor: pointer;
+}
+
+.search-product:hover,
+.search-product:focus-visible {
+  background: #faf3ed;
+}
+
+.search-product-image {
+  width: 54px;
+  height: 62px;
+  flex-shrink: 0;
+  object-fit: cover;
+  border-radius: 6px;
+  background: #f1f1f1;
+}
+
+.search-product-info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.search-product-name {
+  font-size: 13px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.search-product-price {
+  font-size: 13px;
+  color: #805a42;
+}
+
+.search-product-arrow {
+  font-size: 24px;
+  color: #8a6a56;
+}
+
+.search-status {
+  padding: 18px 16px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #666;
+}
+
+.search-status button {
+  display: block;
+  margin-top: 10px;
+  padding: 8px 12px;
+  border: 1px solid #b9957b;
+  border-radius: 6px;
+  background: #fff;
+  color: #543b2c;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .search-results {
+    width: min(340px, calc(100vw - 32px));
+  }
+}

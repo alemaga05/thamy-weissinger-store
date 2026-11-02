@@ -1,0 +1,1318 @@
+<div class="dashboard-layout">
+  
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2>Thamy Admin</h2>
+      <span class="user-greeting">Olá, {{ nomeAdmin }}</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button [class.active]="abaAtiva === 'produtos'" (click)="mudarAba('produtos')">
+        📦 Produtos
+      </button>
+      <button [class.active]="abaAtiva === 'categorias'" (click)="mudarAba('categorias')">
+        🏷️ Categorias
+      </button>
+      <button [class.active]="abaAtiva === 'pedidos'" (click)="mudarAba('pedidos')">
+        🛍️ Pedidos
+      </button>
+      <button [class.active]="abaAtiva === 'banners'" (click)="mudarAba('banners')">
+        🖼️ Banners Home
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="btn-logout" (click)="sair()">
+        🚪 Terminar Sessão
+      </button>
+    </div>
+  </aside>
+
+  <!-- ÁREA PRINCIPAL -->
+  <main class="main-content">
+    <header class="top-header">
+      <h1>Painel Geral de Gestão</h1>
+    </header>
+
+    <div class="content-body">
+      
+      <!-- ABA PRODUTOS -->
+      <section *ngIf="abaAtiva === 'produtos'" class="tab-section">
+        <div class="section-header">
+          <h2>Gestão de Produtos</h2>
+          <button class="btn-primary" (click)="abrirModalNovo()">+ Cadastrar Novo Produto</button>
+        </div>
+
+        <!-- MENU DE CATEGORIAS (SUB-NAV) -->
+        <div class="sub-nav">
+          <button [class.active]="subAbaProduto === 'inicial'" (click)="mudarSubAba('inicial')">🏠 Visão Geral</button>
+          <button [class.active]="subAbaProduto === 'feminino'" (click)="mudarSubAba('feminino')">👩 Feminino</button>
+          <button [class.active]="subAbaProduto === 'masculino'" (click)="mudarSubAba('masculino')">👨 Masculino</button>
+          <button
+            type="button"
+            *ngFor="let categoria of categoriasDinamicas"
+            [class.active]="
+              normalizarTexto(subAbaProduto) ===
+              normalizarTexto(categoria.nome)
+            "
+            (click)="mudarSubAba(categoria.nome)"
+          >
+            {{ categoria.nome }}
+          </button>
+        </div>
+
+        <!-- FILTROS DE SUBCATEGORIA -->
+        <div class="filter-bar" *ngIf="subAbaProduto === 'feminino'">
+          <span>Filtrar por: </span>
+          <select [(ngModel)]="filtroSubcategoria">
+            <option value="todas">Todas as Peças</option>
+            <option value="tops">Tops</option>
+            <option value="shorts">Shorts</option>
+            <option value="leggings">Leggings</option>
+            <option value="conjuntos">Conjuntos</option>
+          </select>
+        </div>
+
+        <div class="filter-bar" *ngIf="subAbaProduto === 'masculino'">
+          <span>Filtrar por: </span>
+          <select [(ngModel)]="filtroSubcategoria">
+            <option value="todas">Todas as Peças</option>
+            <option value="camisas">Camisas</option>
+            <option value="regatas">Regatas</option>
+            <option value="shorts">Shorts</option>
+            <option value="calcas">Calças</option>
+            <option value="conjuntos">Conjuntos</option>
+          </select>
+        </div>
+
+        <div *ngIf="carregandoProdutos" class="loading-state">
+          Carregando catálogo...
+        </div>
+
+        <!-- TABELA DE PRODUTOS -->
+        <div *ngIf="!carregandoProdutos" class="table-container">
+          <h3 class="table-title" *ngIf="subAbaProduto === 'inicial'">Todos os Produtos Adicionados</h3>
+          
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Imagem</th>
+                <th>Nome</th>
+                <th>Categoria / Sub</th>
+                <th>Tamanhos</th>
+                <th>Preço</th>
+                <th>Estoque</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- O *ngFor usa os produtosFiltrados -->
+              <tr *ngFor="let p of produtosFiltrados">
+                <td>
+                  <img [src]="p.imagemUrl || 'assets/placeholder.png'" alt="Produto" class="thumb-img" />
+                </td>
+                <td class="font-bold">{{ p.nome }}</td>
+                <td>
+                  <span class="badge-cat">{{ p.categoria }}</span>
+                  <span *ngIf="p.subcategoria" class="badge-subcat">{{ p.subcategoria }}</span>
+                </td>
+                <td>{{ p.tamanhos || '-' }}</td>
+                <td>R$ {{ p.preco | number:'1.2-2' }}</td>
+                <td>{{ p.estoque }} un</td>
+                <td class="actions-cell">
+                  <button class="btn-action edit" (click)="abrirModalEditar(p)">✏️ Editar</button>
+                  <button class="btn-action delete" (click)="excluirProduto(p.id)">🗑️ Excluir</button>
+                </td>
+              </tr>
+              <tr *ngIf="produtosFiltrados.length === 0">
+                <td colspan="7" class="empty-msg">Nenhum produto encontrado nesta categoria.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- OUTRAS ABAS (EM BREVE) -->
+      <section
+        *ngIf="abaAtiva === 'categorias'"
+        class="tab-section"
+      >
+
+        <app-categorias></app-categorias>
+
+      </section>
+
+      <section *ngIf="abaAtiva === 'pedidos'" class="tab-section pedidos-section">
+
+        <div class="indicadores-pedidos-admin">
+
+  <div class="indicador-pedido">
+    <div class="indicador-pedido-icone">
+      🛒
+    </div>
+
+    <div class="indicador-pedido-info">
+      <span>Total de pedidos</span>
+      <strong>{{ totalPedidos }}</strong>
+    </div>
+  </div>
+
+
+  <div class="indicador-pedido indicador-aprovado">
+    <div class="indicador-pedido-icone">
+      ✓
+    </div>
+
+    <div class="indicador-pedido-info">
+      <span>Pagamentos aprovados</span>
+      <strong>{{ pedidosAprovados }}</strong>
+    </div>
+  </div>
+
+
+  <div class="indicador-pedido indicador-pendente">
+    <div class="indicador-pedido-icone">
+      ⏳
+    </div>
+
+    <div class="indicador-pedido-info">
+      <span>Aguardando pagamento</span>
+      <strong>{{ pedidosPendentes }}</strong>
+    </div>
+  </div>
+
+
+  <div class="indicador-pedido indicador-preparacao">
+    <div class="indicador-pedido-icone">
+      📦
+    </div>
+
+    <div class="indicador-pedido-info">
+      <span>Em preparação</span>
+      <strong>{{ pedidosEmPreparacao }}</strong>
+    </div>
+  </div>
+
+
+  <div class="indicador-pedido indicador-enviado">
+    <div class="indicador-pedido-icone">
+      🚚
+    </div>
+
+    <div class="indicador-pedido-info">
+      <span>Enviados</span>
+      <strong>{{ pedidosEnviados }}</strong>
+    </div>
+  </div>
+
+
+  <div class="indicador-pedido indicador-entregue">
+    <div class="indicador-pedido-icone">
+      ✓
+    </div>
+
+    <div class="indicador-pedido-info">
+      <span>Entregues</span>
+      <strong>{{ pedidosEntregues }}</strong>
+    </div>
+  </div>
+
+</div>
+
+  <div class="section-header pedidos-header">
+
+    <div>
+      <h2>Gestão de Pedidos</h2>
+      <p>Acompanhe e gerencie todas as vendas realizadas na loja.</p>
+    </div>
+
+    <button
+      type="button"
+      class="btn-primary"
+      (click)="carregarPedidos()"
+    >
+      ↻ Atualizar pedidos
+    </button>
+
+  </div>
+
+
+  <!-- CARREGANDO -->
+
+  <div
+    *ngIf="carregandoPedidos"
+    class="loading-state"
+  >
+    Carregando pedidos...
+  </div>
+
+
+  <!-- ERRO -->
+
+  <div
+    *ngIf="!carregandoPedidos && erroPedidos"
+    class="pedido-erro"
+  >
+
+    <span>⚠️</span>
+
+    <div>
+
+      <strong>
+        Não foi possível carregar os pedidos.
+      </strong>
+
+      <p>
+        {{ erroPedidos }}
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- NENHUM PEDIDO -->
+
+  <div
+    *ngIf="!carregandoPedidos && !erroPedidos && pedidos.length === 0"
+    class="pedidos-vazio"
+  >
+
+    <div class="pedidos-vazio-icon">
+      🛍️
+    </div>
+
+    <h3>
+      Nenhum pedido encontrado
+    </h3>
+
+    <p>
+      Quando uma compra for realizada, ela aparecerá aqui.
+    </p>
+
+  </div>
+
+  <!-- ==========================================
+     FILTROS DE PEDIDOS
+     ========================================== -->
+
+<div class="filtros-pedidos-admin">
+
+  <!-- BUSCA -->
+  <div class="filtro-pedido-grupo busca-pedido-grupo">
+
+    <label for="buscaPedido">
+      Buscar pedido
+    </label>
+
+    <div class="campo-busca-pedido">
+
+      <span class="icone-busca-pedido">
+        🔎
+      </span>
+
+      <input
+        id="buscaPedido"
+        type="text"
+        [(ngModel)]="buscaPedido"
+        placeholder="Pedido, cliente ou e-mail..."
+      />
+
+      <button
+        *ngIf="buscaPedido"
+        type="button"
+        class="limpar-busca-pedido"
+        (click)="buscaPedido = ''"
+        aria-label="Limpar busca"
+      >
+        ×
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- FILTRO DE STATUS -->
+  <div class="filtro-pedido-grupo">
+
+    <label for="filtroStatusPedido">
+      Filtrar por status
+    </label>
+
+    <select
+      id="filtroStatusPedido"
+      [(ngModel)]="filtroStatusPedido"
+    >
+
+      <option value="TODOS">
+        Todos os pedidos
+      </option>
+
+      <option value="AGUARDANDO_PAGAMENTO">
+        Aguardando pagamento
+      </option>
+
+      <option value="PAGAMENTO_APROVADO">
+        Pagamento aprovado
+      </option>
+
+      <option value="EM_PREPARACAO">
+        Em preparação
+      </option>
+
+      <option value="ENVIADO">
+        Enviado
+      </option>
+
+      <option value="ENTREGUE">
+        Entregue
+      </option>
+
+      <option value="CANCELADO">
+        Cancelado
+      </option>
+
+    </select>
+
+  </div>
+
+
+  <!-- CONTADOR -->
+  <div class="contador-filtro-pedidos">
+
+    {{ pedidosFiltrados.length }}
+
+    {{
+      pedidosFiltrados.length === 1
+        ? 'pedido encontrado'
+        : 'pedidos encontrados'
+    }}
+
+  </div>
+
+</div>
+
+  <!-- PEDIDOS -->
+
+  <div
+    *ngIf="!carregandoPedidos && !erroPedidos && pedidos.length > 0"
+    class="pedidos-container"
+  >
+
+
+    <div class="pedidos-table-container">
+
+      <table class="data-table pedidos-table">
+
+        <thead>
+
+          <tr>
+
+            <th>Pedido</th>
+            <th>Cliente</th>
+            <th>Data</th>
+            <th>Pagamento</th>
+            <th>Status do pedido</th>
+            <th>Total</th>
+            <th>Ações</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          <tr *ngFor="let pedido of pedidosFiltrados">
+
+            <td>
+
+              <strong class="pedido-numero">
+                {{ pedido.numeroPedido }}
+              </strong>
+
+            </td>
+
+
+            <td>
+
+              <div class="pedido-cliente">
+
+                <strong>
+                  {{ pedido.cliente.nome }}
+                </strong>
+
+                <span>
+                  {{ pedido.cliente.email }}
+                </span>
+
+              </div>
+
+            </td>
+
+
+            <td>
+
+              <span class="pedido-data">
+                {{ pedido.criadoEm | date:'dd/MM/yyyy HH:mm' }}
+              </span>
+
+            </td>
+
+
+            <td>
+
+              <div class="pagamento-pedido">
+
+  <span
+    class="status-badge"
+    [ngClass]="{
+      'status-aprovado':
+        pedido.statusPagamento === 'APROVADO',
+
+      'status-pendente':
+        pedido.statusPagamento === 'PENDENTE',
+
+      'status-recusado':
+        pedido.statusPagamento === 'RECUSADO',
+
+      'status-cancelado':
+        pedido.statusPagamento === 'CANCELADO',
+
+      'status-estornado':
+        pedido.statusPagamento === 'ESTORNADO'
+    }"
+  >
+    <span
+      *ngIf="pedido.statusPagamento === 'APROVADO'"
+      class="status-icone"
+    >
+      ✓
+    </span>
+
+    <span
+      *ngIf="pedido.statusPagamento === 'PENDENTE'"
+      class="status-icone"
+    >
+      ⏳
+    </span>
+
+    <span
+      *ngIf="pedido.statusPagamento === 'RECUSADO'"
+      class="status-icone"
+    >
+      !
+    </span>
+
+    <span
+      *ngIf="pedido.statusPagamento === 'CANCELADO'"
+      class="status-icone"
+    >
+      ×
+    </span>
+
+    <span
+      *ngIf="pedido.statusPagamento === 'ESTORNADO'"
+      class="status-icone"
+    >
+      ↩
+    </span>
+
+    {{
+      pedido.statusPagamento === 'APROVADO'
+        ? 'Aprovado'
+        : pedido.statusPagamento === 'PENDENTE'
+          ? 'Pendente'
+          : pedido.statusPagamento === 'RECUSADO'
+            ? 'Recusado'
+            : pedido.statusPagamento === 'CANCELADO'
+              ? 'Cancelado'
+              : pedido.statusPagamento === 'ESTORNADO'
+                ? 'Estornado'
+                : pedido.statusPagamento
+    }}
+
+  </span>
+
+  <small class="metodo-pagamento">
+    {{
+      pedido.metodoPagamento === 'pix'
+        ? 'Pix'
+        : pedido.metodoPagamento === 'cartao'
+          ? 'Cartão'
+          : pedido.metodoPagamento || 'Não informado'
+    }}
+  </small>
+
+</div>
+
+            </td>
+
+
+            <td>
+
+              <span
+                class="status-badge-admin"
+                [ngClass]="classeStatusPedido(pedido.statusPedido)"
+              >
+                {{ textoStatusPedido(pedido.statusPedido) }}
+              </span>
+
+            </td>
+
+
+            <td>
+
+              <strong class="pedido-total">
+                R$ {{ pedido.total | number:'1.2-2' }}
+              </strong>
+
+            </td>
+
+
+            <td class="actions-cell">
+
+              <button
+                type="button"
+                class="btn-action edit"
+                (click)="abrirDetalhesPedido(pedido)"
+              >
+                👁️ Ver pedido
+              </button>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
+      
+<section
+  *ngIf="abaAtiva === 'banners'"
+  class="banners-admin"
+>
+
+  <div class="banners-cabecalho">
+    <div>
+      <h2>Banners da página inicial</h2>
+      <p>Gerencie as imagens de destaque da Thamy Fitwear.</p>
+    </div>
+
+    <button
+      type="button"
+      class="btn-cadastrar-banner"
+      *ngIf="!formularioBannerAberto"
+      (click)="abrirFormularioBanner()"
+    >
+      + Cadastrar banner
+    </button>
+  </div>
+
+  <p *ngIf="mensagemBanner" class="banner-sucesso">
+    {{ mensagemBanner }}
+  </p>
+
+  <p *ngIf="erroBanner" class="banner-erro">
+    {{ erroBanner }}
+  </p>
+
+  <!-- FORMULÁRIO: aparece somente quando solicitado -->
+  <form
+    *ngIf="formularioBannerAberto"
+    class="banner-formulario"
+    (ngSubmit)="salvarBanner()"
+  >
+    <h3>
+      {{
+        bannerEmEdicao === null
+          ? 'Cadastrar novo banner'
+          : 'Editar banner'
+      }}
+    </h3>
+
+    <label for="bannerTitulo">Título do banner</label>
+    <input
+      id="bannerTitulo"
+      name="bannerTitulo"
+      type="text"
+      [(ngModel)]="novoBanner.titulo"
+      maxlength="150"
+      required
+    />
+
+    <label for="bannerImagem">Endereço da imagem</label>
+    <input
+      id="bannerImagem"
+      name="bannerImagem"
+      type="text"
+      [(ngModel)]="novoBanner.imagemUrl"
+      maxlength="500"
+      placeholder="/banner1.jpg"
+      required
+    />
+
+    <p class="banner-ajuda">
+      Informe o caminho de uma imagem disponível no projeto
+      ou uma URL de imagem acessível.
+    </p>
+
+    <div
+      class="banner-preview"
+      *ngIf="novoBanner.imagemUrl.trim()"
+    >
+      <img
+        [src]="novoBanner.imagemUrl"
+        [alt]="novoBanner.titulo || 'Prévia do banner'"
+      />
+    </div>
+
+    <label for="bannerLink">Link de destino (opcional)</label>
+    <input
+      id="bannerLink"
+      name="bannerLink"
+      type="text"
+      [(ngModel)]="novoBanner.link"
+      maxlength="500"
+      placeholder="/produtos"
+    />
+
+    <label for="bannerOrdem">Ordem de exibição</label>
+    <input
+      id="bannerOrdem"
+      name="bannerOrdem"
+      type="number"
+      [(ngModel)]="novoBanner.ordem"
+      min="0"
+      step="1"
+      required
+    />
+
+    <label class="banner-checkbox">
+      <input
+        type="checkbox"
+        name="bannerAtivo"
+        [(ngModel)]="novoBanner.ativo"
+      />
+      Exibir banner na loja
+    </label>
+
+    <div class="banner-acoes">
+      <button type="submit" [disabled]="salvandoBanner">
+        {{
+          salvandoBanner
+            ? 'Salvando...'
+            : bannerEmEdicao === null
+              ? 'Cadastrar banner'
+              : 'Salvar alterações'
+        }}
+      </button>
+
+      <button
+        type="button"
+        (click)="fecharFormularioBanner()"
+        [disabled]="salvandoBanner"
+      >
+        Cancelar
+      </button>
+    </div>
+  </form>
+
+  <!-- LISTAGEM: permanece visível quando o formulário está fechado -->
+  <div class="banners-lista">
+    <h3>Banners cadastrados</h3>
+
+    
+<!-- MODAL DE CADASTRO/EDIÇÃO DE BANNER -->
+<div
+  class="banner-modal-overlay"
+  *ngIf="formularioBannerAberto"
+  (click)="fecharFormularioBanner()"
+>
+  <form
+    class="banner-modal"
+    (ngSubmit)="salvarBanner()"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="banner-modal-cabecalho">
+      <div>
+        <h3>
+          {{
+            bannerEmEdicao === null
+              ? 'Cadastrar novo banner'
+              : 'Editar banner'
+          }}
+        </h3>
+        <p>Thamy Fitwear</p>
+      </div>
+
+      <button
+        type="button"
+        class="banner-modal-fechar"
+        aria-label="Fechar formulário"
+        (click)="fecharFormularioBanner()"
+      >
+        ×
+      </button>
+    </div>
+
+    <label for="bannerTitulo">Título do banner</label>
+    <input
+      id="bannerTitulo"
+      name="bannerTitulo"
+      type="text"
+      [(ngModel)]="novoBanner.titulo"
+      maxlength="150"
+      placeholder="Ex.: Nova coleção"
+      required
+    />
+
+    <label for="bannerImagem">Endereço da imagem</label>
+    <input
+      id="bannerImagem"
+      name="bannerImagem"
+      type="text"
+      [(ngModel)]="novoBanner.imagemUrl"
+      maxlength="500"
+      placeholder="/banner1.jpg"
+      required
+    />
+
+    <p class="banner-modal-ajuda">
+      Informe o caminho da imagem no projeto ou uma URL acessível.
+    </p>
+
+    <div
+      class="banner-modal-preview"
+      *ngIf="novoBanner.imagemUrl.trim()"
+    >
+      <img
+        [src]="novoBanner.imagemUrl"
+        [alt]="novoBanner.titulo || 'Prévia do banner'"
+      />
+    </div>
+
+    <label for="bannerLink">Link de destino (opcional)</label>
+    <input
+      id="bannerLink"
+      name="bannerLink"
+      type="text"
+      [(ngModel)]="novoBanner.link"
+      maxlength="500"
+      placeholder="/produtos"
+    />
+
+    <label for="bannerOrdem">Ordem de exibição</label>
+    <input
+      id="bannerOrdem"
+      name="bannerOrdem"
+      type="number"
+      [(ngModel)]="novoBanner.ordem"
+      min="0"
+      step="1"
+      required
+    />
+
+    <label class="banner-modal-checkbox">
+      <input
+        type="checkbox"
+        name="bannerAtivo"
+        [(ngModel)]="novoBanner.ativo"
+      />
+      Exibir banner na loja
+    </label>
+
+    <div class="banner-modal-acoes">
+      <button
+        type="button"
+        class="banner-modal-cancelar"
+        (click)="fecharFormularioBanner()"
+        [disabled]="salvandoBanner"
+      >
+        Cancelar
+      </button>
+
+      <button type="submit" [disabled]="salvandoBanner">
+        {{
+          salvandoBanner
+            ? 'Salvando...'
+            : bannerEmEdicao === null
+              ? 'Cadastrar banner'
+              : 'Salvar alterações'
+        }}
+      </button>
+    </div>
+  </form>
+</div>
+
+    <div
+      *ngIf="!carregandoBanners && banners.length === 0"
+      class="banners-vazio"
+    >
+      <p>Nenhum banner cadastrado ainda.</p>
+      <p>Quando você cadastrar um banner, ele aparecerá aqui.</p>
+    </div>
+
+    <article
+      class="banner-item"
+      *ngFor="let banner of banners"
+    >
+      <img
+        class="banner-miniatura"
+        [src]="banner.imagemUrl"
+        [alt]="banner.titulo"
+      />
+
+      <div class="banner-item-info">
+        <h4>{{ banner.titulo }}</h4>
+        <p>Ordem: {{ banner.ordem }}</p>
+        <p>
+          Status:
+          <span [class.banner-status-inativo]="!banner.ativo">
+            {{ banner.ativo ? 'Ativo' : 'Inativo' }}
+          </span>
+        </p>
+      </div>
+
+      <div class="banner-item-acoes">
+        <button
+          type="button"
+          (click)="editarBanner(banner)"
+        >
+          Editar
+        </button>
+
+        <button
+          type="button"
+          class="banner-excluir"
+          (click)="excluirBanner(banner)"
+        >
+          Excluir
+        </button>
+      </div>
+    </article>
+  </div>
+
+</section>
+
+    </div>
+  </main>
+
+  <!-- MODAL DE CADASTRAR / EDITAR PRODUTO -->
+  <div class="modal-overlay" *ngIf="exibirModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>{{ editando ? 'Editar Produto' : 'Cadastrar Novo Produto' }}</h3>
+        <button class="btn-close" (click)="fecharModal()">✕</button>
+      </div>
+
+      <form (ngSubmit)="salvarProduto()">
+        <div class="form-row">
+          <div class="form-group flex-2">
+            <label>Nome do Produto</label>
+            <input type="text" [(ngModel)]="formProduto.nome" name="nome" placeholder="Ex: Top Fitness Ribana" required />
+          </div>
+
+          <div class="form-group flex-1">
+          <label>Categoria Principal</label>
+
+            <select
+              [(ngModel)]="formProduto.categoria"
+              (change)="aoMudarCategoria()"
+              name="categoria"
+            >
+
+              <option
+                *ngFor="let categoria of categoriasPrincipais"
+                [value]="categoria.nome"
+              >
+                {{ categoria.nome }}
+              </option>
+
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Subcategoria</label>
+            <select [(ngModel)]="formProduto.subcategoria" name="subcategoria" required>
+              <option *ngFor="let sub of subcategoriasDisponiveis" [value]="sub">{{ sub }}</option>
+            </select>
+          </div>
+
+          <div class="form-group flex-1">
+            <label>Tamanhos (Separe por vírgula)</label>
+            <input type="text" [(ngModel)]="formProduto.tamanhos" name="tamanhos" placeholder="Ex: P, M, G, GG" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Descrição</label>
+          <textarea [(ngModel)]="formProduto.descricao" name="descricao" rows="2" placeholder="Detalhes do tecido, caimento, etc."></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Preço (R$)</label>
+            <input type="number" step="0.01" [(ngModel)]="formProduto.preco" name="preco" required />
+          </div>
+
+          <div class="form-group">
+            <label>Estoque Total (Unidades)</label>
+            <input type="number" [(ngModel)]="formProduto.estoque" name="estoque" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>URL da Imagem</label>
+          <input type="text" [(ngModel)]="formProduto.imagemUrl" name="imagemUrl" placeholder="https://exemplo.com/imagem.jpg" />
+        </div>
+
+        <div class="form-row check-row">
+          <label class="check-label">
+            <input
+              type="checkbox"
+              [(ngModel)]="formProduto.popular"
+              name="popular"
+            />
+            ⭐ Mostrar nos "Mais Populares"
+          </label>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" (click)="fecharModal()">Cancelar</button>
+          <button type="submit" class="btn-primary">{{ editando ? 'Atualizar' : 'Salvar' }}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL DE DETALHES DO PEDIDO -->
+
+<div
+  class="modal-overlay"
+  *ngIf="exibirModalPedido && pedidoSelecionado"
+>
+
+  <div class="modal-card pedido-modal">
+
+    <!-- CABEÇALHO -->
+
+    <div class="modal-header">
+
+      <div>
+
+        <h3>
+          Pedido {{ pedidoSelecionado.numeroPedido }}
+        </h3>
+
+        <span class="pedido-modal-data">
+          {{ pedidoSelecionado.criadoEm | date:'dd/MM/yyyy HH:mm' }}
+        </span>
+
+      </div>
+
+      <button
+        type="button"
+        class="btn-close"
+        (click)="fecharDetalhesPedido()"
+      >
+        ✕
+      </button>
+
+    </div>
+
+
+    <!-- CONTEÚDO -->
+
+    <div class="pedido-modal-content">
+
+
+      <!-- CLIENTE -->
+
+      <div class="pedido-detalhe-bloco">
+
+        <h4>👤 Cliente</h4>
+
+        <div class="pedido-detalhe-grid">
+
+          <div>
+            <span>Nome</span>
+            <strong>
+              {{ pedidoSelecionado.cliente.nome }}
+            </strong>
+          </div>
+
+          <div>
+            <span>E-mail</span>
+            <strong>
+              {{ pedidoSelecionado.cliente.email }}
+            </strong>
+          </div>
+
+          <div *ngIf="pedidoSelecionado.cliente.telefone">
+            <span>Telefone</span>
+            <strong>
+              {{ pedidoSelecionado.cliente.telefone }}
+            </strong>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ENDEREÇO -->
+
+      <div class="pedido-detalhe-bloco">
+
+        <h4>📍 Endereço de entrega</h4>
+
+        <p>
+          {{ pedidoSelecionado.endereco.rua }}
+        </p>
+
+        <p>
+          {{ pedidoSelecionado.endereco.bairro }}
+          —
+          {{ pedidoSelecionado.endereco.cidade }}
+        </p>
+
+        <p>
+          {{ pedidoSelecionado.endereco.pais }}
+        </p>
+
+      </div>
+
+
+      <!-- PRODUTOS -->
+
+      <div class="pedido-detalhe-bloco">
+
+        <h4>🛍️ Produtos</h4>
+
+        <div class="pedido-itens">
+
+          <div
+            class="pedido-item"
+            *ngFor="let item of pedidoSelecionado.itens"
+          >
+
+            <img
+              *ngIf="item.imagemUrl"
+              [src]="item.imagemUrl"
+              [alt]="item.nomeProduto"
+            />
+
+            <div class="pedido-item-info">
+
+              <strong>
+                {{ item.nomeProduto }}
+              </strong>
+
+              <span>
+                Tamanho:
+                {{ item.tamanho || 'Único' }}
+              </span>
+
+              <span>
+                Quantidade:
+                {{ item.quantidade }}
+              </span>
+
+            </div>
+
+            <div class="pedido-item-preco">
+
+              <span>
+                R$ {{ item.precoUnitario | number:'1.2-2' }}
+              </span>
+
+              <strong>
+                R$ {{ item.subtotal | number:'1.2-2' }}
+              </strong>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- PAGAMENTO -->
+
+      <div class="pedido-detalhe-bloco">
+
+        <h4>💳 Pagamento</h4>
+
+        <div class="pedido-pagamento-grid">
+
+          <div>
+
+            <span>Método</span>
+
+            <strong>
+              {{ pedidoSelecionado.metodoPagamento || 'Não informado' }}
+            </strong>
+
+          </div>
+
+          <div>
+
+            <span>Status do pagamento</span>
+
+            <strong
+              [ngClass]="{
+                'texto-aprovado':
+                  pedidoSelecionado.statusPagamento === 'APROVADO',
+
+                'texto-pendente':
+                  pedidoSelecionado.statusPagamento === 'PENDENTE',
+
+                'texto-recusado':
+                  pedidoSelecionado.statusPagamento === 'RECUSADO'
+              }"
+            >
+              {{ pedidoSelecionado.statusPagamento }}
+            </strong>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- =====================================================
+     STATUS DO PEDIDO
+     ===================================================== -->
+
+<div class="pedido-detalhe-bloco">
+
+  <h4>📦 Status do pedido</h4>
+
+  <div class="status-pedido-admin">
+
+    <div class="status-atual">
+
+      <span>Status atual</span>
+
+      <strong>
+        {{ pedidoSelecionado.statusPedido }}
+      </strong>
+
+    </div>
+
+    <div class="status-alteracao">
+
+      <label for="novoStatusPedido">
+        Alterar status
+      </label>
+
+      <select
+        id="novoStatusPedido"
+        [(ngModel)]="novoStatusPedido"
+      >
+
+        <option value="EM_PREPARACAO">
+          Em preparação
+        </option>
+
+        <option value="ENVIADO">
+          Enviado
+        </option>
+
+        <option value="ENTREGUE">
+          Entregue
+        </option>
+
+        <option value="CANCELADO">
+          Cancelado
+        </option>
+
+      </select>
+
+      <button
+        type="button"
+        class="btn-atualizar-status"
+        (click)="atualizarStatusPedido()"
+      >
+        Atualizar status
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+      <!-- RESUMO -->
+
+      <div class="pedido-resumo-final">
+
+        <div>
+
+          <span>Subtotal</span>
+
+          <strong>
+            R$
+            {{ pedidoSelecionado.subtotal | number:'1.2-2' }}
+          </strong>
+
+        </div>
+
+        <div>
+
+          <span>Frete</span>
+
+          <strong>
+            R$
+            {{ pedidoSelecionado.frete | number:'1.2-2' }}
+          </strong>
+
+        </div>
+
+        <div class="pedido-total-final">
+
+          <span>Total</span>
+
+          <strong>
+            R$
+            {{ pedidoSelecionado.total | number:'1.2-2' }}
+          </strong>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- RODAPÉ -->
+
+    <div class="modal-footer">
+
+      <button
+        type="button"
+        class="btn-secondary"
+        (click)="fecharDetalhesPedido()"
+      >
+        Fechar
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+</div>
