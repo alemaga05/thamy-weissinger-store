@@ -19,6 +19,8 @@ import { AuthModal } from '../auth-modal/auth-modal';
 import { SidePanel } from '../side-panel/side-panel';
 import { LojaService } from '../services/loja.service';
 
+import { environment } from '../../../environments/environment';
+
 interface CategoriaTopbar {
   id: number;
   nome: string;
@@ -41,7 +43,7 @@ interface CategoriaTopbar {
   styleUrl: './header.css',
 })
 export class Header implements OnInit, OnDestroy {
-  private readonly API = 'http://localhost:3000';
+  private readonly API = environment.apiUrl;
   private lojaSubscription?: Subscription;
 
   isSidebarOpen = false;

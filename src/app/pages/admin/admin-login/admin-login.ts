@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
+import { environment } from '../../../../environments/environment';
+
 @Component({
   selector: 'app-admin-login',
   standalone: true,
@@ -12,6 +14,9 @@ import { Router } from '@angular/router';
   styleUrl: './admin-login.css'
 })
 export class AdminLogin {
+
+  private readonly API = environment.apiUrl;
+
   email = '';
   senha = '';
   mensagemErro = '';
@@ -33,11 +38,9 @@ export class AdminLogin {
       password: this.senha
     };
 
-    console.log('Front-end: Enviando requisição para o Back-end...', payload); // ⬅️ RASTREADOR FRONT 1
 
-    this.http.post<any>('http://localhost:3000/login', payload).subscribe({
+    this.http.post<any>(`${this.API}/login`, payload).subscribe({
       next: (res) => {
-        console.log('Front-end: Resposta recebida com SUCESSO!', res); // ⬅️ RASTREADOR FRONT 2
         this.carregando = false;
 
         if (res.user && res.user.role === 'admin') {

@@ -16,6 +16,7 @@ import {
   Categoria
 } from '../../../core/services/categoria.service';
 
+import { environment } from '../../../../environments/environment';
 
 
 interface Banner {
@@ -84,6 +85,8 @@ interface PedidoAdmin {
 
 
 export class Dashboard implements OnInit {
+
+  private readonly API = environment.apiUrl;
 
   // =====================================================
   // ADMIN
@@ -904,7 +907,7 @@ carregarPedidos(): void {
   });
 
   this.http.get<PedidoAdmin[]>(
-    'http://localhost:3000/admin/pedidos',
+    `${this.API}/admin/pedidos`,
     { headers }
   ).subscribe({
     next: (resposta) => {
@@ -1029,7 +1032,7 @@ carregarPedidos(): void {
   });
 
   this.http.put<any>(
-    `http://localhost:3000/admin/pedidos/${this.pedidoSelecionado.id}/status`,
+   `${this.API}/admin/pedidos/${this.pedidoSelecionado.id}/status`,
     {
       statusPedido: status
     },
@@ -1232,7 +1235,7 @@ carregarBanners(): void {
   this.mensagemBanner = '';
 
   this.http.get<Banner[]>(
-    'http://localhost:3000/admin/banners',
+    `${this.API}/admin/banners`,
     { headers: this.obterHeadersBanner() }
   ).subscribe({
     next: (banners) => {
@@ -1283,7 +1286,7 @@ salvarBanner(): void {
 
   const requisicao = this.bannerEmEdicao === null
     ? this.http.post<Banner>(
-        'http://localhost:3000/admin/banners',
+        `${this.API}/admin/banners`,
         dados,
         { headers: this.obterHeadersBanner() }
       )
@@ -1326,7 +1329,7 @@ excluirBanner(banner: Banner): void {
   this.erroBanner = '';
 
   this.http.delete(
-    `http://localhost:3000/admin/banners/${banner.id}`,
+    `${this.API}/admin/banners/${banner.id}`,
     { headers: this.obterHeadersBanner() }
   ).subscribe({
     next: () => {

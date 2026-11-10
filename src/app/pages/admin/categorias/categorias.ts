@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
+import { environment } from '../../../../environments/environment';
+
 interface Categoria {
   id?: number;
   nome: string;
@@ -23,7 +25,7 @@ interface Categoria {
 })
 export class Categorias implements OnInit {
 
-  private apiUrl = 'http://localhost:3000/categorias';
+  private readonly apiUrl = `${environment.apiUrl}/categorias`;
 
   categorias: Categoria[] = [];
 

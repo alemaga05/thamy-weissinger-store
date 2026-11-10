@@ -3,6 +3,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 
+import { environment } from '../../../../environments/environment';
+
 interface Banner {
   id: number;
   titulo: string;
@@ -27,7 +29,7 @@ interface Slide {
   styleUrl: './banner-carousel.css'
 })
 export class BannerCarousel implements OnInit, OnDestroy {
-  private readonly apiUrl = 'http://localhost:3000';
+  private readonly apiUrl = environment.apiUrl;
 
   slides: Slide[] = [];
   currentIndex = 0;

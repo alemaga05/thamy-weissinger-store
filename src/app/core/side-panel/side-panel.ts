@@ -16,6 +16,8 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { forkJoin } from 'rxjs';
 
+import { environment } from '../../../environments/environment';
+
 @Component({
   selector: 'app-side-panel',
   standalone: true,
@@ -24,6 +26,10 @@ import { forkJoin } from 'rxjs';
   styleUrl: './side-panel.css'
 })
 export class SidePanel implements OnChanges {
+
+
+  private readonly API = environment.apiUrl;
+
 
   @Input() isOpen = false;
   @Input() mode: 'cart' | 'favorites' = 'cart';
@@ -46,6 +52,7 @@ export class SidePanel implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
 
+    
   // Sempre que o painel for aberto
   if (changes['isOpen'] && this.isOpen) {
     this.carregarItens();
@@ -97,9 +104,9 @@ export class SidePanel implements OnChanges {
       .set('Authorization', `Bearer ${token}`);
 
     const urlItens =
-      this.mode === 'cart'
-        ? 'http://localhost:3000/carrinho'
-        : 'http://localhost:3000/favoritos';
+  this.mode === 'cart'
+    ? `${this.API}/carrinho`
+    : `${this.API}/favoritos`;
 
     /*
      * Busca:
@@ -112,7 +119,7 @@ export class SidePanel implements OnChanges {
     forkJoin({
       itens: this.http.get<any[]>(urlItens, { headers }),
       produtos: this.http.get<any[]>(
-        'http://localhost:3000/produtos',
+        `${this.API}/produtos`,
         { headers }
       )
     }).subscribe({
@@ -317,8 +324,8 @@ export class SidePanel implements OnChanges {
 
   const url =
     this.mode === 'cart'
-      ? `http://localhost:3000/carrinho/${item.idDb}`
-      : `http://localhost:3000/favoritos/${item.idDb}`;
+      ? `${this.API}/carrinho/${item.idDb}`
+      : `${this.API}/favoritos/${item.idDb}`;
 
   this.http.delete(url, { headers }).subscribe({
 

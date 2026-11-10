@@ -1,6 +1,8 @@
+
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface Produto {
   id?: number;
@@ -13,7 +15,9 @@ export interface Produto {
   estoque: number;
   imagemUrl?: string;
   popular?: boolean;
+  destaque?: boolean;
   criadoEm?: string;
+  atualizadoEm?: string;
 }
 
 @Injectable({
@@ -21,19 +25,22 @@ export interface Produto {
 })
 export class ProdutoService {
 
-  private apiUrl = 'http://localhost:3000/produtos';
+  private apiUrl = `${environment.apiUrl}/produtos`;
 
   constructor(private http: HttpClient) {}
 
   private getHeaders(): { headers: HttpHeaders } {
-    const token = localStorage.getItem('token') || '';
+    const token = localStorage.getItem('token');
 
-    return {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      })
-    };
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
+
+    return { headers };
   }
 
   // 1. Listar todos os produtos - PÚBLICO
@@ -43,9 +50,7 @@ export class ProdutoService {
 
   // 2. Obter produto por ID - PÚBLICO
   obterProdutoPorId(id: number): Observable<Produto> {
-    return this.http.get<Produto>(
-      `${this.apiUrl}/${id}`
-    );
+    return this.http.get<Produto>(`${this.apiUrl}/${id}`);
   }
 
   // 3. Cadastrar produto - ADMIN

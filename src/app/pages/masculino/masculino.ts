@@ -15,6 +15,7 @@ import {
   ProdutoService
 } from '../../core/services/produto.service';
 
+import { environment } from '../../../environments/environment';
 
 // =====================================================
 // PRODUTO
@@ -29,7 +30,6 @@ export interface Product {
   isFavorito: boolean;
 }
 
-
 // =====================================================
 // CATEGORIA
 // =====================================================
@@ -41,7 +41,6 @@ export interface Categoria {
   imagemUrl: string;
   ordem: number;
 }
-
 
 // =====================================================
 // COMPONENTE
@@ -60,24 +59,19 @@ export interface Categoria {
 
 export class Masculino implements OnInit {
 
+  private readonly API = environment.apiUrl;
+
   // =====================================================
   // CATEGORIAS
   // =====================================================
 
   categoriasMasculinas: Categoria[] = [];
 
-  /**
-   * "TODOS" continua sendo um filtro especial.
-   *
-   * As demais categorias serão carregadas
-   * automaticamente do banco de dados.
-   */
   subcategories: {
     name: string;
     sub: string;
     image: string;
   }[] = [];
-
 
   // =====================================================
   // PRODUTOS
@@ -89,7 +83,6 @@ export class Masculino implements OnInit {
 
   tituloSecao: string = 'TODOS OS PRODUTOS';
 
-
   // =====================================================
   // CONTROLE DE CARREGAMENTO
   // =====================================================
@@ -97,7 +90,6 @@ export class Masculino implements OnInit {
   carregandoCategorias: boolean = false;
 
   carregandoProdutos: boolean = false;
-
 
   // =====================================================
   // CONSTRUTOR
@@ -109,7 +101,6 @@ export class Masculino implements OnInit {
     private produtoService: ProdutoService,
     private cdr: ChangeDetectorRef
   ) {}
-
 
   // =====================================================
   // INICIALIZAÇÃO
@@ -126,8 +117,8 @@ export class Masculino implements OnInit {
 
     // Depois carregamos os produtos
     this.carregarProdutosMasculinos();
-  }
 
+  }
 
   // =====================================================
   // CARREGAR CATEGORIAS MASCULINAS
@@ -139,16 +130,13 @@ export class Masculino implements OnInit {
 
     this.http
       .get<Categoria[]>(
-        'http://localhost:3000/categorias'
+        `${this.API}/categorias`
       )
       .subscribe({
 
         next: (categorias: Categoria[]) => {
 
-          /**
-           * Pegamos somente as categorias
-           * do tipo masculino.
-           */
+          // Pegamos somente as categorias do tipo masculino.
           this.categoriasMasculinas = categorias
             .filter(
               (categoria: Categoria) =>
@@ -159,13 +147,8 @@ export class Masculino implements OnInit {
                 a.ordem - b.ordem
             );
 
-
-          /**
-           * Montamos os cards da página.
-           *
-           * "TODOS" é o único item especial
-           * que não vem do banco.
-           */
+          // Montamos os cards da página.
+          // "TODOS" é o único item especial que não vem do banco.
           this.subcategories = [
 
             {
@@ -179,17 +162,12 @@ export class Masculino implements OnInit {
 
                 name: categoria.nome.toUpperCase(),
 
-                /**
-                 * Esse valor será usado para
-                 * comparar com produto.subcategoria.
-                 */
+                // Esse valor será usado para comparar com produto.subcategoria.
                 sub: this.normalizarTexto(
                   categoria.nome
                 ),
 
-                /**
-                 * Imagem cadastrada pelo Admin.
-                 */
+                // Imagem cadastrada pelo Admin.
                 image:
                   categoria.imagemUrl ||
                   '/placeholder.png'
@@ -199,18 +177,16 @@ export class Masculino implements OnInit {
 
           ];
 
-
           console.log(
             'Categorias masculinas carregadas:',
             this.subcategories
           );
 
-
           this.carregandoCategorias = false;
 
           this.cdr.detectChanges();
-        },
 
+        },
 
         error: (err: any) => {
 
@@ -221,11 +197,7 @@ export class Masculino implements OnInit {
 
           this.categoriasMasculinas = [];
 
-
-          /**
-           * Mesmo que a API falhe,
-           * "TODOS" continua disponível.
-           */
+          // Mesmo que a API falhe, "TODOS" continua disponível.
           this.subcategories = [
 
             {
@@ -236,15 +208,15 @@ export class Masculino implements OnInit {
 
           ];
 
-
           this.carregandoCategorias = false;
 
           this.cdr.detectChanges();
+
         }
 
       });
-  }
 
+  }
 
   // =====================================================
   // CARREGAR PRODUTOS MASCULINOS
@@ -258,9 +230,7 @@ export class Masculino implements OnInit {
 
       next: (dadosBanco: Produto[]) => {
 
-        /**
-         * Primeiro pegamos somente produtos masculinos.
-         */
+        // Primeiro pegamos somente produtos masculinos.
         const apenasMasculinos = dadosBanco.filter(
           (p: Produto) =>
             this.normalizarTexto(
@@ -268,11 +238,7 @@ export class Masculino implements OnInit {
             ) === 'masculino'
         );
 
-
-        /**
-         * Depois transformamos para o formato
-         * utilizado pela página.
-         */
+        // Depois transformamos para o formato utilizado pela página.
         this.produtosDoBanco = apenasMasculinos.map(
           (p: Produto) => ({
 
@@ -295,25 +261,19 @@ export class Masculino implements OnInit {
           })
         );
 
-
         console.log(
           'Produtos masculinos carregados:',
           this.produtosDoBanco
         );
 
-
         this.carregandoProdutos = false;
 
         this.cdr.detectChanges();
 
-
-        /**
-         * Depois de carregar os produtos,
-         * verifica os favoritos do usuário.
-         */
+        // Depois de carregar os produtos, verifica os favoritos do usuário.
         this.sincronizarFavoritosComBanco();
-      },
 
+      },
 
       error: (err: any) => {
 
@@ -327,11 +287,12 @@ export class Masculino implements OnInit {
         this.carregandoProdutos = false;
 
         this.cdr.detectChanges();
+
       }
 
     });
-  }
 
+  }
 
   // =====================================================
   // PRODUTOS EXIBIDOS
@@ -339,21 +300,16 @@ export class Masculino implements OnInit {
 
   get products(): Product[] {
 
-    /**
-     * "TODOS" mostra todos os produtos masculinos.
-     */
+    // "TODOS" mostra todos os produtos masculinos.
     if (
       this.subcategoriaSelecionada === 'todos'
     ) {
 
       return this.produtosDoBanco;
+
     }
 
-
-    /**
-     * Caso contrário,
-     * filtramos pela subcategoria selecionada.
-     */
+    // Caso contrário, filtramos pela subcategoria selecionada.
     return this.produtosDoBanco.filter(
       (p: Product) =>
         this.normalizarTexto(
@@ -363,8 +319,8 @@ export class Masculino implements OnInit {
           this.subcategoriaSelecionada
         )
     );
-  }
 
+  }
 
   // =====================================================
   // FILTRO POR SUBCATEGORIA
@@ -378,7 +334,6 @@ export class Masculino implements OnInit {
     this.subcategoriaSelecionada =
       this.normalizarTexto(subValue);
 
-
     if (
       this.subcategoriaSelecionada === 'todos'
     ) {
@@ -390,35 +345,22 @@ export class Masculino implements OnInit {
 
       this.tituloSecao =
         nomeExibicao;
-    }
 
+    }
 
     console.log(
       'Subcategoria masculina selecionada:',
       this.subcategoriaSelecionada
     );
 
-
     this.cdr.detectChanges();
-  }
 
+  }
 
   // =====================================================
   // NORMALIZAR TEXTO
   // =====================================================
 
-  /**
-   * Converte textos para um formato padrão.
-   *
-   * Exemplos:
-   *
-   * "Camisas"    → "camisas"
-   * "SHORTS"     → "shorts"
-   * "Regatas"    → "regatas"
-   * "Conjuntos"  → "conjuntos"
-   *
-   * Também remove acentos.
-   */
   normalizarTexto(valor: string): string {
 
     return valor
@@ -426,8 +368,8 @@ export class Masculino implements OnInit {
       .trim()
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '');
-  }
 
+  }
 
   // =====================================================
   // SINCRONIZAR FAVORITOS COM O BANCO
@@ -438,11 +380,7 @@ export class Masculino implements OnInit {
     const token =
       localStorage.getItem('token');
 
-
-    /**
-     * Usuário não logado:
-     * todos os corações ficam vazios.
-     */
+    // Usuário não logado: todos os corações ficam vazios.
     if (!token) {
 
       this.produtosDoBanco.forEach(
@@ -456,8 +394,8 @@ export class Masculino implements OnInit {
       this.cdr.detectChanges();
 
       return;
-    }
 
+    }
 
     const headers = new HttpHeaders()
       .set(
@@ -465,26 +403,21 @@ export class Masculino implements OnInit {
         `Bearer ${token}`
       );
 
-
     this.http
       .get<any[]>(
-        'http://localhost:3000/favoritos',
+        `${this.API}/favoritos`,
         { headers }
       )
       .subscribe({
 
         next: (favoritosDoBanco: any[]) => {
 
-          /**
-           * Pegamos somente os IDs dos produtos
-           * favoritados.
-           */
+          // Pegamos somente os IDs dos produtos favoritados.
           const idsFavoritados =
             favoritosDoBanco.map(
               (favorito: any) =>
                 Number(favorito.produtoId)
             );
-
 
           this.produtosDoBanco.forEach(
             (produto: Product) => {
@@ -497,16 +430,14 @@ export class Masculino implements OnInit {
             }
           );
 
-
           console.log(
             '❤️ Favoritos masculinos sincronizados:',
             idsFavoritados
           );
 
-
           this.cdr.detectChanges();
-        },
 
+        },
 
         error: (err: any) => {
 
@@ -515,11 +446,7 @@ export class Masculino implements OnInit {
             err
           );
 
-
-          /**
-           * Se houver erro,
-           * deixamos os corações vazios.
-           */
+          // Se houver erro, deixamos os corações vazios.
           this.produtosDoBanco.forEach(
             (produto: Product) => {
 
@@ -528,13 +455,13 @@ export class Masculino implements OnInit {
             }
           );
 
-
           this.cdr.detectChanges();
+
         }
 
       });
-  }
 
+  }
 
   // =====================================================
   // FAVORITAR / DESFAVORITAR
@@ -545,17 +472,12 @@ export class Masculino implements OnInit {
     product: Product
   ): void {
 
-    /**
-     * Impede que o clique no coração
-     * abra a página do produto.
-     */
+    // Impede que o clique no coração abra a página do produto.
     event.preventDefault();
     event.stopPropagation();
 
-
     const token =
       localStorage.getItem('token');
-
 
     if (!token) {
 
@@ -564,8 +486,8 @@ export class Masculino implements OnInit {
       );
 
       return;
-    }
 
+    }
 
     const headers = new HttpHeaders()
       .set(
@@ -573,13 +495,9 @@ export class Masculino implements OnInit {
         `Bearer ${token}`
       );
 
-
-    /**
-     * Guarda o estado anterior.
-     */
+    // Guarda o estado anterior.
     const estadoAnterior =
       product.isFavorito;
-
 
     // ===================================================
     // ADICIONAR AOS FAVORITOS
@@ -589,7 +507,7 @@ export class Masculino implements OnInit {
 
       this.http
         .post(
-          'http://localhost:3000/favoritos',
+          `${this.API}/favoritos`,
           {
             produtoId: product.id
           },
@@ -609,8 +527,8 @@ export class Masculino implements OnInit {
             console.log(
               `❤️ Produto ${product.id} adicionado aos favoritos.`
             );
-          },
 
+          },
 
           error: (err: any) => {
 
@@ -627,12 +545,12 @@ export class Masculino implements OnInit {
             alert(
               'Não foi possível adicionar o produto aos favoritos.'
             );
+
           }
 
         });
 
     }
-
 
     // ===================================================
     // REMOVER DOS FAVORITOS
@@ -642,17 +560,14 @@ export class Masculino implements OnInit {
 
       this.http
         .get<any[]>(
-          'http://localhost:3000/favoritos',
+          `${this.API}/favoritos`,
           { headers }
         )
         .subscribe({
 
           next: (favoritos: any[]) => {
 
-            /**
-             * Procura o registro do favorito
-             * através do ID do produto.
-             */
+            // Procura o registro do favorito através do ID do produto.
             const itemFav =
               favoritos.find(
                 (favorito: any) =>
@@ -660,11 +575,7 @@ export class Masculino implements OnInit {
                   Number(product.id)
               );
 
-
-            /**
-             * Se não encontrou,
-             * sincroniza novamente.
-             */
+            // Se não encontrou, sincroniza novamente.
             if (!itemFav) {
 
               console.warn(
@@ -674,15 +585,13 @@ export class Masculino implements OnInit {
               this.sincronizarFavoritosComBanco();
 
               return;
+
             }
 
-
-            /**
-             * Remove o favorito real do banco.
-             */
+            // Remove o favorito real do banco.
             this.http
               .delete(
-                `http://localhost:3000/favoritos/${itemFav.id}`,
+                `${this.API}/favoritos/${itemFav.id}`,
                 { headers }
               )
               .subscribe({
@@ -699,8 +608,8 @@ export class Masculino implements OnInit {
                   console.log(
                     `🤍 Produto ${product.id} removido dos favoritos.`
                   );
-                },
 
+                },
 
                 error: (err: any) => {
 
@@ -717,12 +626,12 @@ export class Masculino implements OnInit {
                   alert(
                     'Não foi possível remover o produto dos favoritos.'
                   );
+
                 }
 
               });
 
           },
-
 
           error: (err: any) => {
 
@@ -735,12 +644,14 @@ export class Masculino implements OnInit {
               'Erro ao buscar favoritos:',
               err
             );
+
           }
 
         });
-    }
-  }
 
+    }
+
+  }
 
   // =====================================================
   // ADICIONAR AO CARRINHO
@@ -751,17 +662,12 @@ export class Masculino implements OnInit {
     product: Product
   ): void {
 
-    /**
-     * Impede que o botão
-     * abra os detalhes do produto.
-     */
+    // Impede que o botão abra os detalhes do produto.
     event.preventDefault();
     event.stopPropagation();
 
-
     const token =
       localStorage.getItem('token');
-
 
     if (!token) {
 
@@ -770,15 +676,14 @@ export class Masculino implements OnInit {
       );
 
       return;
-    }
 
+    }
 
     const headers = new HttpHeaders()
       .set(
         'Authorization',
         `Bearer ${token}`
       );
-
 
     const payload = {
 
@@ -790,10 +695,9 @@ export class Masculino implements OnInit {
 
     };
 
-
     this.http
       .post(
-        'http://localhost:3000/carrinho',
+        `${this.API}/carrinho`,
         payload,
         { headers }
       )
@@ -807,8 +711,8 @@ export class Masculino implements OnInit {
 
           this.lojaService
             .notificarAtualizacao();
-        },
 
+        },
 
         error: (err: any) => {
 
@@ -820,11 +724,12 @@ export class Masculino implements OnInit {
           alert(
             'Não foi possível adicionar o produto ao carrinho.'
           );
+
         }
 
       });
-  }
 
+  }
 
   // =====================================================
   // FORMATAR PREÇO
@@ -837,6 +742,7 @@ export class Masculino implements OnInit {
     return valor
       ? valor.toFixed(2).replace('.', ',')
       : '0,00';
+
   }
 
 }

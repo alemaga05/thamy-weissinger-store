@@ -3,8 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { loadMercadoPago } from '@mercadopago/sdk-js';
-import { environment } from '../environments/environment';
+import { loadMercadoPago } from '@mercadopago/sdk-js';745
+import { environment } from '../../environments/environment';
+
 
 declare global {
   interface Window {

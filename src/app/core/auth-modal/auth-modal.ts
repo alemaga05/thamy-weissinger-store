@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
+import { environment } from '../../../environments/environment';
+
 @Component({
   selector: 'app-auth-modal',
   standalone: true,
@@ -11,6 +13,9 @@ import { HttpClient } from '@angular/common/http';
   styleUrl: './auth-modal.css'
 })
 export class AuthModal {
+
+  private readonly apiUrl = environment.apiUrl;
+
   @Input() isOpen = false; 
   @Output() close = new EventEmitter();
 
@@ -54,7 +59,7 @@ export class AuthModal {
       password: this.cadastroData.password
     };
 
-    this.http.post('http://localhost:3000/cadastro', payload)
+    this.http.post(`${this.apiUrl}/cadastro`, payload)
       .subscribe({
         next: (resposta) => {
           alert("Cadastro realizado com sucesso! 🎉");

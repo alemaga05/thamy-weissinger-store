@@ -14,6 +14,8 @@ import {
   ProdutoService
 } from '../../core/services/produto.service';
 
+import { environment } from '../../../environments/environment';
+
 export interface Product {
   id: number;
   nome: string;
@@ -42,6 +44,8 @@ export interface Categoria {
   styleUrl: './feminino.css'
 })
 export class Feminino implements OnInit {
+
+    private readonly API = environment.apiUrl;
 
   // =====================================================
   // CATEGORIAS
@@ -105,7 +109,7 @@ export class Feminino implements OnInit {
 
     this.http
       .get<Categoria[]>(
-        'http://localhost:3000/categorias'
+        `${this.API}/categorias`
       )
       .subscribe({
 
@@ -398,10 +402,10 @@ export class Feminino implements OnInit {
       );
 
     this.http
-      .get<any[]>(
-        'http://localhost:3000/favoritos',
-        { headers }
-      )
+          .get<any[]>(
+      `${this.API}/favoritos`,
+      { headers }
+    )
       .subscribe({
 
         next: (favoritosDoBanco: any[]) => {
@@ -508,7 +512,7 @@ export class Feminino implements OnInit {
 
       this.http
         .post(
-          'http://localhost:3000/favoritos',
+          `${this.API}/favoritos`,
           {
             produtoId: product.id
           },
@@ -559,7 +563,7 @@ export class Feminino implements OnInit {
 
       this.http
         .get<any[]>(
-          'http://localhost:3000/favoritos',
+          `${this.API}/favoritos`,
           { headers }
         )
         .subscribe({
@@ -597,7 +601,7 @@ export class Feminino implements OnInit {
              */
             this.http
               .delete(
-                `http://localhost:3000/favoritos/${itemFav.id}`,
+                `${this.API}/favoritos/${itemFav.id}`,
                 { headers }
               )
               .subscribe({
@@ -700,7 +704,7 @@ export class Feminino implements OnInit {
 
     this.http
       .post(
-        'http://localhost:3000/carrinho',
+        `${this.API}/carrinho`,
         payload,
         { headers }
       )

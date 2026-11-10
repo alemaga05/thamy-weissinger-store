@@ -15,6 +15,8 @@ import {
   ProdutoService
 } from '../../../core/services/produto.service';
 
+import { environment } from '../../../../environments/environment';
+
 interface FavoritoApi {
   id: number;
   produtoId: number;
@@ -31,7 +33,7 @@ interface FavoritoApi {
   styleUrl: './popular-products.css'
 })
 export class PopularProducts implements OnInit, OnDestroy {
-  private readonly API = 'http://localhost:3000';
+  private readonly API = environment.apiUrl;
   private subscriptions = new Subscription();
 
   products: Produto[] = [];

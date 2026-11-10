@@ -5,6 +5,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { LojaService } from '../../core/services/loja.service'; 
 import { Produto, ProdutoService } from '../../core/services/produto.service';
 
+import { environment } from '../../../environments/environment';
+
 @Component({
   selector: 'app-product-details',
   standalone: true,
@@ -14,6 +16,8 @@ import { Produto, ProdutoService } from '../../core/services/produto.service';
 })
 export class ProductDetails implements OnInit {
   
+  private apiUrl = environment.apiUrl;
+
   produto: any = null;
   imagemPrincipal = '';
   tamanhos: string[] = [];
@@ -97,7 +101,7 @@ export class ProductDetails implements OnInit {
 
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     
-    this.http.get<any[]>('http://localhost:3000/favoritos', { headers }).subscribe({
+    this.http.get<any[]>(`${this.apiUrl}/favoritos`, { headers }).subscribe({
       next: (favoritosDoBanco: any[]) => {
         const idsFavoritados = favoritosDoBanco.map((f: any) => f.produtoId);
         if (this.produto) {
@@ -117,13 +121,13 @@ export class ProductDetails implements OnInit {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     
     if (this.produto.isFavorito) {
-      this.http.post('http://localhost:3000/favoritos', { produtoId: this.produto.id }, { headers }).subscribe();
+      this.http.post(`${this.apiUrl}/favoritos`, { produtoId: this.produto.id }, { headers }).subscribe();
     } else {
-      this.http.get<any[]>('http://localhost:3000/favoritos', { headers }).subscribe({
+      this.http.get<any[]>(`${this.apiUrl}/favoritos`, { headers }).subscribe({
         next: (favoritos: any[]) => {
           const itemFav = favoritos.find((f: any) => f.produtoId === this.produto.id);
           if (itemFav) {
-            this.http.delete(`http://localhost:3000/favoritos/${itemFav.id}`, { headers }).subscribe();
+            this.http.delete(`${this.apiUrl}/favoritos/${itemFav.id}`, { headers }).subscribe();
           }
         }
       });
@@ -157,7 +161,7 @@ export class ProductDetails implements OnInit {
       quantidade: this.quantidadeSelecionada
     };
 
-    this.http.post('http://localhost:3000/carrinho', payload, { headers })
+    this.http.post(`${this.apiUrl}/carrinho`, payload, { headers })
       .subscribe({
         next: () => {
           alert('✅ Item adicionado ao carrinho com sucesso!');

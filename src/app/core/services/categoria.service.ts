@@ -1,6 +1,8 @@
+
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface Categoria {
   id?: number;
@@ -15,47 +17,36 @@ export interface Categoria {
 })
 export class CategoriaService {
 
-  private apiUrl = 'http://localhost:3000/categorias';
+  private apiUrl = `${environment.apiUrl}/categorias`;
 
   constructor(private http: HttpClient) {}
 
   private getHeaders(): { headers: HttpHeaders } {
-    const token = localStorage.getItem('token') || '';
+    const token = localStorage.getItem('token');
 
-    return {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      })
-    };
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
+
+    return { headers };
   }
 
-  // ==============================
   // LISTAR TODAS
-  // ==============================
-
   obterCategorias(): Observable<Categoria[]> {
     return this.http.get<Categoria[]>(this.apiUrl);
   }
 
-  // ==============================
   // BUSCAR POR ID
-  // ==============================
-
   obterCategoriaPorId(id: number): Observable<Categoria> {
-    return this.http.get<Categoria>(
-      `${this.apiUrl}/${id}`
-    );
+    return this.http.get<Categoria>(`${this.apiUrl}/${id}`);
   }
 
-  // ==============================
   // CRIAR
-  // ==============================
-
-  criarCategoria(
-    categoria: Categoria
-  ): Observable<Categoria> {
-
+  criarCategoria(categoria: Categoria): Observable<Categoria> {
     return this.http.post<Categoria>(
       this.apiUrl,
       categoria,
@@ -63,15 +54,11 @@ export class CategoriaService {
     );
   }
 
-  // ==============================
   // ATUALIZAR
-  // ==============================
-
   atualizarCategoria(
     id: number,
     categoria: Categoria
   ): Observable<Categoria> {
-
     return this.http.put<Categoria>(
       `${this.apiUrl}/${id}`,
       categoria,
@@ -79,12 +66,8 @@ export class CategoriaService {
     );
   }
 
-  // ==============================
   // EXCLUIR
-  // ==============================
-
   deletarCategoria(id: number): Observable<any> {
-
     return this.http.delete<any>(
       `${this.apiUrl}/${id}`,
       this.getHeaders()

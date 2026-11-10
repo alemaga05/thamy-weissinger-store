@@ -5,6 +5,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { LojaService } from '../../core/services/loja.service';
 import { Produto, ProdutoService } from '../../core/services/produto.service';
 
+import { environment } from '../../../environments/environment';
+
 export interface Product {
   id: number;
   nome: string;
@@ -22,6 +24,10 @@ export interface Product {
   styleUrl: './category.css'
 })
 export class Category implements OnInit {
+
+  private readonly API = environment.apiUrl;
+
+
   categoriaAtual: string = '';
   todosOsProdutos: Product[] = [];
   produtosFiltrados: Product[] = [];
@@ -78,7 +84,7 @@ export class Category implements OnInit {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     
     // Adicionado tipo genérico 
-    this.http.get<any[]>('http://localhost:3000/favoritos', { headers }).subscribe({
+    this.http.get<any[]>(`${this.API}/favoritos`, { headers }).subscribe({
       next: (favoritosDoBanco: any[]) => {
         const idsFavoritados = favoritosDoBanco.map((f: any) => f.produtoId);
         this.produtosFiltrados.forEach((p: Product) => {
@@ -104,18 +110,18 @@ export class Category implements OnInit {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
     if (product.isFavorito) {
-      this.http.post('http://localhost:3000/favoritos', { produtoId: product.id }, { headers })
+     this.http.post(`${this.API}/favoritos`, { produtoId: product.id }, { headers })
         .subscribe({
           next: () => this.lojaService.notificarAtualizacao(),
           error: (err: any) => console.error('Erro ao favoritar:', err)
         });
     } else {
       // Adicionado tipo genérico 
-      this.http.get<any[]>('http://localhost:3000/favoritos', { headers }).subscribe({
+      this.http.get<any[]>(`${this.API}/favoritos`, { headers }).subscribe({
         next: (favoritos: any[]) => {
           const itemFav = favoritos.find((f: any) => f.produtoId === product.id);
           if (itemFav) {
-            this.http.delete(`http://localhost:3000/favoritos/${itemFav.id}`, { headers }).subscribe({
+            this.http.delete(`${this.API}/favoritos/${itemFav.id}`, { headers }).subscribe({
               next: () => this.lojaService.notificarAtualizacao(),
               error: (err: any) => console.error('Erro ao remover favorito:', err)
             });
@@ -138,7 +144,7 @@ export class Category implements OnInit {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     const payload = { produtoId: product.id, tamanho: 'Único', quantidade: 1 };
 
-    this.http.post('http://localhost:3000/carrinho', payload, { headers })
+    this.http.post(`${this.API}/carrinho`, payload, { headers })
       .subscribe({
         next: () => {
           alert('Produto adicionado ao carrinho!');

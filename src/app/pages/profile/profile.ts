@@ -13,8 +13,7 @@ import {
   HttpHeaders
 } from '@angular/common/http';
 
-
-
+import { environment } from '../../../environments/environment';
 
 interface Endereco {
   id?: number;
@@ -62,6 +61,9 @@ interface PedidoItem {
   styleUrl: './profile.css'
 })
 export class Profile implements OnInit {
+
+   private apiUrl = environment.apiUrl;
+
 
   // =========================================================
   // ABA ATIVA
@@ -141,6 +143,7 @@ export class Profile implements OnInit {
   private http: HttpClient,
   private cdr: ChangeDetectorRef,
   private ngZone: NgZone
+  
 ) {}
 
 
@@ -203,7 +206,7 @@ export class Profile implements OnInit {
   }
 
   this.http.get<any>(
-    'http://localhost:3000/perfil',
+     `${this.apiUrl}/perfil`,
     { headers: this.obterHeaders() }
   ).subscribe({
     next: (dadosDoBanco) => {
@@ -281,7 +284,7 @@ carregarEnderecos(): void {
   const headers = this.obterHeaders();
 
   this.http.get<Endereco[]>(
-    'http://localhost:3000/enderecos',
+    `${this.apiUrl}/enderecos` ,
     { headers }
   ).subscribe({
     next: (enderecos) => {
@@ -501,7 +504,7 @@ buscarCep(): void {
 
 
     this.http.put<any>(
-      `http://localhost:3000/enderecos/${endereco.id}`,
+      `${this.apiUrl}/enderecos/${endereco.id}`,
       {
         principal: true
       },
@@ -667,7 +670,7 @@ buscarCep(): void {
     if (this.enderecoAtual.id) {
 
       this.http.put<Endereco>(
-        `http://localhost:3000/enderecos/${this.enderecoAtual.id}`,
+        `${this.apiUrl}/enderecos/${this.enderecoAtual.id}`,
         this.enderecoAtual,
         { headers }
       ).subscribe({
@@ -774,7 +777,7 @@ buscarCep(): void {
     // =======================================================
 
     this.http.post<Endereco>(
-      'http://localhost:3000/enderecos',
+      `${this.apiUrl}/enderecos`,
       this.enderecoAtual,
       { headers }
     ).subscribe({
@@ -884,7 +887,7 @@ excluirEndereco(id: number): void {
   const headers = this.obterHeaders();
 
   this.http.delete(
-    `http://localhost:3000/enderecos/${id}`,
+    `${this.apiUrl}/enderecos/${id}`,
     { headers }
   ).subscribe({
     next: () => {
@@ -959,7 +962,7 @@ carregarPedidos(): void {
   this.erroPedidos = '';
 
   this.http.get<any[]>(
-    'http://localhost:3000/pedidos',
+    `${this.apiUrl}/pedidos`,
     { headers: this.obterHeaders() }
   ).subscribe({
     next: (resposta) => {
@@ -1057,7 +1060,7 @@ carregarPedidos(): void {
 
 
     this.http.put<any>(
-      'http://localhost:3000/perfil',
+      `${this.apiUrl}/perfil`,
       this.usuario,
       { headers }
     ).subscribe({
