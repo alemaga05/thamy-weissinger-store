@@ -1388,7 +1388,7 @@ salvarBanner(): void {
         { headers: this.obterHeadersBanner() }
       )
     : this.http.put<Banner>(
-        `http://localhost:3000/admin/banners/${this.bannerEmEdicao}`,
+          `${environment.apiUrl}/admin/banners/${this.bannerEmEdicao}`,
         dados,
         { headers: this.obterHeadersBanner() }
       );

@@ -77,7 +77,7 @@ export class AuthModal {
       password: this.loginData.password
     };
 
-    this.http.post('http://localhost:3000/login', payload)
+    this.http.post(`${this.apiUrl}/login`, payload)
       .subscribe({
         next: (resposta: any) => {
           // Mostra a mensagem verde bonita
