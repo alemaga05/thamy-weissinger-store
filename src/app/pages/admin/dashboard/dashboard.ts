@@ -70,6 +70,13 @@ interface PedidoAdmin {
   }[];
 }
 
+interface ConfiguracaoFrete {
+  id: number;
+  modalidadeFrete: 'GRATIS' | 'FIXO';
+  valorFreteFixo: number;
+  ativo: boolean;
+}
+
 
 @Component({
   selector: 'app-dashboard',
@@ -86,6 +93,20 @@ interface PedidoAdmin {
 
 export class Dashboard implements OnInit {
 
+      // CONFIGURAÇÃO DE FRETE
+    configuracaoFrete: ConfiguracaoFrete = {
+      id: 1,
+      modalidadeFrete: 'GRATIS',
+      valorFreteFixo: 0,
+      ativo: true
+    };
+
+    carregandoFrete = false;
+    salvandoFrete = false;
+    mensagemFrete = '';
+    erroFrete = '';
+
+
   private readonly API = environment.apiUrl;
 
   // =====================================================
@@ -94,11 +115,7 @@ export class Dashboard implements OnInit {
 
   nomeAdmin = 'Administrador';
 
-  abaAtiva:
-    | 'produtos'
-    | 'categorias'
-    | 'pedidos'
-    | 'banners' = 'produtos';
+  abaAtiva: 'produtos' | 'categorias' | 'pedidos' | 'banners' | 'frete' = 'produtos';
 
 
     pedidos: PedidoAdmin[] = [];
@@ -875,7 +892,7 @@ carregarCategorias(): void {
 
   
 mudarAba(
-  aba: 'produtos' | 'categorias' | 'pedidos' | 'banners'
+  aba: 'produtos' | 'categorias' | 'pedidos' | 'banners' | 'frete'
 ): void {
   this.abaAtiva = aba;
 
@@ -886,6 +903,86 @@ mudarAba(
   if (aba === 'banners') {
     this.carregarBanners();
   }
+
+  if (aba === 'frete') {
+    this.carregarFrete();
+  }
+}
+
+
+// ==========================================
+// CONFIGURAÇÃO DE FRETE
+// ==========================================
+
+carregarFrete(): void {
+  this.carregandoFrete = true;
+  this.mensagemFrete = '';
+  this.erroFrete = '';
+
+  this.http.get<ConfiguracaoFrete>(
+    `${this.API}/admin/configuracoes/frete`,
+    { headers: this.obterHeadersBanner() }
+  ).subscribe({
+    next: (dados) => {
+      this.configuracaoFrete = {
+        ...dados,
+        valorFreteFixo: Number(dados.valorFreteFixo)
+      };
+
+      this.carregandoFrete = false;
+    },
+    error: (erro) => {
+      this.erroFrete =
+        erro.error?.mensagem ||
+        'Não foi possível carregar a configuração de frete.';
+
+      this.carregandoFrete = false;
+    }
+  });
+}
+
+salvarFrete(): void {
+  this.mensagemFrete = '';
+  this.erroFrete = '';
+
+  const valor = Number(this.configuracaoFrete.valorFreteFixo);
+
+  if (this.configuracaoFrete.modalidadeFrete === 'FIXO' && (!Number.isFinite(valor) || valor <= 0)) {
+    this.erroFrete = 'Informe um valor válido para o frete.';
+    return;
+  }
+
+  this.salvandoFrete = true;
+
+  const dados = {
+    modalidadeFrete: this.configuracaoFrete.modalidadeFrete,
+    valorFreteFixo:
+      this.configuracaoFrete.modalidadeFrete === 'GRATIS' ? 0 : valor,
+    ativo: this.configuracaoFrete.ativo
+  };
+
+  this.http.put<any>(
+    `${this.API}/admin/configuracoes/frete`,
+    dados,
+    { headers: this.obterHeadersBanner() }
+  ).subscribe({
+    next: (resposta) => {
+      this.configuracaoFrete = {
+        ...resposta.configuracao,
+        valorFreteFixo: Number(resposta.configuracao.valorFreteFixo)
+      };
+
+      this.mensagemFrete = resposta.mensagem;
+      this.salvandoFrete = false;
+    },
+    error: (erro) => {
+      this.erroFrete =
+        erro.error?.mensagem ||
+        'Não foi possível salvar a configuração de frete.';
+
+      this.salvandoFrete = false;
+    }
+  });
 }
 
 

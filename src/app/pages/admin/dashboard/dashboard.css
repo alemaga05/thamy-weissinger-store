@@ -1645,4 +1645,158 @@
     padding: 19px;
     max-height: 92vh;
   }
+}~
+
+
+/* ==========================================
+   CONFIGURAÇÃO DE FRETE
+   ========================================== */
+
+.frete-admin {
+  padding: 24px;
+}
+
+.frete-cabecalho {
+  margin-bottom: 25px;
+}
+
+.frete-cabecalho h2 {
+  margin: 0 0 8px;
+  color: #222;
+  font-size: 23px;
+}
+
+.frete-cabecalho p {
+  margin: 0;
+  color: #777;
+  font-size: 14px;
+}
+
+.frete-card {
+  max-width: 650px;
+  padding: 28px;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.frete-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.frete-campo label {
+  color: #222;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.frete-campo select,
+.frete-campo input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+  font-size: 14px;
+  outline: none;
+}
+
+.frete-campo select:focus,
+.frete-campo input:focus {
+  border-color: #d9a98e;
+  box-shadow: 0 0 0 2px rgba(254, 225, 207, 0.5);
+}
+
+.frete-status {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  background: #faf7f5;
+  border-radius: 8px;
+}
+
+.frete-status label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-weight: 600;
+  color: #333;
+  cursor: pointer;
+}
+
+.frete-status input {
+  width: 17px;
+  height: 17px;
+  accent-color: #191919;
+}
+
+.frete-status small {
+  color: #777;
+  font-size: 12px;
+  margin-left: 26px;
+}
+
+.frete-acoes {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+}
+
+.btn-salvar-frete {
+  padding: 12px 22px;
+  border: none;
+  border-radius: 7px;
+  background: #191919;
+  color: #fee1cf;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-salvar-frete:hover {
+  background: #333;
+}
+
+.btn-salvar-frete:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.frete-sucesso {
+  padding: 12px;
+  color: #216b3a;
+  background: #eaf7ed;
+  border-radius: 7px;
+  font-size: 14px;
+}
+
+.frete-erro {
+  padding: 12px;
+  color: #a32626;
+  background: #fceaea;
+  border-radius: 7px;
+  font-size: 14px;
+}
+
+@media (max-width: 700px) {
+  .frete-admin {
+    padding: 12px;
+  }
+
+  .frete-card {
+    padding: 18px;
+  }
+
+  .frete-acoes,
+  .btn-salvar-frete {
+    width: 100%;
+  }
 }

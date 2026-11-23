@@ -20,6 +20,12 @@
       <button [class.active]="abaAtiva === 'banners'" (click)="mudarAba('banners')">
         🖼️ Banners Home
       </button>
+      <button
+        [class.active]="abaAtiva === 'frete'"
+        (click)="mudarAba('frete')"
+      >
+        🚚 Frete
+      </button>
     </nav>
 
     <div class="sidebar-footer">
@@ -34,6 +40,89 @@
     <header class="top-header">
       <h1>Painel Geral de Gestão</h1>
     </header>
+
+    <!-- ABA FRETE -->
+<section *ngIf="abaAtiva === 'frete'" class="frete-admin">
+
+  <div class="frete-cabecalho">
+    <div>
+      <h2>Configuração de frete</h2>
+      <p>Defina como o frete será cobrado nas compras da Thamy Fitwear.</p>
+    </div>
+  </div>
+
+  <div *ngIf="carregandoFrete" class="loading-state">
+    Carregando configuração...
+  </div>
+
+  <div *ngIf="!carregandoFrete" class="frete-card">
+
+    <p *ngIf="mensagemFrete" class="frete-sucesso">
+      {{ mensagemFrete }}
+    </p>
+
+    <p *ngIf="erroFrete" class="frete-erro">
+      {{ erroFrete }}
+    </p>
+
+    <div class="frete-campo">
+      <label for="modalidadeFrete">Modalidade de frete</label>
+
+      <select
+        id="modalidadeFrete"
+        name="modalidadeFrete"
+        [(ngModel)]="configuracaoFrete.modalidadeFrete"
+      >
+        <option value="GRATIS">Frete grátis</option>
+        <option value="FIXO">Valor fixo</option>
+      </select>
+    </div>
+
+    <div
+      class="frete-campo"
+      *ngIf="configuracaoFrete.modalidadeFrete === 'FIXO'"
+    >
+      <label for="valorFrete">Valor do frete (R$)</label>
+
+      <input
+        id="valorFrete"
+        name="valorFrete"
+        type="number"
+        min="0.01"
+        step="0.01"
+        [(ngModel)]="configuracaoFrete.valorFreteFixo"
+        placeholder="Ex.: 15.90"
+      />
+    </div>
+
+    <div class="frete-status">
+      <label>
+        <input
+          type="checkbox"
+          name="freteAtivo"
+          [(ngModel)]="configuracaoFrete.ativo"
+        />
+        Ativar configuração de frete
+      </label>
+
+      <small>
+        Se desativada, a finalização de compras será bloqueada.
+      </small>
+    </div>
+
+    <div class="frete-acoes">
+      <button
+        type="button"
+        class="btn-salvar-frete"
+        (click)="salvarFrete()"
+        [disabled]="salvandoFrete || carregandoFrete"
+      >
+        {{ salvandoFrete ? 'Salvando...' : 'Salvar configuração' }}
+      </button>
+    </div>
+
+  </div>
+</section>
 
     <div class="content-body">
       

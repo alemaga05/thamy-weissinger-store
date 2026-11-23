@@ -48,6 +48,13 @@ interface Endereco {
   principal: boolean;
 }
 
+interface ConfiguracaoFrete {
+  id: number;
+  modalidadeFrete: 'GRATIS' | 'FIXO';
+  valorFreteFixo: number;
+  ativo: boolean;
+}
+
 @Component({
   selector: 'app-checkout',
   standalone: true,
@@ -56,6 +63,9 @@ interface Endereco {
   styleUrl: './checkout.css'
 })
 export class Checkout implements OnInit, OnDestroy {
+
+  private readonly API = environment.apiUrl;
+
 
   // =========================================================
   // DADOS DO CHECKOUT
@@ -146,9 +156,61 @@ export class Checkout implements OnInit, OnDestroy {
 
     await this.inicializarMercadoPago();
 
-    this.carregarCheckout();
+    this.carregarConfiguracaoFrete(); 
   }
 
+  carregarConfiguracaoFrete(): void {
+  this.carregando = true;
+  this.erro = '';
+
+  this.http.get<ConfiguracaoFrete>(
+    `${this.API}/configuracoes/frete`
+  ).subscribe({
+    next: (configuracao) => {
+
+      if (!configuracao.ativo) {
+        this.erro = 'A loja está temporariamente sem configuração de frete disponível.';
+        this.carregando = false;
+        return;
+      }
+
+      if (
+        configuracao.modalidadeFrete !== 'GRATIS' &&
+        configuracao.modalidadeFrete !== 'FIXO'
+      ) {
+        this.erro = 'A modalidade de frete configurada é inválida.';
+        this.carregando = false;
+        return;
+      }
+
+      this.valorFrete =
+        configuracao.modalidadeFrete === 'GRATIS'
+          ? 0
+          : Number(configuracao.valorFreteFixo);
+
+      if (
+        !Number.isFinite(this.valorFrete) ||
+        this.valorFrete < 0
+      ) {
+        this.erro = 'O valor do frete configurado é inválido.';
+        this.carregando = false;
+        return;
+      }
+
+      this.carregarCheckout();
+    },
+
+    error: (erro) => {
+      console.error('Erro ao carregar configuração de frete:', erro);
+
+      this.erro =
+        erro?.error?.mensagem ||
+        'Não foi possível carregar o frete. Tente novamente mais tarde.';
+
+      this.carregando = false;
+    }
+  });
+}
 
   // =========================================================
   // MERCADO PAGO
@@ -648,7 +710,7 @@ private async processarPagamentoCartao(
 
     const resposta =
       await this.http.post<any>(
-        'http://localhost:3000/pedidos/cartao',
+        `${this.API}/pedidos/cartao`,
         dadosPagamento,
         {
           headers
@@ -888,7 +950,7 @@ private async processarPagamentoCartao(
 
 
     this.http.get<ItemCarrinho[]>(
-      'http://localhost:3000/carrinho',
+      `${this.API}/carrinho`,
       {
         headers
       }
@@ -910,7 +972,7 @@ private async processarPagamentoCartao(
 
 
         this.http.get<Produto[]>(
-          'http://localhost:3000/produtos'
+           `${this.API}/produtos`
 
         ).subscribe({
 
@@ -1030,7 +1092,7 @@ private async processarPagamentoCartao(
   ): void {
 
     this.http.get<Endereco[]>(
-      'http://localhost:3000/enderecos',
+      `${this.API}/enderecos`,
       {
         headers
       }
@@ -1081,28 +1143,14 @@ private async processarPagamentoCartao(
 
   calcularTotais(): void {
 
-    this.valorSubtotal =
-      this.itens.reduce(
-        (
-          total,
-          item
-        ) =>
-          total +
-          item.subtotal,
-
-        0
-      );
-
-
-    this.valorFrete =
-      0;
-
+    this.valorSubtotal = this.itens.reduce(
+      (total, item) => total + item.subtotal,
+      0
+    );
 
     this.valorTotal =
-      this.valorSubtotal +
-      this.valorFrete;
+      this.valorSubtotal + this.valorFrete;
   }
-
 
   // =========================================================
   // SELECIONAR PAGAMENTO
@@ -1395,7 +1443,7 @@ private async processarPagamentoCartao(
 
 
     this.http.post<any>(
-      'http://localhost:3000/pedidos',
+      `${this.API}/pedidos`,
       {},
       {
         headers
